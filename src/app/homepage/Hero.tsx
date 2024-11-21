@@ -34,7 +34,7 @@ const Hero = () => {
           {/* Search Input */}
           <div className="flex items-center space-x-2 flex-grow">
             <Image
-              src="/Searchicon.png" // Search icon image
+              src="/Searchicon.png"
               alt="Search Icon"
               width={20}
               height={20}
@@ -56,6 +56,7 @@ const Hero = () => {
             />
             <select
               className="bg-transparent outline-none text-white cursor-pointer"
+              aria-label="Select location"
             >
               <option value="lagos">Lagos</option>
               <option value="abuja">Abuja</option>
