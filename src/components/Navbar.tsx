@@ -39,7 +39,7 @@ const Navbar = () => {
           />
 
           {/* Create Event Button */}
-          <button className="bg-green-500 text-black px-4 py-2 rounded-full font-medium hover:bg-green-400">
+          <button type="button" className="bg-[#9EDD45] text-black px-4 py-1 rounded-full font-medium hover:bg-green-400">
             + Create Event
           </button>
 

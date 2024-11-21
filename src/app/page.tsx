@@ -7,11 +7,11 @@ import EventCard from "@/app/homepage/EventCard";
 
 export default function Home() {
   return (
-    <main>
-      <Hero/>
+    <>
+      <Hero />
       <ExploreEvents />
       <HowItWorks />
       <EventCard />
-    </main>
+    </>
   );
 }
