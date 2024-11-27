@@ -67,11 +67,19 @@ const EventCard = () => {
   ];
 
   return (
-    <div className="bg-gray-900 min-h-screen py-10">
+    <div
+      className="bg-[#020e1e] min-h-screen py-10 relative pb-56"
+      style={{
+        backgroundImage: "url('/Line.png')", // Path to your gradient image
+        backgroundSize: "cover", // Adjust to fit your design
+        backgroundPosition: "center", // Center the image
+        backgroundRepeat: "no-repeat", // Prevent tiling
+      }}
+    >
       {/* Section Heading */}
       <div className="text-center mb-8 px-4">
         <h1 className="text-white text-4xl font-bold">Discover Unforgettable Events Content</h1>
-        <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
+        <p className="text-white mt-4 max-w-2xl mx-auto">
           Browse a diverse selection of events hosted by top creators. Whether
           you&apos;re looking for concerts, workshops, or social gatherings, our
           marketplace brings unique experiences tailored for everyone.
@@ -83,10 +91,10 @@ const EventCard = () => {
         {categories.map((category, index) => (
           <button
             key={index}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${
+            className={`px-8 py-2 rounded-full text-sm font-semibold ${
               category === "Art"
-                ? "bg-green-500 text-white"
-                : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
+                ? "bg-[#9edd45] text-black"
+                : "border border-gray-800 hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded"
             }`}
           >
             {category}
@@ -111,23 +119,49 @@ const EventCard = () => {
                 height={160}
                 className="rounded-t-lg"
               />
-              <span className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold rounded-full px-2 py-1">
-                ✔️
+              <span className="absolute top-2 right-2">
+                <Image
+                  src="/verify.png" // Path to your verify image
+                  alt="Verified"
+                  width={24} // Adjust the size of the image
+                  height={24}
+                />
               </span>
             </div>
             {/* Content Section */}
             <div className="p-4">
-              <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+              <span className="bg-[#9edd45] text-black text-xs font-semibold px-2 py-1 rounded">
                 {event.category}
               </span>
-              <h3 className="text-white font-bold text-lg mt-2 truncate">
-                {event.title}
-              </h3>
+              <h3 className="text-white font-[600] text-[19.8px] text-lg mt-2 ">
+  {event.title}
+</h3>
               <p className="text-gray-400 text-sm mt-1">{event.venue}</p>
               <p className="text-gray-400 text-sm">{event.time}</p>
               <div className="flex items-center justify-between mt-4">
-                <p className="text-green-400 font-bold">₹{event.price}</p>
-                <p className="text-gray-400 text-sm">{event.interested} interested</p>
+                {/* Price Section */}
+                <div className="flex items-center">
+                  <Image
+                    src="/ticket.png" // Path to your ticket image
+                    alt="Ticket Icon"
+                    width={16} // Adjust width and height as needed
+                    height={16}
+                    className="mr-2"
+                  />
+                  <p className="text-[#9edd45] font-bold">₹{event.price}</p>
+                </div>
+
+                {/* Interested Section */}
+                <div className="flex items-center text-gray-400 text-sm">
+                  <Image
+                    src="/Star 1.png" // Path to your star image
+                    alt="Star Icon"
+                    width={16} // Adjust width and height as needed
+                    height={16}
+                    className="mr-2"
+                  />
+                  <p>{event.interested} interested</p>
+                </div>
               </div>
             </div>
             {/* Date Badge */}
