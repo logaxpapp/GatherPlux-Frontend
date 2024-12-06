@@ -19,3 +19,15 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.rdp-today {
+  color: #9edd45 !important;
+}
+
+.rdp-selected > button {
+  border-color: #9edd45 !important;
+}
+
+.rdp-chevron {
+  fill: #9edd45 !important;
+}
