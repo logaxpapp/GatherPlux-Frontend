@@ -46,6 +46,7 @@ const Navbar = () => {
           <div className="flex items-center space-x-4 relative">
             <div className="relative flex items-center">
               <button
+                type="button"
                 className="flex items-center gap-2 text-white"
                 onClick={toggleDropdown}
               >
@@ -112,9 +113,9 @@ const Navbar = () => {
                 </ul>
               )}
             </div>
-            <button className="bg-[#9edd45] text-black px-4 py-2 rounded-full font-medium hover:bg-green-400">
+            <a href="/create-event" className="bg-[#9edd45] text-black px-4 py-2 rounded-full font-medium hover:bg-green-400">
               + Create Event
-            </button>
+            </a>
             <Image
               src="/avatar.png"
               alt="User Avatar"
