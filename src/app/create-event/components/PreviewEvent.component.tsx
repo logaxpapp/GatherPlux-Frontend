@@ -30,7 +30,12 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails,
         <div className="mb-4">
           <div className="w-full h-[570px] bg-gray-200 rounded-md flex items-center justify-center">
             {selectedFile ? (
-              <Image src={URL.createObjectURL(selectedFile)} alt="Event Banner" className="rounded-md h-[570px] w-full" />
+              <Image
+                src={URL.createObjectURL(selectedFile)}
+                alt="Event Banner"
+                width={570}
+                height={500}
+                className="rounded-md h-[570px]" />
             ) : (
               <span className="text-gray-500">No Image Selected</span>
             )}

@@ -34,7 +34,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
             Event Title <span className=" text-red-500 ml-1">*</span>
           </p>
 
-          <input type="text" placeholder="Enter the event name" name="title" className="col-span-6 ml-4 h-[58px] p-4 rounded-md text-[#ACACAC]" onChange={handleTitleAndDescription} />
+          <input type="text" placeholder="Enter the event name" name="title" className="col-span-6 ml-4 h-[58px] p-4 rounded-md text-[#000]" onChange={handleTitleAndDescription} />
         </div>
 
         {/* Event Category  */}
@@ -43,7 +43,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
             Event Category <span className=" text-red-500 ml-1">*</span>
           </label>
 
-          <select id="category" className="col-span-6 ml-4 h-[58px] p-4 rounded-md text-[#ACACAC] appearance-none"
+          <select id="category" className="col-span-6 ml-4 h-[58px] p-4 rounded-md text-[#000] appearance-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
               backgroundRepeat: "no-repeat",
@@ -51,8 +51,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
               backgroundSize: "1em",
             }}
             onChange={handleCategoryChange}
+            defaultValue=""
           >
-            <option value="select" disabled>Please select one</option>
+            <option value="" selected disabled>Please select one</option>
             {categories?.map((eachCategory) => (
               <option
                 value={JSON.stringify(eachCategory)}
@@ -76,11 +77,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
           </p>
           <div className="col-span-8 ml-4 flex space-x-4">
             <div className="flex items-center space-x-2 text-[24px]">
-              <input type="radio" id="single" name="type" value="single" onChange={handleEventTypeChange} />
+              <input type="radio" id="single" name="type" value="One-Time" onChange={handleEventTypeChange} />
               <label htmlFor="single">Single Event</label>
             </div>
             <div className="flex items-center space-x-2 text-[24px]">
-              <input type="radio" id="recurring" name="type" value="recurring" onChange={handleEventTypeChange} />
+              <input type="radio" id="recurring" name="type" value="Recurring" onChange={handleEventTypeChange} />
               <label htmlFor="recurring">Recurring Event</label>
             </div>
           </div>
@@ -130,7 +131,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
             <br />
             event take place?
           </label>
-          <select id="location" className="col-span-6 ml-4 h-[58px] p-4 rounded-md text-[#ACACAC] appearance-none"
+          <select id="location" className="col-span-6 ml-4 h-[58px] p-4 rounded-md text-[#000] appearance-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
               backgroundRepeat: "no-repeat",
@@ -138,8 +139,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
               backgroundSize: "1em",
             }}
             onChange={handleLocationChange}
+            defaultValue=""
           >
-            <option value="select" disabled>Please select one</option>
+            <option value="" disabled>Please select one</option>
             {states?.map((eachState) => (
               <option
                 value={JSON.stringify(eachState)}
@@ -163,7 +165,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
             Event Description <span className=" text-red-500 ml-1">*</span>
           </label>
 
-          <textarea id="description" name="description" rows={4} placeholder="Describe what's special about your event & other important details." className="col-span-10 ml-4 p-4 rounded-md text-[#ACACAC]" onChange={handleTitleAndDescription} />
+          <textarea id="description" name="description" rows={4} placeholder="Describe what's special about your event & other important details." className="col-span-10 ml-4 p-4 rounded-md text-[#000]" onChange={handleTitleAndDescription} />
         </div>
 
       </div>
