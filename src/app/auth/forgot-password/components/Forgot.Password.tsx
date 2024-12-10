@@ -1,7 +1,47 @@
-import React from "react";
+'use strict';
+'use client';
+
+import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from 'next/navigation';
+
+import { useResetUserPasswordRequestMutation } from "@/services/slices/user.slice";
+import Loader from "@/components/Loader";
+
 
 const ForgotPassword: React.FC = () => {
+
+  const router = useRouter();
+
+  const [email, setEmail] = useState<string>('');
+
+  const [resetPasswordRequest, { isLoading }] = useResetUserPasswordRequestMutation();
+
+  const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleResetPasswordRequest = async () => {
+
+    if (email === '') {
+      // toast.error("Please input your email!", {
+      //   position: 'top-right'
+      // });
+      return;
+    }
+
+    try {
+      const { data } = await resetPasswordRequest({ email });
+
+      if (data && data.message === 'SUCCESSFUL') {
+        router.push(`/auth/reset-password?email=${email}`);
+      }
+    } catch (err) {
+      console.error("An error occured: ", err);
+    }
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-[#011926] to-[#002B41]"
@@ -24,10 +64,11 @@ const ForgotPassword: React.FC = () => {
       >
         {/* Lock Icon */}
         <div className="flex justify-center mb-4">
-          <img
-            src="/lock.png" // Replace with the path to your lock icon
+          <Image
+            width={48}
+            height={48}
+            src="/lock.png"
             alt="Lock Icon"
-            className="w-12 h-12"
           />
         </div>
         {/* Heading */}
@@ -42,22 +83,28 @@ const ForgotPassword: React.FC = () => {
             Email
           </label>
           <div className="relative">
-            <img
-              src="/sms-tracking.png" // Replace with the path to your SMS-tracking icon
+            <Image
+              height={20}
+              width={20}
+              src="/sms-tracking.png"
               alt="Email Icon"
-              className="absolute top-3 left-3 w-5 h-5"
+              className="absolute top-3 left-3"
             />
             <input
               type="email"
               id="email"
               placeholder="Enter email address"
               className="w-full pl-10 pr-3 py-2 bg-[#0f172a] text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
+              value={email}
+              onChange={handleOnchange}
+              disabled={isLoading}
             />
           </div>
         </div>
 
         {/* Reset Password Button */}
-        <button className="w-full mt-6 bg-lime-500 text-black font-bold py-2 rounded-lg hover:bg-lime-600">
+        <button type="button" className="w-full mt-6 bg-lime-500 text-black font-bold py-2 rounded-lg hover:bg-lime-600" onClick={handleResetPasswordRequest}>
+          {isLoading && <Loader />}
           Reset Password
         </button>
 

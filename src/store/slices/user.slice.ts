@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getCookie } from "@/utils/cookie.utility";
 
 const initialState = {
     currentUser: null,
-    accessToken: null,
-    isAuthenticated: false,
+    accessToken: getCookie('token') || null,
     userDetails: {
         firstname: '',
         lastname: '',
@@ -24,12 +24,10 @@ const userSlice = createSlice({
     reducers: {
         setCurrentUser: (state, action) => void (state.currentUser = action.payload),
         setToken: (state, action) => void (state.accessToken = action.payload),
-        setIsAuthenticated: (state, action) => void (state.isAuthenticated = action.payload),
         setUserDetails: (state, action) => void (state.userDetails = action.payload),
         logOut: (state) => {
             state.currentUser = null;
             state.accessToken = null;
-            state.isAuthenticated = false;
             state.userDetails = {
                 firstname: '',
                 lastname: '',
@@ -49,7 +47,6 @@ const userSlice = createSlice({
 export const {
     setCurrentUser,
     setToken,
-    setIsAuthenticated,
     setUserDetails,
     logOut
 } = userSlice.actions;
