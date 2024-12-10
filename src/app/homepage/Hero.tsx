@@ -81,6 +81,7 @@ const Hero = () => {
               height={20}
             />
             <select
+              title={''}
               className="bg-transparent outline-none text-white cursor-pointer"
             >
               <option value="lagos">Lagos</option>

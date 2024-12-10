@@ -3,14 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuid } from 'uuid';
 import { FaArrowLeftLong } from "react-icons/fa6";
+import axios from "axios";
 
 import ProgressBar from "./components/ProgressBar.component";
 import EventDetails from "./components/EventDetails.component";
-
-import { combinedStateAndCategoryProps } from "./types/types";
 import EventBanner from "./components/EventBanner.component";
 import EventTickets from "./components/EventTickets.component";
 import PreviewEvent from "./components/PreviewEvent.component";
+
+import { combinedStateAndCategoryProps } from "./types/types";
+import { useGetAllCategoriesQuery } from "@/services/slices/category.slice";
+import { useGetAllStatesQuery } from "@/services/slices/state.slice";
 
 interface SessionsProps {
   id: string;
@@ -35,17 +38,25 @@ export interface EventDetailsProps {
 
 export default function CreateEvent() {
 
-  const [formStep, setFormStep] = useState(4);
+  const [formStep, setFormStep] = useState(1);
 
   const [categories, setCategories] = useState<combinedStateAndCategoryProps[]>([]);
   const [states, setStates] = useState<combinedStateAndCategoryProps[]>([]);
 
+  const { data: categoriesData } = useGetAllCategoriesQuery('');
+  const { data: allStates } = useGetAllStatesQuery('AG');
+
   useEffect(() => {
     // fetch categories
-    setCategories([]);
-    setStates([]);
+    if (categoriesData && categoriesData.body) {
+      setCategories(categoriesData.body);
+    }
+
+    if (allStates && allStates.body) {
+      setStates(allStates.body);
+    }
     // fetch states
-  }, []);
+  }, [allStates, categoriesData]);
 
   const [eventDetails, setEventDetails] = useState<EventDetailsProps>({
     title: "",
@@ -62,23 +73,22 @@ export default function CreateEvent() {
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const parsedData = JSON.parse(event.target.value);
-    const { value } = parsedData;
-    if (value) {
-      setEventDetails({ ...eventDetails, category: value });
+    const { id } = parsedData;
+    if (id) {
+      setEventDetails({ ...eventDetails, category: id });
     }
   };
 
   const handleEventTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const parsedData = JSON.parse(event.target.value);
-    const { value } = parsedData;
+    const { value } = event.target;
     setEventDetails({ ...eventDetails, type: value });
   };
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const parsedData = JSON.parse(event.target.value);
-    const { value } = parsedData;
-    if (value) {
-      setEventDetails({ ...eventDetails, state: value });
+    const { id } = parsedData;
+    if (id) {
+      setEventDetails({ ...eventDetails, state: id });
     }
   };
 
@@ -123,7 +133,7 @@ export default function CreateEvent() {
 
   // file upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  // const [uploadedBanner, setUploadedBanner] = useState<string | null>(null);
+  const [uploadedBanner, setUploadedBanner] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,24 +160,23 @@ export default function CreateEvent() {
       const formData = new FormData();
       formData.append('files', file);
 
-      console.log(formData);
       // Had to upload file with axios, was getting error in the fileUploads.slice.ts
-      // try {
-      //   const response = await axios.post(`${import.meta.env.VITE_BASE_URL}file`, formData, {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //     },
-      //   });
+      try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}file`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
-      //   if (response.data.body.length > 0) {
-      //     setUploadedBanner(response.data.body[0].secure_url);
-      //   } else {
-      //     console.error('Error uploading file');
-      //   }
+        if (response.data.body.length > 0) {
+          setUploadedBanner(response.data.body[0].secure_url);
+        } else {
+          console.error('Error uploading file');
+        }
 
-      // } catch (error) {
-      //   console.error('Error uploading file:', error);
-      // }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
     }
   };
 
@@ -197,8 +206,9 @@ export default function CreateEvent() {
 
   const handleSaveAndContinue = () => {
     if (formStep === 1) {
-      if (eventDetails.title === "" || eventDetails.category?.name === undefined || eventDetails.type === "" || sessions.length === 0 || eventDetails.state?.name === undefined || eventDetails.description === "") {
+      if (eventDetails.title === "" || eventDetails.category === undefined || eventDetails.type === "" || sessions.length === 0 || eventDetails.state === undefined || eventDetails.description === "") {
         console.log('fill all input fields');
+        console.log(eventDetails, sessions);
         return;
       }
 
@@ -225,15 +235,15 @@ export default function CreateEvent() {
   const handleCreateEvent = async () => {
     const newEvent = {
       title: eventDetails.title,
-      category_id: eventDetails.category?.id,
-      state_id: eventDetails.state?.id,
+      category_id: eventDetails.category,
+      state_id: eventDetails.state,
       city: eventDetails.state?.name,
       description: eventDetails.description,
-      // images: [uploadedBanner],
+      images: [uploadedBanner],
       ticketed: eventType === 'ticketed',
       tickets: eventType === 'ticketed' ? tickets.map(ticket => ({ name: ticket.name, price: ticket.price })) : [],
       sessions: sessions.map(session => ({
-        date: session.startDate?.toISOString().split('T')[0],
+        date: session.startDate,
         start_time: session.startTime,
         end_time: session.endTime,
       })),
