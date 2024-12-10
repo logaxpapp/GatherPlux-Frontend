@@ -13,6 +13,7 @@ import { useLoginUserMutation } from '@/services/slices/user.slice';
 import Loader from '@/components/Loader';
 import { setToken } from '@/store/slices/user.slice';
 import { setCookie } from '@/utils/cookie.utility';
+import Link from 'next/link';
 
 export default function Login() {
   const router = useRouter();
@@ -111,7 +112,7 @@ export default function Login() {
           {/* Password */}
           <div>
             <label className="block text-sm font-medium mb-1 text-[#dbdae3]">Password</label>
-            <div className="border-[1px] border-[#97a0a4] bg-[#284449]  flex items-center px-3  rounded-md">
+            <div className="border-[1px] border-[#97a0a4] bg-[#284449]  flex items-center px-3 mb-3  rounded-md">
               <Image src={Lock.src} alt="Profile" width={24} height={24} className="mr-2" />
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -128,8 +129,8 @@ export default function Login() {
               </button>
             </div>
           </div>
-          <p className='text-right text-[#9EDD45] pb-6'>Forgot password</p>
 
+          <Link href='/auth/forgot-password' className='flex items-center justify-end text-[#9EDD45] pb-6'>Forgot password</Link>
 
           {/* Submit Button */}
           <button
@@ -145,7 +146,7 @@ export default function Login() {
         <div className="mt-4 text-gray-400">
           <p>
             Don&apos;t have an account?{' '}
-            <a href="/login" className="text-[#9EDD45] hover:underline">
+            <a href="/auth/register" className="text-[#9EDD45] hover:underline">
               Create account
             </a>
           </p>

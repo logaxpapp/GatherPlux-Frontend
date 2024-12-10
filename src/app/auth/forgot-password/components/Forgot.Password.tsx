@@ -110,7 +110,7 @@ const ForgotPassword: React.FC = () => {
 
         {/* Back to Login Link */}
         <div className="mt-4 text-center">
-          <Link href="/login" className="text-[#9EDD45] hover:underline flex items-center justify-center">
+          <Link href="/auth/login" className="text-[#9EDD45] hover:underline flex items-center justify-center">
             <span className="mr-1">←</span> Back to login
           </Link>
         </div>
