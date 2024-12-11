@@ -1,7 +1,7 @@
 import Loader from "@/components/Loader";
 import Image from "next/image";
 import React from "react";
-import { FiUser, FiMail, FiLock, FiBook } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiBook, FiBookmark } from "react-icons/fi";
 
 <FiUser className="text-[#a5b0c1] w-5 h-5" />;
 
@@ -55,6 +55,10 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
                 <FiBook className="w-4 h-4" />
                 <span>Bookings</span>
               </li>
+              <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
+      <FiBookmark className="w-4 h-4" />
+      <span>Bookmark</span>
+    </li>
             </ul>
           </div>
 

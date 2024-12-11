@@ -1,4 +1,4 @@
-'use strict'; 
+'use strict';
 'use client';
 
 import { useVerifyUserMutation } from '@/services/slices/user.slice';
@@ -56,7 +56,7 @@ export default function EmailVerification() {
         }}
       >
         <div
-          className="w-full max-w-md p-6 text-white rounded-3xl shadow-lg relative"
+          className="w-full max-w-md p-6 text-white rounded-3xl shadow-lg mx-auto"
           style={{
             background: 'linear-gradient(to bottom, #102730, #123739, #10212d)',
             borderTop: '5px solid #9EDD45',
@@ -70,7 +70,7 @@ export default function EmailVerification() {
             We have sent a 6-digit OTP to <span className="text-white">{email}</span>. Please enter
             the code below to verify your mail.
           </p>
-          <div className="flex justify-between gap-2 mb-6">
+          <div className="flex flex-col items-center gap-4 mb-6">
             <OTPInput length={6} onChange={handleOtpChange} isLoading={isLoading} />
             {isLoading && <Loader />}
           </div>
