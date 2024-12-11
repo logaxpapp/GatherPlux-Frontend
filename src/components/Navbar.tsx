@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import MobileNavbar from "./MobileNavbar";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -91,13 +92,15 @@ const Navbar = () => {
             </a>
 
             {/* User Avatar */}
-            <Image
-              src="/avatar.png"
-              alt="User Avatar"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
+            <Link href="/auth/login">
+              <Image
+                src="/avatar.png"
+                alt="User Avatar"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+            </Link>
           </div>
         </div>
       </nav>

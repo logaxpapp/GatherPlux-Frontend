@@ -1,49 +1,78 @@
-import React from "react";
+'use client';
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { useGetAllPublicEventsQuery } from "@/services/slices/events.slice";
+import { useGetAllCategoriesQuery } from "@/services/slices/category.slice";
+import { setEvents as setStateEvents } from "@/store/slices/event.slice";
+import { setCategories as setStateCategories } from "@/store/slices/category.slice";
+
+interface CategoriesProps {
+  id: number;
+  name: string;
+  description: string;
+}
+
+const formatDate = (dateString: string) => {
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
+    }).replace(',', '');
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return dateString; // Fallback to original string if formatting fails
+  }
+};
+
+interface EventProps {
+  id: number;
+  images: string[];
+  category_id: number;
+  title: string;
+  start_date: string;
+  time: string;
+  city: string;
+  price: number;
+  likes: number;
+}
 
 const EventCard = () => {
-  const categories = ["Art", "Collectibles", "Metaverse", "Virtual Worlds", "Sports", "Music"];
-  const events = [
-    {
-      image: "/Rectangle 2.png",
-      category: "Technology & Innovation",
-      title: "Event title that can go up to two lines",
-      date: "Nov 22",
-      time: "00:00 AM",
-      venue: "Venue Name",
-      price: 499,
-      interested: 10,
-    },
-    {
-      image: "/image.png",
-      category: "Technology & Innovation",
-      title: "Event title that can go up to two lines",
-      date: "Nov 22",
-      time: "00:00 AM",
-      venue: "Venue Name",
-      price: 499,
-      interested: 10,
-    },
-    {
-      image: "/Rectangle 2.png",
-      category: "Technology & Innovation",
-      title: "Event title that can go up to two lines",
-      date: "Nov 22",
-      time: "00:00 AM",
-      venue: "Venue Name",
-      price: 499,
-      interested: 10,
-    },
-  ];
+  const dispatch = useDispatch();
+
+  const [categories, setCategories] = useState<CategoriesProps[]>([]);
+  const [events, setEvents] = useState<EventProps[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  const { data: eventsData } = useGetAllPublicEventsQuery('');
+  const { data: categoriesData } = useGetAllCategoriesQuery('');
+
+  useEffect(() => {
+    setIsClient(true);
+
+    if (eventsData && eventsData.body) {
+      setEvents(eventsData.body.events.records);
+      dispatch(setStateEvents(eventsData.body.events.records));
+    }
+
+    if (categoriesData && categoriesData.body) {
+      setCategories(categoriesData.body);
+      dispatch(setStateCategories(categoriesData.body));
+    }
+  }, [eventsData, categoriesData, dispatch]);
+
+
 
   return (
     <div
       className="bg-[#020e1e] min-h-screen py-10 relative pb-56"
       style={{
-        backgroundImage: "url('/Line.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
+        backgroundImage: "url('/Line.png')", // Path to your gradient image
+        backgroundSize: "cover", // Adjust to fit your design
+        backgroundPosition: "center", // Center the image
+        backgroundRepeat: "no-repeat", // Prevent tiling
       }}
     >
       {/* Section Heading */}
@@ -58,87 +87,101 @@ const EventCard = () => {
 
       {/* Categories Section */}
       <div className="flex justify-center gap-4 flex-wrap mb-8">
-        {categories.map((category, index) => (
-          <button
-            key={index}
-            className={`px-8 py-2 rounded-full text-sm font-semibold ${
-              category === "Art"
-                ? "bg-[#9edd45] text-black"
-                : "border border-gray-800 hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
+        {
+          categories && categories.length > 0 ? (
+            categories.map((category, index) => (
+              <button
+                type="button"
+                key={category.id}
+                className={`px-8 py-2 rounded-full text-sm font-semibold ${index === 0
+                  ? "bg-[#9edd45] text-black"
+                  : "border border-gray-800 hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded"
+                  }`}
+              >
+                {category.name}
+              </button>
+            ))
+          ) : (
+            <div>No categories available</div>
+          )
+        }
+
       </div>
 
       {/* Events Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-        {events.map((event, index) => (
-          <div
-            key={index}
-            className="bg-gray-800 rounded-lg shadow-lg overflow-hidden relative"
-          >
-            {/* Image Section */}
-            <div className="relative w-full h-64">
-              <Image
-                src={event.image}
-                alt={event.title}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-t-lg"
-              />
-              <span className="absolute top-2 right-2">
-                <Image
-                  src="/verify.png"
-                  alt="Verified"
-                  width={24}
-                  height={24}
-                />
-              </span>
-            </div>
-            {/* Content Section */}
-            <div className="p-4">
-              <span className="bg-[#9edd45] text-black text-xs font-semibold px-2 py-1 rounded">
-                {event.category}
-              </span>
-              <h3 className="text-white font-[600] text-[19.8px] text-lg mt-2">
-                {event.title}
-              </h3>
-              <p className="text-gray-400 text-sm mt-1">{event.venue}</p>
-              <p className="text-gray-400 text-sm">{event.time}</p>
-              <div className="flex items-center justify-between mt-4">
-                {/* Price Section */}
-                <div className="flex items-center">
+        {
+          events && events.length > 0 ? (
+            events.map((event) => (
+              <div
+                key={event.id}
+                className="bg-gray-800 rounded-lg shadow-lg overflow-hidden relative"
+              >
+                {/* Image Section */}
+                <div className="relative">
                   <Image
-                    src="/ticket.png"
-                    alt="Ticket Icon"
-                    width={16}
-                    height={16}
-                    className="mr-2"
+                    src={event.images[0]}
+                    alt={event.title}
+                    layout="responsive"
+                    width={400} // Adjust width and height as needed
+                    height={160}
+                    className="rounded-t-lg"
                   />
-                  <p className="text-[#9edd45] font-bold">₹{event.price}</p>
+                  <span className="absolute top-2 right-2">
+                    <Image
+                      src="/verify.png" // Path to your verify image
+                      alt="Verified"
+                      width={24} // Adjust the size of the image
+                      height={24}
+                    />
+                  </span>
                 </div>
+                {/* Content Section */}
+                <div className="p-4">
+                  <span className="bg-[#9edd45] text-black text-xs font-semibold px-2 py-1 rounded">
+                    {event.category_id}
+                  </span>
+                  <h3 className="text-white font-[600] text-[19.8px] text-lg mt-2 ">
+                    {event.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm mt-1">{event.city}</p>
+                  <p className="text-gray-400 text-sm">{event.time}</p>
+                  <div className="flex items-center justify-between mt-4">
+                    {/* Price Section */}
+                    <div className="flex items-center">
+                      <Image
+                        src="/ticket.png" // Path to your ticket image
+                        alt="Ticket Icon"
+                        width={16}
+                        height={190}
+                        className="mr-2"
+                      />
+                      <p className="text-[#9edd45] font-bold">₹{event.price}</p>
+                    </div>
 
-                {/* Interested Section */}
-                <div className="flex items-center text-gray-400 text-sm">
-                  <Image
-                    src="/Star 1.png"
-                    alt="Star Icon"
-                    width={16}
-                    height={16}
-                    className="mr-2"
-                  />
-                  <p>{event.interested} interested</p>
+                    {/* Interested Section */}
+                    <div className="flex items-center text-gray-400 text-sm">
+                      <Image
+                        src="/Star 1.png" // Path to your star image
+                        alt="Star Icon"
+                        width={16} // Adjust width and height as needed
+                        height={16}
+                        className="mr-2"
+                      />
+                      <p>{event.likes} interested</p>
+                    </div>
+                  </div>
+                </div>
+                {/* Date Badge */}
+                <div className="absolute top-4 left-4 bg-white text-black font-bold text-sm rounded-full w-12 h-12 flex items-center justify-center">
+                  {isClient ? formatDate(event.start_date) : event.start_date}
                 </div>
               </div>
-            </div>
-            {/* Date Badge */}
-            <div className="absolute top-4 left-4 bg-white text-black font-bold text-sm rounded-full w-12 h-12 flex items-center justify-center">
-              {event.date}
-            </div>
-          </div>
-        ))}
+            ))
+          ) : (
+            <div>No events available</div>
+          )
+        }
       </div>
     </div>
   );

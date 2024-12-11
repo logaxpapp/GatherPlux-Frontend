@@ -53,7 +53,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
             onChange={handleCategoryChange}
             defaultValue=""
           >
-            <option value="" selected disabled>Please select one</option>
+            <option value="" disabled>Please select one</option>
             {categories?.map((eachCategory) => (
               <option
                 value={JSON.stringify(eachCategory)}
