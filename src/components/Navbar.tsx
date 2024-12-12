@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import MobileNavbar from "./MobileNavbar";
 import Link from "next/link";
+import { FaChevronDown } from "react-icons/fa";
 
 const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("US");
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
@@ -16,10 +18,25 @@ const Navbar = () => {
     setDropdownOpen(false);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <nav className="hidden lg:flex fixed top-0 left-0 w-full justify-center z-50 mt-8">
-        <div className="flex items-center justify-between px-8 py-4 bg-gray-800/70 backdrop-blur-md text-white w-[90%] max-w-6xl shadow-lg">
+      <nav
+        className={`hidden lg:flex fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
+          hasScrolled ? "bg-[#020e1e] border-b-[1px] border-[#9edd45]" : "bg-transparent"
+        }`}
+      >
+        <div className="flex items-center justify-between px-8 py-8 w-full max-w-6xl mx-auto text-white shadow-lg">
           {/* Logo */}
           <div className="flex items-center">
             <Image
@@ -32,13 +49,13 @@ const Navbar = () => {
 
           {/* Navigation Links */}
           <div className="flex space-x-8 text-sm">
-            <a href="#" className="hover:text-gray-300">
+            <a href="#" className="hover:text-[#9edd45] text-white">
               Category
             </a>
-            <a href="#" className="hover:text-gray-300">
+            <a href="#" className="hover:text-[#9edd45] text-white">
               Upcoming Events
             </a>
-            <a href="#" className="hover:text-gray-300">
+            <a href="#" className="hover:text-[#9edd45] text-white">
               Support
             </a>
           </div>
@@ -49,7 +66,7 @@ const Navbar = () => {
             <div className="relative">
               <button
                 type="button"
-                className="flex items-center gap-2 text-white"
+                className="flex items-center gap-1 text-white"
                 onClick={toggleDropdown}
               >
                 <Image
@@ -59,10 +76,13 @@ const Navbar = () => {
                   height={16}
                 />
                 <span className="text-sm capitalize">{selectedCountry}</span>
+                <FaChevronDown className="text-white" />
               </button>
               {isDropdownOpen && (
                 <ul className="absolute top-full right-0 mt-2 w-40 bg-white text-black shadow-lg rounded z-50">
-                  {["US", "GB", "CA", "AU"].map((country) => (
+                  {[
+                    "US", "GB", "CA", "AU"
+                  ].map((country) => (
                     <li
                       key={country}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
@@ -86,7 +106,7 @@ const Navbar = () => {
             {/* Create Event Button */}
             <a
               href="/create-event"
-              className="bg-[#9edd45] text-black px-4 py-2 font-medium hover:bg-green-400 rounded"
+              className="bg-[#9edd45] text-black px-4 py-2 font-medium hover:bg-green-400 rounded-full"
             >
               + Create Event
             </a>

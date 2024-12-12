@@ -1,4 +1,4 @@
-import Loader from "@/components/Loader";
+// import Loader from "@/components/Loader";
 import Image from "next/image";
 import React from "react";
 import { FiUser, FiMail, FiLock, FiBook, FiBookmark } from "react-icons/fi";
@@ -19,18 +19,18 @@ interface Props {
 }
 
 const ProfilePage: React.FC<Props> = ({
-  image,
-  email,
-  firstname,
-  lastname,
-  phone,
-  address,
-  isLoading,
-  handleUpdateProfile,
-  triggerFilePicker,
-  handleAllOnChange,
-  fileInputRef,
-  handleFileChange,
+  // image,
+  // email,
+  // firstname,
+  // lastname,
+  // phone,
+  // address,
+  // isLoading,
+  // handleUpdateProfile,
+  // triggerFilePicker,
+  // handleAllOnChange,
+  // fileInputRef,
+  // handleFileChange,
 }) => {
   return (
     <div className="min-h-screen bg-[#020e1e] flex justify-center py-10 text-white mt-11">
