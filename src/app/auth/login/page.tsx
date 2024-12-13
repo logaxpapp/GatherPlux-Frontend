@@ -47,7 +47,7 @@ export default function Login() {
       if (response && response.code === 200 && response.message === 'SUCCESSFUL') {
         setCookie('token', response.body.access_token);
         dispatch(setToken(response.body.access_token));
-        router.push("/profile");
+        router.push("/profile/profilePage");
       }
 
       if (response && response.status === 401) {
