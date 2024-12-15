@@ -1,9 +1,7 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
 import { IoTimeOutline, IoTicketSharp, IoLocationOutline } from "react-icons/io5";
 import { SlCalender } from "react-icons/sl";
 import { EventDetailsProps } from '../page';
-// import { RootState } from '';
 import Image from 'next/image';
 
 interface PreviewEventProps {
@@ -13,8 +11,6 @@ interface PreviewEventProps {
 }
 
 const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails, handleCreateEvent }) => {
-
-  // const user = useSelector((state: RootState) => state.user.userDetails);
   const user = {
     firstname: 'John',
     lastname: 'Doe',
@@ -23,84 +19,146 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails,
   };
 
   return (
-    <div className="px-20">
-      <p className="mb-10">Nearly there! Check everything&apos;s correct.</p>
-      <div className="w-8/12 mx-auto p-4 bg-white border rounded-lg shadow-md">
+    <div className="min-h-screen bg-[#0D1117] text-white px-10 py-10">
+      {/* Event Card */}
+      <div className="max-w-[1100px] mx-auto border border-[#9EDD45] rounded-xl p-6 bg-[#020e1e] shadow-md">
         {/* Event Image */}
-        <div className="mb-4">
-          <div className="w-full h-[570px] bg-gray-200 rounded-md flex items-center justify-center">
-            {selectedFile ? (
-              <Image
-                src={URL.createObjectURL(selectedFile)}
-                alt="Event Banner"
-                width={570}
-                height={500}
-                className="rounded-md h-[570px]" />
-            ) : (
-              <span className="text-gray-500">No Image Selected</span>
-            )}
+        <div className="relative w-full rounded-lg overflow-hidden mb-6">
+          {selectedFile ? (
+            <Image
+              src={URL.createObjectURL(selectedFile)}
+              alt="Event Banner"
+              width={1200}
+              height={500}
+              className="w-full h-[300px] object-cover"
+            />
+          ) : (
+            <Image
+              src="/mnt/data/Screenshot (1168).png"
+              alt="Default Event"
+              width={1200}
+              height={500}
+              className="w-full h-[300px] object-cover"
+            />
+          )}
+          <div className="absolute top-0 right-0 bg-[#9EDD45] text-black px-4 py-2 rounded-bl-lg font-bold">
+            LIVE EVENT
           </div>
         </div>
 
         {/* Event Details */}
-        <div className="mb-4">
-          <h2 className="text-2xl font-semibold text-black">{eventDetails.title || 'Event Title'}</h2>
-          <div className="mt-6 flex justify-between">
-            <div className="flex flex-col space-y-2">
-              <h3 className="font-bold text-lg text-gray-700">Date and Time</h3>
-              <div className="flex flex-col space-y-2 text-black">
-                <p className="flex items-center"><SlCalender className="pr-2 text-xl" /> Day, Date</p>
-                <p className="flex items-center"><IoTimeOutline className="pr-2 text-xl" /> Time</p>
-              </div>
-              <div className="flex">
-                <p className="pr-5"> </p>
-                <a href="#" className="text-blue-500 text-sm">+ Add to Calendar</a>
-              </div>
-            </div>
-            <div className='text-black'>
-              <h3 className="font-bold text-lg">Ticket Information</h3>
-              <p className="flex items-center"><IoTicketSharp className="mr-2" /> {eventDetails.type === 'ticketed' ? 'Ticketed' : 'Free'}</p>
-            </div>
-          </div>
-        </div>
+        <div className="flex flex-wrap gap-6">
 
-        {/* Event Location */}
-        <div className="my-6">
-          <h3 className="font-bold text-gray-700 text-lg">Location</h3>
-          <p className="text-gray-600 my-4 flex items-center"><IoLocationOutline className="mr-2" />{eventDetails.state?.name || 'Address'}</p>
-          <div className="w-full h-48 bg-gray-200 rounded-md flex items-center justify-center">
-            <span className="text-gray-500">Map Placeholder</span>
-          </div>
-        </div>
 
-        {/* Host Info */}
-        <div className="my-6 text-black">
-          <h3 className="font-bold pb-4 text-lg">Hosted by</h3>
-          <div className="flex space-x-1">
-            <div className="w-16 h-18 bg-gray-300 rounded-md mr-3"></div>
+
+
+          {/* Left Section */}
+          <div className="w-full lg:w-1/2 space-y-6">
+            <h1 className="text-3xl font-bold text-[#fdfdfd]">{eventDetails.title || 'Sound Of Christmas 2024'}</h1>
+
+
+             {/* Description */}
+             <div>
+              <h2 className="font-semibold text-lg mb-2">About the Event</h2>
+              <p className="text-gray-400">
+                {eventDetails.description ||
+                  'Get ready to kick off the Christmas season with the Sound Of Christmas 2024. Join us for an exciting night of music, choir, and dance performances!'}
+              </p>
+            </div>
+
+   
+
+            {/* Host Info */}
             <div>
-              <h3 className="font-semibold">{user.firstname}</h3>
-              <div className="flex space-x-2 mt-2">
-                <button type="button" className="border border-[#2B293D] rounded-md px-2 py-1 text-sm">Contact</button>
-                <button type="button" className="text-white bg-black px-2 py-1 rounded-md text-sm">+ Follow</button>
+              <h1 className="font-extralight text-lg mb-2">Hosted by</h1>
+              <p className="font-bold">
+                {user.firstname} {user.lastname} - LogaXP Groups
+              </p>
+            </div>
+
+           
+          </div>
+
+          {/* Right Section */}
+          <div className="w-full lg:w-1/2 max-w-[300px] ml-auto bg-[#1b2634] border-[#9EDD45] rounded-lg p-6 border-2">
+            {/* Date and Time */}
+            <div className="mb-4">
+              <h2 className="font-bold text-xl mb-2">Date and Time</h2>
+              <p className="flex items-center">
+                <SlCalender className="text-[#9EDD45] mr-2" /> Saturday, 2 December 2023
+              </p>
+              <p className="flex items-center mt-1">
+                <IoTimeOutline className="text-[#9EDD45] mr-2" /> 6:30 PM - 9:30 PM
+              </p>
+            </div>
+
+            {/* Divider Line */}
+            <hr className="border-t border-gray-500 my-4" />
+
+            {/* Ticket Information */}
+            <div>
+              <h2 className="font-bold text-xl mb-2">Ticket Information</h2>
+              <p className="text-gray-400 text-sm mb-2">
+                Numbers of Tickets <span className="text-[#9EDD45] font-semibold">200,000</span>
+              </p>
+              <div className="space-y-2">
+                <p className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    <IoTicketSharp className="text-[#9EDD45] mr-2" /> Standard Ticket
+                  </span>
+                  <span className="text-yellow-400 font-semibold">₦ 200 each</span>
+                </p>
+
+                <p className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    <IoTicketSharp className="text-[#9EDD45] mr-2" /> VIP Ticket
+                  </span>
+                  <span className="text-yellow-400 font-semibold">₦ 3,000 each</span>
+                </p>
+
+                <p className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    <IoTicketSharp className="text-[#9EDD45] mr-2" /> Reserved
+                  </span>
+                  <span className="text-yellow-400 font-semibold">₦ 4,000,000 each</span>
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Event Description */}
-        <div className="my-6">
-          <h3 className="font-bold text-gray-700 text-lg">Event Description</h3>
-          <p className="text-gray-600 text-sm mt-2">
-            {eventDetails.description ||
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.'}
-          </p>
+        {/* Buttons */}
+        <div className="flex justify-end mt-6 space-x-4">
+          <button className="bg-gray-600 px-4 py-2 rounded-md text-white">Save for Later</button>
+          <button
+            onClick={handleCreateEvent}
+            className="bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold"
+          >
+            Publish Event
+          </button>
         </div>
 
-      </div>
-      <div className="flex justify-end space-x-4 mt-6">
-        <button type="button" className="px-6 py-2 bg-yellow-400 text-white rounded-md">Save for Later</button>
-        <button type="button" className="px-6 py-2 bg-[#9EDD45] text-white rounded-md" onClick={handleCreateEvent}>Publish Event</button>
+
+
+
+        {/* Location */}
+<div className="mt-4">
+  <h2 className="font-semibold text-lg mb-2">Location</h2>
+  <p className="flex items-center mb-4">
+    <IoLocationOutline className="mr-2" />
+    {eventDetails.state?.name || '02 Arena, London West'}
+  </p>
+  {/* Map Image */}
+  <div className="relative rounded-lg overflow-hidden">
+    <Image
+      src="/Map (1).png"
+      alt="Event Location Map"
+      width={400}
+      height={200}
+      className="w-full h-auto object-cover"
+    />
+  </div>
+</div>
       </div>
     </div>
   );

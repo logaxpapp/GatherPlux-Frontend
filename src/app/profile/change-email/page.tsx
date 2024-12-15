@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiUser, FiLock, FiBook, FiBookmark } from "react-icons/fi";
+import {} from "react-icons/fi";
+import {  } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useUpdateUserProfileMutation } from "@/services/slices/user.slice";
@@ -89,50 +90,13 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#020e1e] flex justify-center py-10 text-white pt-28">
-      <div className="w-full max-w-6xl bg-[#020e1e] rounded-lg shadow-md flex flex-col lg:flex-row mt-14">
-
-        {/* Left Content Area (Sidebar) */}
-        <div className="w-full lg:w-1/4 bg-[#020e1e] p-6">
-          <div className="flex justify-start mb-8">
-            <button
-              type="button"
-              className="pr-14 pl-6 py-2 bg-[#93d437] text-[#0b1326] font-bold rounded-md hover:bg-[#a4de4a] text-lg"
-            >
-              Dashboard
-            </button>
-          </div>
-
-          <ul className="space-y-4">
-            <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-              <FiUser className="w-4 h-4" />
-              <span>Account Info</span>
-            </li>
-            <li className="flex items-center space-x-2 font-medium text-[#93d437] bg-[#243447] px-4 py-2 rounded-md text-sm w-44">
-              <span>Change Email</span>
-            </li>
-
-
-            <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-              <FiLock className="w-4 h-4" />
-              <span>Password</span>
-            </li>
-            <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-              <FiBook className="w-4 h-4" />
-              <span>Bookings</span>
-            </li>
-            <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-              <FiBookmark className="w-4 h-4" />
-              <span>Bookmark</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Separator Line */}
-        <div className="hidden lg:block w-[1px] bg-[#2c3e50]"></div>
+    <div className="min-h-screen bg-[#020e1e] flex justify-center  text-white ">
+      <div className="w-full max-w-6xl bg-[#020e1e] rounded-lg shadow-md flex flex-col lg:flex-row ">
 
         {/* right section */}
 
+       <div className="flex flex-col w-full pl-8">
+      
         <div className="flex flex-col w-full p-8">
           <h2 className="text-white text-3xl mb-6">Change Email</h2>
 
@@ -226,6 +190,7 @@ const ProfilePage: React.FC = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

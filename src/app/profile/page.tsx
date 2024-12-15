@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-import ProfilePage from "./components/ProfilePage";
+import ProfilePage from "./profilePage/components/ProfilePage";
 import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/services/slices/user.slice";
 import { logOut, setUserDetails } from "@/store/slices/user.slice";
 import { RootState } from "@/store/store";
 import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
 import { removeCookie } from "@/utils/cookie.utility";
+import SidebarLayout from './layout';  // Import the layout
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,6 @@ const Page = () => {
   const [address, setAddress] = useState("");
 
   const userInfo = useSelector((state: RootState) => state.user.userDetails);
-
 
   const { data } = useGetUserProfileQuery('');
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
@@ -82,10 +82,9 @@ const Page = () => {
         dispatch(setUserDetails(data.body));
       }
     } catch (err) {
-      console.error("An error occured: ", err);
+      console.error("An error occurred: ", err);
     }
   };
-
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const triggerFilePicker = () => {
@@ -100,7 +99,6 @@ const Page = () => {
       const formData = new FormData();
       formData.append('files', files[0]);
 
-      // Had to upload file with axios, was getting error in the fileUploads.slice.ts
       try {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}file`, formData, {
           headers: {
@@ -121,15 +119,29 @@ const Page = () => {
     router.push('/auth/login');
   };
 
-  return (
-    <div className="bg-[#020e1e] min-h-screen px-4 py-8 text-white">
-      <button type="button" onClick={handleLogout} className="bg-red-400 text-white absolute left-36 bottom-60 p-4">
-        Logout
-      </button>
-      <ProfilePage image={image} email={email} firstname={firstname} lastname={lastname} phone={phone} address={address} isLoading={isLoading} handleUpdateProfile={handleUpdateProfile} handleAllOnChange={handleAllOnChange} triggerFilePicker={triggerFilePicker} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
+  return (   
+    <div className="min-h-screen flex bg-[#020e1e] text-white">
+     
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        <ProfilePage
+          image={image}
+          email={email}
+          firstname={firstname}
+          lastname={lastname}
+          phone={phone}
+          address={address}
+          isLoading={isLoading}
+          handleUpdateProfile={handleUpdateProfile}
+          handleAllOnChange={handleAllOnChange}
+          triggerFilePicker={triggerFilePicker}
+          fileInputRef={fileInputRef}
+          handleFileChange={handleFileChange}
+        />
+      </div>
     </div>
+    
   );
-
 };
 
-export default isAuth(Page);
+export default Page;
