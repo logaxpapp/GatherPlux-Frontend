@@ -1,7 +1,7 @@
 import Loader from "@/components/Loader";
 import Image from "next/image";
 import React from "react";
-import { FiUser, FiMail, FiLock, FiBook, FiBookmark } from "react-icons/fi";
+import { FiUser, } from "react-icons/fi";
 
 <FiUser className="text-[#a5b0c1] w-5 h-5" />;
 
@@ -22,52 +22,16 @@ interface Props {
 
 const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone, address, isLoading, handleUpdateProfile, triggerFilePicker, handleAllOnChange, fileInputRef, handleFileChange }) => {
   return (
-    <div className="min-h-screen bg-[#020e1e] flex justify-center py-10 text-white">
-      <div className="w-full max-w-6xl bg-[#020e1e] rounded-lg shadow-md flex flex-col lg:flex-row mt-14">
-
-        <div className="w-full max-w-[1000px] bg-[#020e1e] flex justify-center mt-20">
-
-          {/* Left Content Area (Sidebar) */}
-          <div className="w-full lg:w-1/4 bg-[#020e1e] p-6">
-            {/* Dashboard Button */}
-            <div className="flex justify-start mb-8">
-              <button type="button" className="px-11 py-3 bg-[#93d437] text-[#0b1326] font-bold rounded-md hover:bg-[#a4de4a] text-lg">
-                Dashboard
-              </button>
-            </div>
-
-            {/* Sidebar Links */}
-            <ul className="space-y-4">
-              <li className="flex items-center space-x-2 font-medium text-[#93d437] bg-[#243447] px-4 py-2 rounded-md text-sm w-44">
-                <FiUser className="w-4 h-4" />
-                <span>Account Info</span>
-              </li>
-
-              <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-                <FiMail className="w-4 h-4" />
-                <span>Change Email</span>
-              </li>
-              <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-                <FiLock className="w-4 h-4" />
-                <span>Password</span>
-              </li>
-              <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-                <FiBook className="w-4 h-4" />
-                <span>Bookings</span>
-              </li>
-              <li className="flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm">
-      <FiBookmark className="w-4 h-4" />
-      <span>Bookmark</span>
-    </li>
-            </ul>
-          </div>
+    <div className="min-h-screen bg-[#020e1e] flex justify-center  text-white ">
+      <div className="w-full max-w-6xl bg-[#020e1e] rounded-lg shadow-md flex flex-col lg:flex-row ">
 
 
-          {/* Separator Line */}
-          <div className="hidden lg:block w-[1px] bg-[#2c3e50]"></div>
+        <div className="w-full max-w-[1000px] bg-[#020e1e] flex justify-center   ">
+
+         
 
           {/* Right Content Area */}
-          <div className="w-full lg:w-3/4 p-6 lg:p-8 bg-[#020e1e]">
+          <div className="w-full lg:w-3/4   bg-[#020e1e]">
             <h2 className="text-xl lg:text-2xl font-bold text-white mb-6">
               Account Information
             </h2>

@@ -261,10 +261,10 @@ export default function CreateEvent() {
 
 
   return (
-    <div className="my-32 px-10">
+    <div className="py-32 px-10 bg-[#020e1e]">
       <div className="flex items-center space-x-10">
-        <FaArrowLeftLong className="text-[48px] cursor-pointer" />
-        <h2 className="text-[48px] font-bold">Create a New Event</h2>
+        <FaArrowLeftLong className="text-[38px] cursor-pointer" />
+        <h2 className="text-[38px] font-bold">Create a New Event</h2>
       </div>
       <ProgressBar currentStep={formStep} />
 
@@ -294,7 +294,7 @@ export default function CreateEvent() {
         </div>
       )}
 
-      <div className="flex justify-end mt-20 mx-20">
+      <div className="flex justify-between mt-20 mx-20">
         {formStep > 1 && formStep < 4 && (
           <button type="button" className="border-none mr-8" onClick={handleGoBack}>
             {formStep === 2 ? 'Go back to Edit Event' : 'Go back'}
@@ -302,7 +302,7 @@ export default function CreateEvent() {
         )}
 
         {formStep !== 4 && (
-          <button type="button" className="w-80 h-[52px] bg-[#9EDD45] text-white rounded-full" onClick={handleSaveAndContinue}>
+          <button type="button" className="w-60 h-[42px] bg-[#9EDD45] text-black rounded-full" onClick={handleSaveAndContinue}>
             Save & Continue
           </button>
         )}

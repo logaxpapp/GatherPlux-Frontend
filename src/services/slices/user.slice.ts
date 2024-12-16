@@ -52,8 +52,15 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
+    resetPassword: builder.mutation({
+      query: (body) => ({
+        url: 'profile/password',
+        method: 'PUT',
+        body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useLoginUserMutation, useCreateUserMutation, useVerifyUserMutation, useResetUserPasswordRequestMutation, useSetNewPasswordMutation, useGetUserProfileQuery, useUpdateUserProfileMutation } = extendApiSlice;
+export const { useLoginUserMutation, useCreateUserMutation, useVerifyUserMutation, useResetUserPasswordRequestMutation, useSetNewPasswordMutation, useGetUserProfileQuery, useUpdateUserProfileMutation, useResetPasswordMutation } = extendApiSlice;
