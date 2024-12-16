@@ -1,29 +1,27 @@
 'use strict';
-"use client";
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
-import ProfilePage from "./profilePage/components/ProfilePage";
-import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/services/slices/user.slice";
-import { logOut, setUserDetails } from "@/store/slices/user.slice";
-import { RootState } from "@/store/store";
-import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
-import { removeCookie } from "@/utils/cookie.utility";
-import SidebarLayout from './layout';  // Import the layout
+import ProfilePage from './profilePage/components/ProfilePage';
+import {
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+} from '@/services/slices/user.slice';
+import { setUserDetails } from '@/store/slices/user.slice';
+import { RootState } from '@/store/store';
 
 const Page = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const [image, setImage] = useState<string | null>(null);
-  const [email, setEmail] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
 
   const userInfo = useSelector((state: RootState) => state.user.userDetails);
 
@@ -39,7 +37,7 @@ const Page = () => {
       setImage(data.body.image_url);
       setEmail(data.body.email);
 
-      // set the user details in the state 
+      // set the user details in the state
       dispatch(setUserDetails(data.body));
     }
   }, [data, dispatch]);
@@ -65,8 +63,14 @@ const Page = () => {
   };
 
   const handleUpdateProfile = async () => {
-    if (firstname === userInfo?.firstname && lastname === userInfo?.lastname && phone === userInfo?.phone && address === userInfo?.address && image === userInfo?.image_url) {
-      console.error("No changes made");
+    if (
+      firstname === userInfo?.firstname &&
+      lastname === userInfo?.lastname &&
+      phone === userInfo?.phone &&
+      address === userInfo?.address &&
+      image === userInfo?.image_url
+    ) {
+      console.error('No changes made');
       return;
     }
 
@@ -82,7 +86,7 @@ const Page = () => {
         dispatch(setUserDetails(data.body));
       }
     } catch (err) {
-      console.error("An error occurred: ", err);
+      console.error('An error occurred: ', err);
     }
   };
 
@@ -100,11 +104,15 @@ const Page = () => {
       formData.append('files', files[0]);
 
       try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}file`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}file`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           },
-        });
+        );
 
         setImage(response.data.body[0].secure_url);
       } catch (error) {
@@ -113,17 +121,10 @@ const Page = () => {
     }
   };
 
-  const handleLogout = () => {
-    removeCookie('token');
-    dispatch(logOut());
-    router.push('/auth/login');
-  };
-
-  return (   
-    <div className="min-h-screen flex bg-[#020e1e] text-white">
-     
+  return (
+    <div className='min-h-screen flex bg-[#020e1e] text-white'>
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className='flex-1 p-8'>
         <ProfilePage
           image={image}
           email={email}
@@ -140,7 +141,6 @@ const Page = () => {
         />
       </div>
     </div>
-    
   );
 };
 
