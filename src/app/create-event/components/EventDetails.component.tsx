@@ -1,24 +1,77 @@
+import React, { useState } from "react";
 import CustomCalendar from "@/components/CustomCalender";
 import CustomTimePicker from "@/components/CustomTimePicker";
 import { CiCirclePlus } from "react-icons/ci";
 import { combinedStateAndCategoryProps } from "../types/types";
 
 interface EventDetailsProps {
-  handleTitleAndDescription: (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleTitleAndDescription: (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
+  ) => void;
   categories: combinedStateAndCategoryProps[];
   states: combinedStateAndCategoryProps[];
   handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleEventTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  sessions: {
-    id: string;
-  }[];
-  handleStartDateChange: (date: Date | undefined, id: string) => void;
-  handleTimeChange: (time: string | undefined, id: string | undefined, type: string) => void;
-  handleAddSession: () => void;
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, categories = [], states = [], handleCategoryChange, handleEventTypeChange, sessions, handleStartDateChange, handleTimeChange, handleAddSession, handleLocationChange }) => {
+interface Session {
+  id: string;
+  name: string;
+  startDate: Date | undefined;
+  startTime: string | undefined;
+  endTime: string | undefined;
+}
+
+const EventDetails: React.FC<EventDetailsProps> = ({
+  handleTitleAndDescription,
+  categories = [],
+  states = [],
+  handleCategoryChange,
+  handleEventTypeChange,
+  handleLocationChange,
+}) => {
+  const [sessions, setSessions] = useState<Session[]>([
+    { id: "1", name: "", startDate: undefined, startTime: "", endTime: "" },
+  ]);
+  const [isMultipleSession, setIsMultipleSession] = useState(false);
+
+  // Add a new session
+  const handleAddSession = () => {
+    const newSession: Session = {
+      id: (sessions.length + 1).toString(),
+      name: "",
+      startDate: undefined,
+      startTime: "",
+      endTime: "",
+    };
+    setSessions([...sessions, newSession]);
+  };
+
+  // Handle session name change
+  const handleSessionNameChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const updatedSessions = sessions.map((session) =>
+      session.id === id ? { ...session, name: e.target.value } : session
+    );
+    setSessions(updatedSessions);
+  };
+
+  // Handle start date change
+  const handleStartDateChange = (date: Date | undefined, id: string) => {
+    const updatedSessions = sessions.map((session) =>
+      session.id === id ? { ...session, startDate: date } : session
+    );
+    setSessions(updatedSessions);
+  };
+
+  // Handle time changes (start time or end time)
+  const handleTimeChange = (time: string | undefined, id: string, type: string) => {
+    const updatedSessions = sessions.map((session) =>
+      session.id === id ? { ...session, [type]: time } : session
+    );
+    setSessions(updatedSessions);
+  };
+
   return (
     <>
       {/* Event Details */}
@@ -125,26 +178,50 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
           name="sessionType"
           value="Single Session"
           className="mr-2 h-4 w-4 text-[#9edd45] border-gray-600 focus:ring-[#9edd45]"
+          onChange={() => setIsMultipleSession(false)}
         />
         Single Session
       </label>
-      {/* Multiple Session */}
-      <label className="flex items-center text-[18px] text-white">
-        <input
-          type="radio"
-          name="sessionType"
-          value="Multiple Session"
-          className="mr-2 h-4 w-4 text-[#9edd45] border-gray-600 focus:ring-[#9edd45]"
-        />
-        Multiple Session
-      </label>
+   {/* Multiple Session */}
+<div className="w-[200px]"> {/* Adjust width here */}
+  <label className="flex items-center text-[18px] text-white">
+    <input
+      type="radio"
+      name="sessionType"
+      value="Multiple Session"
+      className="mr-2 h-4 w-4 text-[#9edd45] border-gray-600 focus:ring-[#9edd45]"
+      onChange={() => setIsMultipleSession(true)}
+    />
+    Multiple Session
+  </label>
+</div>
+
     </div>
   </div>
 
   {/* Session Input Fields */}
   <div className="space-y-6">
-    {sessions.map((session) => (
+    {sessions.map((session, index) => (
       <div key={session.id} className="grid grid-cols-12 gap-4 items-center">
+ 
+ 
+ {/* Session Name (only for multiple sessions) */}
+{isMultipleSession && (
+  <div className="col-span-12 mb-2 flex items-center justify-between">
+    <div className="flex items-center space-x-2">
+      <h2 className="text-lg text-white font-semibold">Session {index + 1}</h2>
+      <button
+        type="button"
+        className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
+        onClick={() => handleEditName(session.id)} // Replace this with your actual function
+      >
+        ✏️ edit name
+      </button>
+    </div>
+  </div>
+)}
+
+
         {/* Start Date */}
         <div className="col-span-4">
           <label className="block text-sm text-gray-400 mb-2">
@@ -198,8 +275,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({ handleTitleAndDescription, 
     ))}
   </div>
 </div>
-
-
 
 
 

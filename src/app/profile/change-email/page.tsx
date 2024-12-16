@@ -97,7 +97,7 @@ const ProfilePage: React.FC = () => {
 
        <div className="flex flex-col w-full pl-8">
       
-        <div className="flex flex-col w-full p-8">
+        <div className="flex flex-col w-full">
           <h2 className="text-white text-3xl mb-6">Change Email</h2>
 
           <div className="space-y-6">
