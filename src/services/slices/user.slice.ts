@@ -42,7 +42,6 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
         url: 'profile',
         method: 'GET',
       }),
-      providesTags: ['User'],
     }),
     updateUserProfile: builder.mutation({
       query: (body) => ({
@@ -50,7 +49,6 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: ['User'],
     }),
     resetPassword: builder.mutation({
       query: (body) => ({
@@ -59,8 +57,15 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
         body,
       }),
     }),
+    updateUserEmail: builder.mutation({
+      query: (body) => ({
+        url: 'profile/email',
+        method: 'PUT',
+        body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useLoginUserMutation, useCreateUserMutation, useVerifyUserMutation, useResetUserPasswordRequestMutation, useSetNewPasswordMutation, useGetUserProfileQuery, useUpdateUserProfileMutation, useResetPasswordMutation } = extendApiSlice;
+export const { useLoginUserMutation, useCreateUserMutation, useVerifyUserMutation, useResetUserPasswordRequestMutation, useSetNewPasswordMutation, useGetUserProfileQuery, useUpdateUserProfileMutation, useResetPasswordMutation, useUpdateUserEmailMutation } = extendApiSlice;

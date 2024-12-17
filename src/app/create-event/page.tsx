@@ -1,22 +1,23 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { FaArrowLeftLong } from "react-icons/fa6";
-import axios from "axios";
+import { FaArrowLeftLong } from 'react-icons/fa6';
+import axios from 'axios';
 
-import ProgressBar from "./components/ProgressBar.component";
-import EventDetails from "./components/EventDetails.component";
-import EventBanner from "./components/EventBanner.component";
-import EventTickets from "./components/EventTickets.component";
-import PreviewEvent from "./components/PreviewEvent.component";
+import ProgressBar from './components/ProgressBar.component';
+import EventDetails from './components/EventDetails.component';
+import EventBanner from './components/EventBanner.component';
+import EventTickets from './components/EventTickets.component';
+import PreviewEvent from './components/PreviewEvent.component';
 
-import { combinedStateAndCategoryProps } from "./types/types";
-import { useGetAllCategoriesQuery } from "@/services/slices/category.slice";
-import { useGetAllStatesQuery } from "@/services/slices/state.slice";
+import { combinedStateAndCategoryProps } from './types/types';
+import { useGetAllCategoriesQuery } from '@/services/slices/category.slice';
+import { useGetAllStatesQuery } from '@/services/slices/state.slice';
 
-interface SessionsProps {
+export interface SessionsProps {
   id: string;
+  name?: string;
   startDate: Date | undefined;
   startTime: string | undefined;
   endTime: string | undefined;
@@ -26,6 +27,7 @@ interface TicketEntry {
   id: string;
   name: string;
   price: string;
+  people: number;
 }
 
 export interface EventDetailsProps {
@@ -37,10 +39,11 @@ export interface EventDetailsProps {
 }
 
 export default function CreateEvent() {
+  const [formStep, setFormStep] = useState(4);
 
-  const [formStep, setFormStep] = useState(1);
-
-  const [categories, setCategories] = useState<combinedStateAndCategoryProps[]>([]);
+  const [categories, setCategories] = useState<combinedStateAndCategoryProps[]>(
+    [],
+  );
   const [states, setStates] = useState<combinedStateAndCategoryProps[]>([]);
 
   const { data: categoriesData } = useGetAllCategoriesQuery('');
@@ -59,19 +62,25 @@ export default function CreateEvent() {
   }, [allStates, categoriesData]);
 
   const [eventDetails, setEventDetails] = useState<EventDetailsProps>({
-    title: "",
+    title: '',
     category: undefined,
-    type: "One-Time",
+    type: 'one-time',
     state: undefined,
-    description: "",
+    description: '',
   });
 
-  const handleTitleAndDescription = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTitleAndDescription = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     setEventDetails({ ...eventDetails, [name]: value });
   };
 
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const parsedData = JSON.parse(event.target.value);
     const { id } = parsedData;
     if (id) {
@@ -79,12 +88,16 @@ export default function CreateEvent() {
     }
   };
 
-  const handleEventTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEventTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const { value } = event.target;
     setEventDetails({ ...eventDetails, type: value });
   };
 
-  const handleLocationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleLocationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const parsedData = JSON.parse(event.target.value);
     const { id } = parsedData;
     if (id) {
@@ -92,21 +105,35 @@ export default function CreateEvent() {
     }
   };
 
-
   // sessions
   const [sessions, setSessions] = useState<SessionsProps[]>([
     {
       id: uuid(),
       startDate: undefined,
-      startTime: "",
-      endTime: "",
+      startTime: '',
+      endTime: '',
     },
   ]);
+  const [isMultipleSession, setIsMultipleSession] = useState(false);
 
-  const handleAddSession = () => {
-    setSessions([...sessions, { id: uuid(), startDate: undefined, startTime: "", endTime: "" }]);
+  const handleSessionTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { value } = event.target;
+    setIsMultipleSession(value === 'multiple');
   };
 
+  const handleAddSession = () => {
+    setSessions([
+      ...sessions,
+      { id: uuid(), startDate: undefined, startTime: '', endTime: '' },
+    ]);
+  };
+
+  const handleDeleteSession = (id: string) => {
+    const updatedSessions = sessions.filter((session) => session.id !== id);
+    setSessions(updatedSessions);
+  };
 
   const handleStartDateChange = (date: Date | undefined, id: string) => {
     const updatedSessions = sessions.map((session) => {
@@ -119,7 +146,11 @@ export default function CreateEvent() {
     setSessions(updatedSessions);
   };
 
-  const handleTimeChange = (time: string | undefined, id: string | undefined, type: string) => {
+  const handleTimeChange = (
+    time: string | undefined,
+    id: string | undefined,
+    type: string,
+  ) => {
     const updatedSessions = sessions.map((session) => {
       if (session.id === id) {
         return { ...session, [type]: time };
@@ -130,6 +161,16 @@ export default function CreateEvent() {
     setSessions(updatedSessions);
   };
 
+  const handleSessionEditName = (id: string, name: string) => {
+    setSessions(
+      sessions.map((session) => {
+        if (session.id === id) {
+          return { ...session, name };
+        }
+        return session;
+      }),
+    );
+  };
 
   // file upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -143,7 +184,9 @@ export default function CreateEvent() {
       // Check file type
       const validTypes = ['image/jpeg', 'image/gif', 'image/png'];
       if (!validTypes.includes(file.type)) {
-        console.error('Invalid file type. Please upload JPG, GIF, or PNG files only.');
+        console.error(
+          'Invalid file type. Please upload JPG, GIF, or PNG files only.',
+        );
         return;
       }
 
@@ -152,7 +195,9 @@ export default function CreateEvent() {
       img.src = URL.createObjectURL(file);
       img.onload = () => {
         if (img.width < 1170 || img.height < 504) {
-          console.error('Image must be at least 1170 pixels wide by 504 pixels high.');
+          console.error(
+            'Image must be at least 1170 pixels wide by 504 pixels high.',
+          );
           return;
         }
       };
@@ -162,18 +207,21 @@ export default function CreateEvent() {
 
       // Had to upload file with axios, was getting error in the fileUploads.slice.ts
       try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}file`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}file`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           },
-        });
+        );
 
         if (response.data.body.length > 0) {
           setUploadedBanner(response.data.body[0].secure_url);
         } else {
           console.error('Error uploading file');
         }
-
       } catch (error) {
         console.error('Error uploading file:', error);
       }
@@ -183,49 +231,74 @@ export default function CreateEvent() {
   // tickets
   const [eventType, setEventType] = useState<string>('ticketed');
   const [tickets, setTickets] = useState<TicketEntry[]>([
-    { id: uuid(), name: '', price: '0.00' }
+    { id: uuid(), name: '', price: '0.00', people: 1 },
   ]);
+  const [numberOfTickets, setNumberOfTickets] = useState<number | ''>('');
 
   const addTicketEntry = () => {
-    setTickets([...tickets, { id: uuid(), name: '', price: '0.00' }]);
+    setTickets([
+      ...tickets,
+      { id: uuid(), name: '', price: '0.00', people: 1 },
+    ]);
   };
 
-  const updateTicket = (id: string, field: 'name' | 'price', value: string) => {
-    setTickets(tickets.map(ticket => {
-      if (ticket.id === id) {
-        return { ...ticket, [field]: value };
-      }
-      return ticket;
-    }));
+  const deleteTicketEntry = (id: string) => {
+    const updatedTickets = tickets.filter((ticket) => ticket.id !== id);
+    setTickets(updatedTickets);
+  };
+
+  const updateTicket = (
+    id: string,
+    field: 'name' | 'price' | 'people',
+    value: string,
+  ) => {
+    setTickets(
+      tickets.map((ticket) => {
+        if (ticket.id === id) {
+          return { ...ticket, [field]: value };
+        }
+        return ticket;
+      }),
+    );
   };
 
   const handleEventTypeOnTicket = (value: string) => {
     setEventType(value);
   };
 
+  const handleNumberOfTickets = (value: number | '') => {
+    setNumberOfTickets(value);
+  };
 
   const handleSaveAndContinue = () => {
     if (formStep === 1) {
-      if (eventDetails.title === "" || eventDetails.category === undefined || eventDetails.type === "" || sessions.length === 0 || eventDetails.state === undefined || eventDetails.description === "") {
+      if (
+        eventDetails.title === '' ||
+        eventDetails.category === undefined ||
+        eventDetails.type === '' ||
+        sessions.length === 0 ||
+        eventDetails.state === undefined ||
+        eventDetails.description === ''
+      ) {
         console.log('fill all input fields');
         console.log(eventDetails, sessions);
         return;
       }
-
     } else if (formStep === 2) {
       if (!selectedFile) {
         console.log('select a file');
         return;
       }
-
     } else if (formStep === 3) {
-      if (eventType === 'ticketed' && tickets.some(ticket => ticket.name === '' || ticket.price === '0.00')) {
+      if (
+        eventType === 'ticketed' &&
+        tickets.some((ticket) => ticket.name === '' || ticket.price === '0.00')
+      ) {
         console.log('fill all ticket fields');
         return;
       }
     }
     setFormStep((prev) => prev + 1);
-
   };
 
   const handleGoBack = () => {
@@ -241,8 +314,14 @@ export default function CreateEvent() {
       description: eventDetails.description,
       images: [uploadedBanner],
       ticketed: eventType === 'ticketed',
-      tickets: eventType === 'ticketed' ? tickets.map(ticket => ({ name: ticket.name, price: ticket.price })) : [],
-      sessions: sessions.map(session => ({
+      tickets:
+        eventType === 'ticketed'
+          ? tickets.map((ticket) => ({
+              name: ticket.name,
+              price: ticket.price,
+            }))
+          : [],
+      sessions: sessions.map((session) => ({
         date: session.startDate,
         start_time: session.startTime,
         end_time: session.endTime,
@@ -259,50 +338,88 @@ export default function CreateEvent() {
     // }
   };
 
-
   return (
-    <div className="py-32 px-10 bg-[#020e1e]">
-      <div className="flex items-center space-x-10">
-        <FaArrowLeftLong className="text-[38px] cursor-pointer" />
-        <h2 className="text-[38px] font-bold">Create a New Event</h2>
+    <div className='py-32 px-10 bg-[#020e1e]'>
+      <div className='flex items-center space-x-10'>
+        <FaArrowLeftLong className='text-[38px] cursor-pointer' />
+        <h2 className='text-[38px] font-bold'>Create a New Event</h2>
       </div>
       <ProgressBar currentStep={formStep} />
 
       {formStep === 1 && (
-        <div className="animate-fadeIn">
-          <EventDetails handleTitleAndDescription={handleTitleAndDescription} categories={categories} states={states} handleCategoryChange={handleCategoryChange} handleEventTypeChange={handleEventTypeChange} sessions={sessions} handleStartDateChange={handleStartDateChange} handleTimeChange={handleTimeChange} handleAddSession={handleAddSession} handleLocationChange={handleLocationChange} />
+        <div className='animate-fadeIn'>
+          <EventDetails
+            handleTitleAndDescription={handleTitleAndDescription}
+            categories={categories}
+            states={states}
+            handleCategoryChange={handleCategoryChange}
+            handleEventTypeChange={handleEventTypeChange}
+            sessions={sessions}
+            isMultipleSession={isMultipleSession}
+            handleSessionTypeChange={handleSessionTypeChange}
+            handleStartDateChange={handleStartDateChange}
+            handleTimeChange={handleTimeChange}
+            handleSessionEditName={handleSessionEditName}
+            handleAddSession={handleAddSession}
+            handleDeleteSession={handleDeleteSession}
+            handleLocationChange={handleLocationChange}
+            eventDetails={eventDetails}
+          />
         </div>
       )}
 
-      {
-        formStep === 2 && (
-          <div className="animate-slideIn">
-            <EventBanner fileInputRef={fileInputRef} handleFileChange={handleFileChange} selectedFile={selectedFile} />
-          </div>
-        )}
+      {formStep === 2 && (
+        <div className='animate-slideIn'>
+          <EventBanner
+            fileInputRef={fileInputRef}
+            handleFileChange={handleFileChange}
+            selectedFile={selectedFile}
+          />
+        </div>
+      )}
 
-      {
-        formStep === 3 && (
-          <div className="animate-slideIn">
-            <EventTickets eventType={eventType} handleEventTypeOnTicket={handleEventTypeOnTicket} tickets={tickets} updateTicket={updateTicket} addTicketEntry={addTicketEntry} />
-          </div>
-        )}
+      {formStep === 3 && (
+        <div className='animate-slideIn'>
+          <EventTickets
+            eventType={eventType}
+            handleEventTypeOnTicket={handleEventTypeOnTicket}
+            tickets={tickets}
+            updateTicket={updateTicket}
+            addTicketEntry={addTicketEntry}
+            handleNumberOfTickets={handleNumberOfTickets}
+            numberOfTickets={numberOfTickets}
+            deleteTicketEntry={deleteTicketEntry}
+          />
+        </div>
+      )}
 
       {formStep === 4 && (
-        <div className="animate-fadeIn">
-          <PreviewEvent selectedFile={selectedFile} eventDetails={eventDetails} handleCreateEvent={handleCreateEvent} />
+        <div className='animate-fadeIn'>
+          <PreviewEvent
+            selectedFile={selectedFile}
+            eventDetails={eventDetails}
+            handleCreateEvent={handleCreateEvent}
+          />
         </div>
       )}
 
-      <div className="flex justify-between mt-20 mx-20">
+      <div className='flex justify-between mt-20 mx-20'>
         {formStep > 1 && formStep < 4 && (
-          <button type="button" className="border-none mr-8" onClick={handleGoBack}>
+          <button
+            type='button'
+            className='border-none mr-8'
+            onClick={handleGoBack}
+          >
             {formStep === 2 ? 'Go back to Edit Event' : 'Go back'}
           </button>
         )}
 
         {formStep !== 4 && (
-          <button type="button" className="w-60 h-[42px] bg-[#9EDD45] text-black rounded-full" onClick={handleSaveAndContinue}>
+          <button
+            type='button'
+            className='w-60 h-[42px] bg-[#9EDD45] text-black rounded-full'
+            onClick={handleSaveAndContinue}
+          >
             Save & Continue
           </button>
         )}
