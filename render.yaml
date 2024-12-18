@@ -1,0 +1,20 @@
+services:
+- type: web
+  name: next-js
+  runtime: node
+  plan: starter
+  buildCommand: npm; npm run build
+  startCommand: npm start
+  autoDeploy: true
+  envVars:
+  - key: NODE_ENV
+    value: production
+# Uncomment the following to deploy this app as a static site on render
+- type: web
+  name: nextjs-static
+  runtime: static
+  buildCommand: npm; npm run build
+  staticPublishPath: out    
+  envVars:
+  - key: NODE_ENV
+    value: production
