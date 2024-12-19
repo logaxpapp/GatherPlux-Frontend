@@ -1,6 +1,12 @@
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 
-export default function EventDescription() {
+// Define the prop types for the component
+interface EventDescriptionProps {
+  onOpenModal: () => void; // Function prop to toggle modal
+}
+
+const EventDescription: React.FC<EventDescriptionProps> = ({ onOpenModal }) => {
   return (
     <div
       className='bg-[#020e1e] py-10 px-10 relative'
@@ -154,9 +160,12 @@ export default function EventDescription() {
             <span>Total</span>
             <span className='font-bold'>₦0</span>
           </div>
-          <button className='bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2'>
+          <button
+        className="bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2"
+        onClick={onOpenModal} // Trigger the modal via the prop
+      >
             <Image
-              src='/buy-ticket-icon.png' // Replace with actual icon
+              src='/ticket.png' // Replace with actual icon
               alt='Buy Ticket'
               width={16}
               height={16}
@@ -168,3 +177,4 @@ export default function EventDescription() {
     </div>
   );
 }
+export default EventDescription;

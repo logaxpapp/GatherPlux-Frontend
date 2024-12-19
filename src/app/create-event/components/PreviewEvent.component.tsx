@@ -1,5 +1,5 @@
-import React from 'react';
-import { IoTimeOutline, IoTicketSharp, IoLocationOutline } from "react-icons/io5";
+import React, { useState } from "react";
+import { IoTimeOutline, IoTicketSharp, IoLocationOutline,IoChevronDownSharp, IoChevronUpSharp  } from "react-icons/io5";
 import { SlCalender } from "react-icons/sl";
 import { EventDetailsProps } from '../page';
 import Image from 'next/image';
@@ -17,6 +17,10 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails,
     email: 'johndoe@email.com',
     phone: '08012345678',
   };
+
+
+
+  const [showMore, setShowMore] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0D1117] text-white px-10 py-10">
@@ -79,12 +83,36 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails,
            
           </div>
 
-          {/* Right Section */}
-          <div className="w-full lg:w-1/2 max-w-[300px] ml-auto bg-[#1b2634] border-[#9EDD45] rounded-lg p-6 border-2">
-            {/* Date and Time */}
-            <div className="mb-4">
-              <h2 className="font-bold text-xl mb-2">Date and Time</h2>
-              <p className="flex items-center">
+{/* Right Section */}
+<div className="w-full lg:w-1/2 max-w-[300px] ml-auto bg-[#1b2634] border-[#9EDD45] rounded-lg p-6 border-2">
+      {/* Date and Time */}
+      <div className="mb-4">
+        <h2 className="font-bold text-xl mb-1">Date and Time</h2>
+        <p className="text-gray-400 text-sm mb-2">this is a multiple session event</p>
+
+        {/* Session 1 */}
+        <div>
+          <p className="flex items-center font-semibold">
+            <IoTicketSharp className="text-white mr-2" /> Session1 (name of event)
+          </p>
+          <p className="flex items-center mt-1">
+            <SlCalender className=" mr-2" /> Saturday, 2 December 2023
+          </p>
+          <p className="flex items-center mt-1">
+            <IoTimeOutline className=" mr-2" /> 6:30 PM - 9:30 PM
+          </p>
+        </div>
+
+        {/* Additional Sessions */}
+        {showMore && (
+          <>
+            {/* Session 2 */}
+            <hr className="border-t border-gray-500 my-4" />
+            <div>
+              <p className="flex items-center font-semibold">
+                <IoTicketSharp className="text-white mr-2" /> Session2 (name of event)
+              </p>
+              <p className="flex items-center mt-1">
                 <SlCalender className="text-[#9EDD45] mr-2" /> Saturday, 2 December 2023
               </p>
               <p className="flex items-center mt-1">
@@ -92,39 +120,74 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails,
               </p>
             </div>
 
-            {/* Divider Line */}
+            {/* Session 3 */}
             <hr className="border-t border-gray-500 my-4" />
-
-            {/* Ticket Information */}
             <div>
-              <h2 className="font-bold text-xl mb-2">Ticket Information</h2>
-              <p className="text-gray-400 text-sm mb-2">
-                Numbers of Tickets <span className="text-[#9EDD45] font-semibold">200,000</span>
+              <p className="flex items-center font-semibold">
+                <IoTicketSharp className="text-white mr-2" /> Session3 (name of event)
               </p>
-              <div className="space-y-2">
-                <p className="flex items-center justify-between">
-                  <span className="flex items-center">
-                    <IoTicketSharp className="text-[#9EDD45] mr-2" /> Standard Ticket
-                  </span>
-                  <span className="text-yellow-400 font-semibold">₦ 200 each</span>
-                </p>
-
-                <p className="flex items-center justify-between">
-                  <span className="flex items-center">
-                    <IoTicketSharp className="text-[#9EDD45] mr-2" /> VIP Ticket
-                  </span>
-                  <span className="text-yellow-400 font-semibold">₦ 3,000 each</span>
-                </p>
-
-                <p className="flex items-center justify-between">
-                  <span className="flex items-center">
-                    <IoTicketSharp className="text-[#9EDD45] mr-2" /> Reserved
-                  </span>
-                  <span className="text-yellow-400 font-semibold">₦ 4,000,000 each</span>
-                </p>
-              </div>
+              <p className="flex items-center mt-1">
+                <SlCalender className="text-[#9EDD45] mr-2" /> Saturday, 2 December 2023
+              </p>
+              <p className="flex items-center mt-1">
+                <IoTimeOutline className="text-[#9EDD45] mr-2" /> 6:30 PM - 9:30 PM
+              </p>
             </div>
-          </div>
+          </>
+        )}
+
+        {/* View More / View Less */}
+        <p
+          className="text-[#9EDD45] underline mt-4 flex items-center justify-end cursor-pointer"
+          onClick={() => setShowMore(!showMore)}
+        >
+          {showMore ? (
+            <>
+              view less <IoChevronUpSharp className="ml-1" />
+            </>
+          ) : (
+            <>
+              view more <IoChevronDownSharp className="ml-1" />
+            </>
+          )}
+        </p>
+      </div>
+
+      {/* Divider Line */}
+      <hr className="border-t border-gray-500 my-4" />
+
+      {/* Ticket Information */}
+      <div>
+        <h2 className="font-bold text-xl mb-2">Ticket Information</h2>
+        <p className="text-gray-400 text-sm mb-2">
+          Numbers of Tickets <span className="text-[#9EDD45] font-semibold">200,000</span>
+        </p>
+        <div className="space-y-2">
+          <p className="flex items-center justify-between">
+            <span className="flex items-center">
+              <IoTicketSharp className="text-white mr-2" /> Standard Ticket
+            </span>
+            <span className="text-yellow-400 font-semibold">₦ 200 each</span>
+          </p>
+
+          <p className="flex items-center justify-between">
+            <span className="flex items-center">
+              <IoTicketSharp className="text-white mr-2" /> VIP Ticket
+            </span>
+            <span className="text-yellow-400 font-semibold">₦ 3,000 each</span>
+          </p>
+
+          <p className="flex items-center justify-between">
+            <span className="flex items-center">
+              <IoTicketSharp className="text-white mr-2" /> Reserved
+            </span>
+            <span className="text-yellow-400 font-semibold">₦ 4,000,000 each</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+
         </div>
 
         {/* Buttons */}
