@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { IoTimeOutline, IoTicketSharp, IoLocationOutline,IoChevronDownSharp, IoChevronUpSharp  } from "react-icons/io5";
+import {
+  IoTimeOutline,
+  IoTicketSharp,
+  IoLocationOutline,
+  IoChevronDownSharp,
+  IoChevronUpSharp,
+} from "react-icons/io5";
 import { SlCalender } from "react-icons/sl";
-import { EventDetailsProps } from '../page';
-import Image from 'next/image';
+import { EventDetailsProps } from "../page";
+import Image from "next/image";
+import SignInModal from "@/components/modal/SignInModal";
+import SignUpModal from "@/components/modal/signUpModal"; // Import SignUpModal
 
 interface PreviewEventProps {
   selectedFile: File | null;
@@ -10,17 +18,34 @@ interface PreviewEventProps {
   handleCreateEvent: () => void;
 }
 
-const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails, handleCreateEvent }) => {
+const PreviewEvent: React.FC<PreviewEventProps> = ({
+  selectedFile,
+  eventDetails,
+  handleCreateEvent,
+}) => {
   const user = {
-    firstname: 'John',
-    lastname: 'Doe',
-    email: 'johndoe@email.com',
-    phone: '08012345678',
+    firstname: "John",
+    lastname: "Doe",
+    email: "johndoe@email.com",
+    phone: "08012345678",
   };
 
-
-
   const [showMore, setShowMore] = useState(false);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false); // State for SignUpModal
+
+  const handleSignInClick = () => {
+    setIsSignInModalOpen(true);
+  };
+
+  const handleSignUpClick = () => {
+    setIsSignUpModalOpen(true); // Open SignUpModal
+  };
+
+  const handleCloseModal = () => {
+    setIsSignInModalOpen(false);
+    setIsSignUpModalOpen(false); // Close both modals
+  };
 
   return (
     <div className="min-h-screen bg-[#0D1117] text-white px-10 py-10">
@@ -69,19 +94,35 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({ selectedFile, eventDetails,
                   'Get ready to kick off the Christmas season with the Sound Of Christmas 2024. Join us for an exciting night of music, choir, and dance performances!'}
               </p>
             </div>
+{/* Host Info */}
+<div>
+  <h1 className="font-extralight text-lg mb-2">Hosted by</h1>
+  <p className="font-bold">
+    {user.firstname} {user.lastname} - LogaXP Groups
+  </p>
+</div>
 
-   
+ {/* Sign In and Sign Up Buttons */}
+<div className="mt-4 flex space-x-4">
+  <button
+    className="px-6 py-2 text-[#131610]  bg-[#8ec643]  rounded-md border border-[#8ec643]   font-semibold"
+    onClick={handleSignInClick}
+  >
+    Sign In
+  </button>
+  <button
+    className="px-4 py-2 text-white bg--[#8ec643] rounded-md border border-[#8ec643] hover:bg-[#8ec643] "
+    onClick={handleSignUpClick}
+  >
+    Sign Up
+  </button>
+</div>
+{/* Sign In Modal */}
+{isSignInModalOpen && <SignInModal onClose={handleCloseModal} />}
+{/* Sign Up Modal */}
+{isSignUpModalOpen && <SignUpModal onClose={handleCloseModal} />}
 
-            {/* Host Info */}
-            <div>
-              <h1 className="font-extralight text-lg mb-2">Hosted by</h1>
-              <p className="font-bold">
-                {user.firstname} {user.lastname} - LogaXP Groups
-              </p>
-            </div>
-
-           
-          </div>
+    </div>
 
 {/* Right Section */}
 <div className="w-full lg:w-1/2 max-w-[300px] ml-auto bg-[#1b2634] border-[#9EDD45] rounded-lg p-6 border-2">

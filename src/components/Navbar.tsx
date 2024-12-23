@@ -36,7 +36,7 @@ const Navbar = () => {
           hasScrolled ? "bg-[#020e1e] border-b-[1px] border-[#9edd45]" : "bg-transparent"
         }`}
       >
-        <div className="flex items-center justify-between px-8 py-8 w-full max-w-6xl mx-auto text-white shadow-lg">
+        <div className="flex items-center justify-between px-8 py-8 w-full max-w-7xl mx-auto text-white shadow-lg">
           {/* Logo */}
           <div className="flex items-center">
             <Image
