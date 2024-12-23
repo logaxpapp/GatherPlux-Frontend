@@ -19,11 +19,11 @@ export interface SessionsProps {
   id: string;
   name?: string;
   startDate: Date | undefined;
-  startTime: string | undefined;
-  endTime: string | undefined;
+  startTime: string;
+  endTime: string;
 }
 
-interface TicketEntry {
+export interface TicketEntry {
   id: string;
   name: string;
   price: string;
@@ -39,7 +39,7 @@ export interface EventDetailsProps {
 }
 
 export default function CreateEvent() {
-  const [formStep, setFormStep] = useState(4);
+  const [formStep, setFormStep] = useState(1);
 
   const [categories, setCategories] = useState<combinedStateAndCategoryProps[]>(
     [],
@@ -174,7 +174,9 @@ export default function CreateEvent() {
 
   // file upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadedBanner, setUploadedBanner] = useState<string | null>(null);
+  const [uploadedBanner, setUploadedBanner] = useState<string | null>(
+    'https://res.cloudinary.com/dzbbob9gb/image/upload/v1734956035/kqu4jpsiksmhf3gc8l6d.jpg',
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -286,8 +288,8 @@ export default function CreateEvent() {
       }
     } else if (formStep === 2) {
       if (!selectedFile) {
-        console.log('select a file');
-        return;
+        // console.log('select a file');
+        // return;
       }
     } else if (formStep === 3) {
       if (
@@ -396,9 +398,13 @@ export default function CreateEvent() {
       {formStep === 4 && (
         <div className='animate-fadeIn'>
           <PreviewEvent
-            selectedFile={selectedFile}
+            uploadedBanner={uploadedBanner}
             eventDetails={eventDetails}
-            handleCreateEvent={handleCreateEvent}
+            sessions={sessions}
+            tickets={tickets}
+            numberOfTickets={numberOfTickets}
+            eventType={eventType}
+            isMultipleSession={isMultipleSession}
           />
         </div>
       )}
@@ -422,6 +428,24 @@ export default function CreateEvent() {
           >
             Save & Continue
           </button>
+        )}
+
+        {formStep === 4 && (
+          <div className='flex justify-end mt-6 space-x-4'>
+            <button
+              type='button'
+              className='bg-gray-600 px-4 py-2 rounded-md text-white'
+            >
+              Save for Later
+            </button>
+            <button
+              type='button'
+              onClick={handleCreateEvent}
+              className='bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold'
+            >
+              Publish Event
+            </button>
+          </div>
         )}
       </div>
     </div>
