@@ -68,4 +68,4 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useLoginUserMutation, useCreateUserMutation, useVerifyUserMutation, useResetUserPasswordRequestMutation, useSetNewPasswordMutation, useGetUserProfileQuery, useUpdateUserProfileMutation, useResetPasswordMutation, useUpdateUserEmailMutation } = extendApiSlice;
+export const { useLoginUserMutation, useCreateUserMutation, useVerifyUserMutation, useResetUserPasswordRequestMutation, useSetNewPasswordMutation, useGetUserProfileQuery, useLazyGetUserProfileQuery, useUpdateUserProfileMutation, useResetPasswordMutation, useUpdateUserEmailMutation } = extendApiSlice;

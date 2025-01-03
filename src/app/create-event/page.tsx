@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 import ProgressBar from './components/ProgressBar.component';
 import EventDetails from './components/EventDetails.component';
@@ -14,6 +15,7 @@ import PreviewEvent from './components/PreviewEvent.component';
 import { combinedStateAndCategoryProps } from './types/types';
 import { useGetAllCategoriesQuery } from '@/services/slices/category.slice';
 import { useGetAllStatesQuery } from '@/services/slices/state.slice';
+import { useCreateEventMutation } from '@/services/slices/events.slice';
 
 export interface SessionsProps {
   id: string;
@@ -35,10 +37,13 @@ export interface EventDetailsProps {
   category: combinedStateAndCategoryProps | undefined;
   type: string;
   state: combinedStateAndCategoryProps | undefined;
+  address: string;
   description: string;
 }
 
 export default function CreateEvent() {
+  const router = useRouter();
+
   const [formStep, setFormStep] = useState(1);
 
   const [categories, setCategories] = useState<combinedStateAndCategoryProps[]>(
@@ -48,6 +53,7 @@ export default function CreateEvent() {
 
   const { data: categoriesData } = useGetAllCategoriesQuery('');
   const { data: allStates } = useGetAllStatesQuery('AG');
+  const [createEvent] = useCreateEventMutation();
 
   useEffect(() => {
     // fetch categories
@@ -65,11 +71,12 @@ export default function CreateEvent() {
     title: '',
     category: undefined,
     type: 'one-time',
+    address: '',
     state: undefined,
     description: '',
   });
 
-  const handleTitleAndDescription = (
+  const handleTitleAndDescriptionAndAddress = (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
@@ -101,7 +108,7 @@ export default function CreateEvent() {
     const parsedData = JSON.parse(event.target.value);
     const { id } = parsedData;
     if (id) {
-      setEventDetails({ ...eventDetails, state: id });
+      setEventDetails({ ...eventDetails, state: parsedData });
     }
   };
 
@@ -174,9 +181,7 @@ export default function CreateEvent() {
 
   // file upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadedBanner, setUploadedBanner] = useState<string | null>(
-    'https://res.cloudinary.com/dzbbob9gb/image/upload/v1734956035/kqu4jpsiksmhf3gc8l6d.jpg',
-  );
+  const [uploadedBanner, setUploadedBanner] = useState<string | null>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -288,8 +293,8 @@ export default function CreateEvent() {
       }
     } else if (formStep === 2) {
       if (!selectedFile) {
-        // console.log('select a file');
-        // return;
+        console.log('select a file');
+        return;
       }
     } else if (formStep === 3) {
       if (
@@ -311,7 +316,8 @@ export default function CreateEvent() {
     const newEvent = {
       title: eventDetails.title,
       category_id: eventDetails.category,
-      state_id: eventDetails.state,
+      state_id: eventDetails.state?.id,
+      address: eventDetails.address,
       city: eventDetails.state?.name,
       description: eventDetails.description,
       images: [uploadedBanner],
@@ -329,15 +335,14 @@ export default function CreateEvent() {
         end_time: session.endTime,
       })),
     };
-    console.log(newEvent);
-    // const response = await createEvent(newEvent);
-    // if (response.data) {
-    //   console.log(response.data);
-    // }
+    const response = await createEvent(newEvent);
+    if (response.data) {
+      router.push('/');
+    }
 
-    // if ('error' in response) {
-    //   console.log(response.error);
-    // }
+    if ('error' in response) {
+      console.log(response.error);
+    }
   };
 
   return (
@@ -351,7 +356,9 @@ export default function CreateEvent() {
       {formStep === 1 && (
         <div className='animate-fadeIn'>
           <EventDetails
-            handleTitleAndDescription={handleTitleAndDescription}
+            handleTitleAndDescriptionAndAddress={
+              handleTitleAndDescriptionAndAddress
+            }
             categories={categories}
             states={states}
             handleCategoryChange={handleCategoryChange}

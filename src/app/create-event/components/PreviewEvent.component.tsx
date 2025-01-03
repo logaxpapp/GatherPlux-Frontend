@@ -10,9 +10,12 @@ import { SlCalender } from 'react-icons/sl';
 import Image from 'next/image';
 import { EventDetailsProps, SessionsProps, TicketEntry } from '../page';
 import { RootState } from '@/store/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SignInModal from '@/components/modal/SignInModal';
 import SignUpModal from '@/components/modal/signUpModal'; // Import SignUpModal
+import { useLazyGetUserProfileQuery } from '@/services/slices/user.slice';
+import { setUserDetails } from '@/store/slices/user.slice';
+import Map from '@/components/Map';
 
 interface PreviewEventProps {
   uploadedBanner: string | null;
@@ -33,27 +36,50 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
   eventType,
   isMultipleSession,
 }) => {
-  const user = useSelector((state: RootState) => state.user.userDetails);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user);
+
+  const [getUserProfileQuery] = useLazyGetUserProfileQuery();
 
   useEffect(() => {
-    console.log('test');
-  }, [eventDetails]);
+    const fetchUserProfile = async () => {
+      const response = await getUserProfileQuery('').unwrap();
+
+      if (
+        response &&
+        response.code === 200 &&
+        response.message === 'SUCCESSFUL'
+      ) {
+        dispatch(setUserDetails(response.body));
+      }
+    };
+
+    if (
+      user &&
+      user.accessToken !== '' &&
+      user.userDetails.firstname === '' &&
+      user.userDetails.lastname === ''
+    ) {
+      fetchUserProfile();
+    }
+  }, [dispatch, eventDetails, getUserProfileQuery, user]);
 
   const [showMore, setShowMore] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false); // State for SignUpModal
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
   const handleSignInClick = () => {
     setIsSignInModalOpen(true);
   };
 
   const handleSignUpClick = () => {
-    setIsSignUpModalOpen(true); // Open SignUpModal
+    setIsSignUpModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsSignInModalOpen(false);
-    setIsSignUpModalOpen(false); // Close both modals
+    setIsSignUpModalOpen(false);
   };
 
   return (
@@ -104,27 +130,34 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
             <div>
               <h1 className='font-extralight text-lg mb-2'>Hosted by</h1>
               <p className='font-bold'>
-                {user.firstname} {user.lastname} - LogaXP Groups
+                {user.userDetails.firstname} {user.userDetails.lastname}
               </p>
             </div>
 
             {/* Sign In and Sign Up Buttons */}
-            <div className='mt-4 flex space-x-4'>
-              <button
-                type='button'
-                className='px-6 py-2 text-[#131610]  bg-[#8ec643]  rounded-md border border-[#8ec643]   font-semibold'
-                onClick={handleSignInClick}
-              >
-                Sign In
-              </button>
-              <button
-                type='button'
-                className='px-4 py-2 text-white bg--[#8ec643] rounded-md border border-[#8ec643] hover:bg-[#8ec643] '
-                onClick={handleSignUpClick}
-              >
-                Sign Up
-              </button>
-            </div>
+            {user &&
+              user.userDetails.firstname === '' &&
+              user.userDetails.lastname === '' && (
+                <>
+                  <div className='mt-4 flex space-x-4'>
+                    <button
+                      type='button'
+                      className='px-6 py-2 text-[#131610]  bg-[#8ec643]  rounded-md border border-[#8ec643]   font-semibold'
+                      onClick={handleSignInClick}
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      type='button'
+                      className='px-4 py-2 text-white bg--[#8ec643] rounded-md border border-[#8ec643] hover:bg-[#8ec643] '
+                      onClick={handleSignUpClick}
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                </>
+              )}
+
             {/* Sign In Modal */}
             {isSignInModalOpen && <SignInModal onClose={handleCloseModal} />}
             {/* Sign Up Modal */}
@@ -254,17 +287,11 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
           <h2 className='font-semibold text-lg mb-2'>Location</h2>
           <p className='flex items-center mb-4'>
             <IoLocationOutline className='mr-2' />
-            {eventDetails.state?.name || '02 Arena, London West'}
+            {eventDetails.address}
           </p>
           {/* Map Image */}
           <div className='relative rounded-lg overflow-hidden'>
-            <Image
-              src='/Map (1).png'
-              alt='Event Location Map'
-              width={400}
-              height={200}
-              className='w-full h-auto object-cover'
-            />
+            <Map address={eventDetails.address} />
           </div>
         </div>
       </div>

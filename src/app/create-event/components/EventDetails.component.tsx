@@ -6,7 +6,7 @@ import { combinedStateAndCategoryProps } from '../types/types';
 import { SessionsProps } from '../page';
 
 interface EventDetailsProps {
-  handleTitleAndDescription: (
+  handleTitleAndDescriptionAndAddress: (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
@@ -34,7 +34,7 @@ interface EventDetailsProps {
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({
-  handleTitleAndDescription,
+  handleTitleAndDescriptionAndAddress,
   categories = [],
   states = [],
   isMultipleSession,
@@ -87,7 +87,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
             placeholder='Enter the name of your event'
             name='title'
             className='h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-[500px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]'
-            onChange={handleTitleAndDescription}
+            onChange={handleTitleAndDescriptionAndAddress}
           />
         </div>
 
@@ -325,8 +325,28 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           {/* Location Heading */}
           <h3 className='font-semibold text-[24px] mb-4'>Location</h3>
 
+          <div className='grid grid-cols-12 gap-4 items-center'>
+            <div className='col-span-10 relative'>
+              {' '}
+              <label
+                htmlFor='address'
+                className='absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1'
+              >
+                Event Address <span className='text-red-500'>*</span>
+              </label>
+              <input
+                type='text'
+                id='address'
+                name='address'
+                placeholder="Address of the event's location"
+                className='w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]'
+                onChange={handleTitleAndDescriptionAndAddress}
+              ></input>
+            </div>
+          </div>
+
           {/* Event Location */}
-          <div className='grid grid-cols-12 gap-4 items-center mb-8'>
+          <div className='grid grid-cols-12 gap-4 items-center my-8'>
             {/* Select Box with Inline Label */}
             <div className='col-span-8 relative'>
               <label
@@ -385,7 +405,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 rows={8} /* Increased Rows for Larger Box */
                 placeholder="Describe what's special about your event & other important details."
                 className='w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]'
-                onChange={handleTitleAndDescription}
+                onChange={handleTitleAndDescriptionAndAddress}
               ></textarea>
             </div>
           </div>
