@@ -9,8 +9,18 @@ const MobileNavbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gray-800 text-white py-3 px-5 flex justify-between items-center shadow-lg z-50">
-      {/* Logo */}
-      <Image src="/logo.png" alt="Logo" width={100} height={100} />
+  
+    {/* Logo */}
+             <div className="flex items-center">
+               <Image
+                 src="/white icon.png"
+                 alt="Gatherplus Logo"
+                 width={30}
+                 height={30}
+               />
+             </div>
+
+
 
       {/* Hamburger Icon / Close Icon */}
       <button
@@ -34,7 +44,7 @@ const MobileNavbar = () => {
       Support
     </a>
     <a
-  href="#"
+  href="/create-event"
   className="inline-block bg-[#9edd45] text-black px-4 py-2 rounded-md font-medium text-center hover:bg-green-400"
 >
   + Create Event

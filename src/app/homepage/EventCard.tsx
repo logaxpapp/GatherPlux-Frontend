@@ -69,10 +69,10 @@ const EventCard = () => {
     <div
       className="bg-[#020e1e] min-h-screen py-10 relative pb-56"
       style={{
-        backgroundImage: "url('/Line.png')", // Path to your gradient image
-        backgroundSize: "cover", // Adjust to fit your design
-        backgroundPosition: "center", // Center the image
-        backgroundRepeat: "no-repeat", // Prevent tiling
+        backgroundImage: "url('/Line.png')",  
+        backgroundSize: "cover",  
+        backgroundPosition: "center", 
+        backgroundRepeat: "no-repeat",  
       }}
     >
       {/* Section Heading */}
@@ -118,24 +118,16 @@ const EventCard = () => {
                 className="bg-gray-800 rounded-lg shadow-lg overflow-hidden relative"
               >
                 {/* Image Section */}
-                <div className="relative">
-                  <Image
-                    src={event.images[0]}
-                    alt={event.title}
-                    layout="responsive"
-                    width={400} // Adjust width and height as needed
-                    height={160}
-                    className="rounded-t-lg"
-                  />
-                  <span className="absolute top-2 right-2">
-                    <Image
-                      src="/verify.png" // Path to your verify image
-                      alt="Verified"
-                      width={24} // Adjust the size of the image
-                      height={24}
-                    />
-                  </span>
-                </div>
+                <div className="relative aspect-w-16 aspect-h-12">
+  <Image
+    src={event.images[0]}
+    alt={event.title}
+    layout="fill"  
+    objectFit="cover"  
+    className="rounded-t-lg"
+  />
+</div>
+
                 {/* Content Section */}
                 <div className="p-4">
                   <span className="bg-[#9edd45] text-black text-xs font-semibold px-2 py-1 rounded">
@@ -150,7 +142,7 @@ const EventCard = () => {
                     {/* Price Section */}
                     <div className="flex items-center">
                       <Image
-                        src="/ticket.png" // Path to your ticket image
+                        src="/ticket.png"  
                         alt="Ticket Icon"
                         width={16}
                         height={190}
@@ -162,9 +154,9 @@ const EventCard = () => {
                     {/* Interested Section */}
                     <div className="flex items-center text-gray-400 text-sm">
                       <Image
-                        src="/Star 1.png" // Path to your star image
+                        src="/Star 1.png"  
                         alt="Star Icon"
-                        width={16} // Adjust width and height as needed
+                        width={16}  
                         height={16}
                         className="mr-2"
                       />

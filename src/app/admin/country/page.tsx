@@ -1,19 +1,46 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { FaArrowLeft, FaArrowRight, FaTrashAlt } from "react-icons/fa";
 
-  
+// Define the Country type for better reusability
+type Country = {
+  code: string;
+  name: string;
+  currency: string;
+  states: number;
+};
 
- 
-import { FaArrowLeft, FaArrowRight, FaTrashAlt } from 'react-icons/fa';
-
-  
 const Countries = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [countryToDelete, setCountryToDelete] = useState<Country | null>(null); // Type definition for countryToDelete state
+
+  const openModal = (country: Country) => {
+    setCountryToDelete(country);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCountryToDelete(null);
+  };
+
+  const deleteCountry = () => {
+    // Logic for deleting the country from your data
+    console.log("Deleted country: ", countryToDelete);
+    closeModal(); // Close modal after deletion
+  };
+
+  // Mock country data
+  const countryData: Country[] = [
+    { code: "NG", name: "Nigeria", currency: "Naira", states: 36 },
+    { code: "US", name: "United States", currency: "Dollar", states: 50 },
+    { code: "CA", name: "Canada", currency: "Canadian Dollar", states: 13 },
+  ];
+
   return (
     <div className="flex h-screen bg-[#020e1e]">
-      {/* Page Wrapper for max width */}
       <div className="w-full max-w-8xl mx-auto flex h-full">
-        {/* Main Content */}
         <main className="flex-1 p-10 bg-[#020e1e] pr-10 text-white">
-          {/* Countries Section */}
           <section className="border border-[#243447] rounded-lg mt-16">
             <div className="flex justify-between p-5">
               <div className="flex items-center space-x-2 border border-[#243447] bg-[#020e1e] p-2 rounded-md">
@@ -81,7 +108,10 @@ const Countries = () => {
                       </button>
                     </td>
                     <td className="p-3">
-                      <button className="flex items-center bg-[#243447] text-red-500 px-4 py-1 text-sm rounded-full">
+                      <button
+                        className="flex items-center bg-[#243447] text-red-500 px-4 py-1 text-sm rounded-full"
+                        onClick={() => openModal(country)} // Open modal on click
+                      >
                         Delete <FaTrashAlt className="ml-2" />
                       </button>
                     </td>
@@ -96,7 +126,6 @@ const Countries = () => {
                 <FaArrowLeft className="text-xl" />
                 <span>Previous</span>
               </button>
-
               <div className="flex items-center space-x-3">
                 <button className="w-10 h-10 flex items-center justify-center rounded-md bg-[#93d437] text-[#020e1e]">
                   1
@@ -123,18 +152,33 @@ const Countries = () => {
           </section>
         </main>
       </div>
+
+      {/* Modal for confirmation */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-5 rounded-lg text-black w-96">
+            <h2 className="text-xl mb-4">
+              Are you sure you want to delete {countryToDelete?.name}?
+            </h2>
+            <div className="flex justify-end space-x-3">
+              <button
+                className="px-4 py-2 bg-gray-300 rounded-md"
+                onClick={closeModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded-md"
+                onClick={deleteCountry}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
-// Mock country data
-const countryData = [
-  { code: "NG", name: "Nigeria", currency: "Naira", states: 36 },
-  { code: "US", name: "United States", currency: "Dollar", states: 50 },
-  { code: "CA", name: "Canada", currency: "Canadian Dollar", states: 13 },
-  { code: "NG", name: "Nigeria", currency: "Naira", states: 36 },
-  { code: "US", name: "United States", currency: "Dollar", states: 50 },
-  { code: "CA", name: "Canada", currency: "Canadian Dollar", states: 13 },
-];
 
 export default Countries;

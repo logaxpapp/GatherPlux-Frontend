@@ -17,28 +17,28 @@ const Messages: React.FC = () => {
     {
       id: 1,
       sender: "Jane Doe",
-      time: "Thursday 4:45pm",
-      content: "Here is another message to show how the UI works...",
+      time: "Wed 10:15am",
+      content: "Here is another message to show how ...",
       read: false,
     },
     {
       id: 2,
       sender: "John Doe",
-      time: "Wednesday 10:15am",
+      time: "Wed 10:15am",
       content: "Don't forget to check the new updates!",
       read: false,
     },
     {
       id: 3,
       sender: "John Doe",
-      time: "Wednesday 10:15am",
+      time: "Wed 10:15am",
       content: "Don't forget to check the new updates!",
       read: false,
     },
     {
       id: 4,
       sender: "John Doe",
-      time: "Wednesday 10:15am",
+      time: "Wed 10:15am",
       content: "Don't forget to check the new updates!",
       read: false,
     },
@@ -79,6 +79,11 @@ const Messages: React.FC = () => {
       </div>
     </div>
   );
+};
+
+const truncateContent = (content: string, wordLimit: number = 4) => {
+  const words = content.split(" ");
+  return words.length > wordLimit ? `${words.slice(0, wordLimit).join(" ")}...` : content;
 };
 
 // Message List Component
@@ -138,6 +143,12 @@ type MessageItemProps = {
   onDelete: () => void;
 };
 
+
+
+
+
+
+
 const MessageItem: React.FC<MessageItemProps> = ({
   message,
   onClick,
@@ -145,13 +156,13 @@ const MessageItem: React.FC<MessageItemProps> = ({
   onDelete,
 }) => (
   <div className="flex justify-between items-center py-3 border-b border-[#243447] cursor-pointer">
-    <div className="flex items-center space-x-4" onClick={onClick}>
+    <div className="flex items-start space-x-4 flex-1" onClick={onClick}>
       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600">
         UE
       </div>
       <div>
         <h3 className="font-bold">{message.sender}</h3>
-        <p className="text-sm text-gray-500">{message.content}</p>
+        <p className="text-sm text-gray-500">{truncateContent(message.content)}</p>
       </div>
     </div>
     <div className="flex items-center space-x-4">
@@ -179,6 +190,11 @@ const MessageItem: React.FC<MessageItemProps> = ({
     </div>
   </div>
 );
+
+
+
+
+
 
 // Message Detail Component
 type MessageDetailProps = {
