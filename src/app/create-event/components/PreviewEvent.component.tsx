@@ -57,7 +57,7 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
 
     if (
       user &&
-      user.accessToken !== '' &&
+      user.accessToken !== null &&
       user.userDetails.firstname === '' &&
       user.userDetails.lastname === ''
     ) {

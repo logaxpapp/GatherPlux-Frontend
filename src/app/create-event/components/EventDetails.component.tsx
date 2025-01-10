@@ -2,22 +2,25 @@ import React, { useState } from 'react';
 import CustomCalendar from '@/components/CustomCalender';
 import CustomTimePicker from '@/components/CustomTimePicker';
 import { CiCirclePlus, CiTrash } from 'react-icons/ci';
-import { combinedStateAndCategoryProps } from '../types/types';
+import { CombinedStateAndCategoryProps, CountryProp } from '../types/types';
 import { SessionsProps } from '../page';
 
-interface EventDetailsProps {
+export interface EventDetailsProps {
   handleTitleAndDescriptionAndAddress: (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
-  categories: combinedStateAndCategoryProps[];
-  states: combinedStateAndCategoryProps[];
+  categories: CombinedStateAndCategoryProps[];
+  countries: CountryProp[];
+  states: CombinedStateAndCategoryProps[];
   isMultipleSession: boolean;
   sessions: SessionsProps[];
   handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleEventTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleCountryChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleCityChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleStateChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleStartDateChange: (date: Date | undefined, id: string) => void;
   handleSessionTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleTimeChange: (
@@ -36,12 +39,15 @@ interface EventDetailsProps {
 const EventDetails: React.FC<EventDetailsProps> = ({
   handleTitleAndDescriptionAndAddress,
   categories = [],
+  countries = [],
   states = [],
   isMultipleSession,
   sessions,
   handleCategoryChange,
   handleEventTypeChange,
-  handleLocationChange,
+  handleCountryChange,
+  handleCityChange,
+  handleStateChange,
   handleStartDateChange,
   handleSessionTypeChange,
   handleTimeChange,
@@ -325,6 +331,107 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           {/* Location Heading */}
           <h3 className='font-semibold text-[24px] mb-4'>Location</h3>
 
+          {/* Event Country */}
+          <div className='grid grid-cols-12 gap-4 items-center my-8'>
+            {/* Select Box with Inline Label */}
+            <div className='col-span-8 relative'>
+              <label
+                htmlFor='location'
+                className='absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1'
+              >
+                The Country where your event will take place?{' '}
+                <span className='text-red-500'>*</span>
+              </label>
+              <select
+                id='location'
+                className='w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#9edd45] appearance-none'
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 1rem center',
+                  backgroundSize: '1em',
+                }}
+                onChange={handleCountryChange}
+                defaultValue=''
+              >
+                <option value='' disabled>
+                  Please select one
+                </option>
+                {countries?.map((eachCountry) => (
+                  <option
+                    value={JSON.stringify(eachCountry)}
+                    key={eachCountry.code2}
+                  >
+                    {eachCountry.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Event State */}
+          {states.length > 0 && (
+            <div className='grid grid-cols-12 gap-4 items-center my-8'>
+              {/* Select Box with Inline Label */}
+              <div className='col-span-8 relative'>
+                <label
+                  htmlFor='location'
+                  className='absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1'
+                >
+                  The State where your event will take place?{' '}
+                  <span className='text-red-500'>*</span>
+                </label>
+                <select
+                  id='location'
+                  className='w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#9edd45] appearance-none'
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 1rem center',
+                    backgroundSize: '1em',
+                  }}
+                  onChange={handleStateChange}
+                  defaultValue=''
+                >
+                  <option value='' disabled>
+                    Please select one
+                  </option>
+                  {states?.map((eachState) => (
+                    <option
+                      value={JSON.stringify(eachState)}
+                      key={eachState.id}
+                    >
+                      {eachState.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* Event City */}
+          <div className='grid grid-cols-12 gap-4 items-center my-8'>
+            <div className='col-span-10 relative'>
+              {' '}
+              <label
+                htmlFor='address'
+                className='absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1'
+              >
+                The City where your event will take place{' '}
+                <span className='text-red-500'>*</span>
+              </label>
+              <input
+                type='text'
+                id='city'
+                name='city'
+                placeholder="City of the event's location"
+                className='w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]'
+                onChange={handleCityChange}
+              ></input>
+            </div>
+          </div>
+
+          {/* Event Address */}
           <div className='grid grid-cols-12 gap-4 items-center'>
             <div className='col-span-10 relative'>
               {' '}
@@ -342,41 +449,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 className='w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]'
                 onChange={handleTitleAndDescriptionAndAddress}
               ></input>
-            </div>
-          </div>
-
-          {/* Event Location */}
-          <div className='grid grid-cols-12 gap-4 items-center my-8'>
-            {/* Select Box with Inline Label */}
-            <div className='col-span-8 relative'>
-              <label
-                htmlFor='location'
-                className='absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1'
-              >
-                Where will your event take place?{' '}
-                <span className='text-red-500'>*</span>
-              </label>
-              <select
-                id='location'
-                className='w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#9edd45] appearance-none'
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 1rem center',
-                  backgroundSize: '1em',
-                }}
-                onChange={handleLocationChange}
-                defaultValue=''
-              >
-                <option value='' disabled>
-                  Please select one
-                </option>
-                {states?.map((eachState) => (
-                  <option value={JSON.stringify(eachState)} key={eachState.id}>
-                    {eachState.name}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
 

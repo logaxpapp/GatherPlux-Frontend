@@ -5,9 +5,11 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
     getAllStates: builder.query({
       query: (countryCode) => `base/country/state/${countryCode}`,
     }),
-
+    getAllCountries: builder.query({
+      query: () => 'base/country',
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllStatesQuery } = extendApiSlice;
+export const { useLazyGetAllStatesQuery, useGetAllCountriesQuery } = extendApiSlice;
