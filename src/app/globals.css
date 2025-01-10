@@ -1,3 +1,7 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Menseal&family=Inter:wght@400;700&family=Plus+Jakarta+Sans:wght@400;700&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -67,3 +71,7 @@ body {
   background-repeat: repeat; /* Repeats the pattern */
   color: white; /* Ensures text color contrasts well */
 }
+
+
+
+

@@ -1,11 +1,9 @@
-
 "use client";
 
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  
   FaGlobe,
   FaBuilding,
   FaUsers,
@@ -15,6 +13,8 @@ import {
   FaKey,
   FaSignOutAlt,
   FaCog,
+  FaTags, // Icon for Categories
+  FaStar, // Icon for Ratings
 } from 'react-icons/fa';
 
 // NavItem Component
@@ -60,8 +60,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           style={{ height: 'calc(100% - 100px)' }}
         >
           <div className="flex items-center text-[#93d437] text-xl font-bold mb-8"></div>
-          <nav className="space-y-6">
-            <NavItem  label="Dashboard" icon={undefined} />
+          <nav className="space-y-3">
+            <NavItem label="Dashboard" icon={undefined} />
             <NavItem icon={<FaBuilding />} label="Company" href="/admin/company" />
             <NavItem icon={<FaGlobe />} label="Country" href="/admin/country" />
             <NavItem icon={<FaUsers />} label="Users" href="/admin/users" />
@@ -69,8 +69,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <NavItem icon={<FaCreditCard />} label="Billing plans" href="/admin/billing" />
             <NavItem icon={<FaComments />} label="Messages" href="/admin/messages" />
             <NavItem icon={<FaKey />} label="Change password" href="/admin/resetpassword" />
+            <NavItem icon={<FaTags />} label="Categories" href="/admin/categories" />
+            <NavItem icon={<FaStar />} label="Ratings" href="/admin/ratings" />
           </nav>
-          <nav className="mt-12 space-y-4">
+          <nav className="mt-16 space-y-4">
             <NavItem icon={<FaCog />} label="Settings" href="/admin/settings" />
             <NavItem icon={<FaSignOutAlt />} label="Log out" href="/admin/logout" />
           </nav>

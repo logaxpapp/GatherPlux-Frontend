@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  IoTimeOutline,
-  IoTicketSharp,
-  IoLocationOutline,
-  IoChevronDownSharp,
-  IoChevronUpSharp,
+import {IoTimeOutline,IoTicketSharp,IoLocationOutline,IoChevronDownSharp,IoChevronUpSharp,
 } from 'react-icons/io5';
 import { SlCalender } from 'react-icons/sl';
 import Image from 'next/image';
@@ -17,24 +12,12 @@ import { useLazyGetUserProfileQuery } from '@/services/slices/user.slice';
 import { setUserDetails } from '@/store/slices/user.slice';
 import Map from '@/components/Map';
 
-interface PreviewEventProps {
-  uploadedBanner: string | null;
-  eventDetails: EventDetailsProps;
-  sessions: SessionsProps[];
-  tickets: TicketEntry[];
-  numberOfTickets: number | '';
-  eventType: string;
+interface PreviewEventProps {uploadedBanner: string | null; eventDetails: EventDetailsProps; sessions: SessionsProps[]; tickets: TicketEntry[];numberOfTickets: number | ''; eventType: string;
   isMultipleSession: boolean;
 }
 
 const PreviewEvent: React.FC<PreviewEventProps> = ({
-  uploadedBanner,
-  eventDetails,
-  sessions,
-  tickets,
-  numberOfTickets,
-  eventType,
-  isMultipleSession,
+  uploadedBanner, eventDetails, sessions, tickets, numberOfTickets, eventType, isMultipleSession,
 }) => {
   const dispatch = useDispatch();
 
@@ -68,7 +51,8 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
   const [showMore, setShowMore] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
-
+   
+  // Handlers for modals
   const handleSignInClick = () => {
     setIsSignInModalOpen(true);
   };
@@ -82,8 +66,10 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
     setIsSignUpModalOpen(false);
   };
 
+  
+
   return (
-    <div className='min-h-screen bg-[#0D1117] text-white px-10 py-10'>
+    <div className='min-h-screen bg-[#020e1e] text-white px-10 py-10'>
       {/* Event Card */}
       <div className='max-w-[1100px] mx-auto border border-[#9EDD45] rounded-xl p-6 bg-[#020e1e] shadow-md'>
         {/* Event Image */}

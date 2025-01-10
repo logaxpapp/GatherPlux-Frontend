@@ -1,11 +1,32 @@
-import Image from "next/image";
-import React from "react";
+"use client";
 
+import React, { useState } from "react";
+import Image from "next/image";
 import { FaTrashAlt, FaChevronDown } from "react-icons/fa";
+import DeleteAdmin from "@/components/modal/Admins-delete-admins";
 
 const Dash1 = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<string | null>(null);
+
+  const handleDelete = (adminName: string) => {
+    setSelectedAdmin(adminName);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedAdmin(null);
+  };
+
+  const confirmDelete = () => {
+    // Perform the delete action here, then close the modal
+    console.log(`${selectedAdmin} has been deleted.`);
+    closeModal();
+  };
+
   return (
-    <div className="flex h-screen  ">
+    <div className="flex h-screen">
       {/* Page Wrapper for max width */}
       <div className="w-full mx-auto flex h-full">
         {/* Main Content */}
@@ -28,6 +49,8 @@ const Dash1 = () => {
                 <Image
                   src="/avatar.jpg"
                   alt="avatar"
+                  width={16} 
+                  height={16} 
                   className="w-7 h-7 rounded-full border border-[#243447]"
                 />
                 <div className="flex items-center">
@@ -38,7 +61,7 @@ const Dash1 = () => {
             </div>
           </header>
 
-          <section className="border  border-[#243447] rounded-lg">
+          <section className="border border-[#243447] rounded-lg">
             <div className="flex justify-between items-center bg-[#243447] pt-5 pb-3">
               <h2 className="text-xl font-bold text-[#eef0ec] pl-16">
                 Companies
@@ -95,7 +118,10 @@ const Dash1 = () => {
                     </td>
                     <td className="p-3 text-[#93d437]">Premium</td>
                     <td className="p-3">
-                      <button className="flex items-center bg-red-100 text-red-600 px-4 py-1 text-sm rounded-full">
+                      <button
+                        className="flex items-center bg-red-100 text-red-600 px-4 py-1 text-sm rounded-full"
+                        onClick={() => handleDelete(`${admin.firstName} ${admin.lastName}`)}
+                      >
                         Delete <FaTrashAlt className="ml-2" />
                       </button>
                     </td>
@@ -109,7 +135,9 @@ const Dash1 = () => {
                 <Image
                   src="/arrwl.png"
                   alt="Previous Arrow"
-                  className="w-4 h-4 mr-2"
+                  width={16}
+                  height={16}
+                  className="mr-2"
                 />
                 <span>Previous</span>
               </button>
@@ -138,6 +166,8 @@ const Dash1 = () => {
                 <Image
                   src="/arrwr.png"
                   alt="Next Arrow"
+                  width={16}
+                  height={16}
                   className="w-4 h-4 ml-2"
                 />
               </button>
@@ -145,6 +175,15 @@ const Dash1 = () => {
           </section>
         </main>
       </div>
+
+      {/* Delete Modal */}
+      {isModalOpen && (
+        <DeleteAdmin
+          onClose={closeModal}
+          onDelete={confirmDelete}
+          adminName={selectedAdmin || ""}
+        />
+      )}
     </div>
   );
 };
