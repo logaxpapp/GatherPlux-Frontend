@@ -14,8 +14,9 @@ import Loader from '@/components/Loader';
 import { setToken } from '@/store/slices/user.slice';
 import { setCookie } from '@/utils/cookie.utility';
 import Link from 'next/link';
+import isAuth from '@/helpers/higherOrderComponent/isAuthenticated';
 
-export default function Login() {
+const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -189,4 +190,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default isAuth(Login);

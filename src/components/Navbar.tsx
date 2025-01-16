@@ -56,9 +56,12 @@ const Navbar = () => {
             <a href='#' className='hover:text-[#9edd45] text-white'>
               Category
             </a>
-            <a href='#' className='hover:text-[#9edd45] text-white'>
+            <Link
+              href='/upcoming-events'
+              className='hover:text-[#9edd45] text-white'
+            >
               Upcoming Events
-            </a>
+            </Link>
             <a href='#' className='hover:text-[#9edd45] text-white'>
               Support
             </a>

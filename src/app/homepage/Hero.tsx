@@ -1,10 +1,9 @@
-import Image from "next/image";
-
+import Image from 'next/image';
 
 const Hero = () => {
   return (
     <section
-      className="relative flex flex-col items-center justify-center text-white sparkle-background min-h-screen bg-cover bg-center"
+      className='relative flex flex-col items-center justify-center text-white sparkle-background min-h-screen bg-cover bg-center'
       style={{
         backgroundImage: `
           linear-gradient(
@@ -19,11 +18,11 @@ const Hero = () => {
       }}
     >
       {/* Sparkles */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className='absolute inset-0 overflow-hidden'>
         {Array.from({ length: 50 }).map((_, index) => (
           <div
             key={index}
-            className="sparkle"
+            className='sparkle'
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
@@ -35,57 +34,57 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl">
-        <h1 className="font-menseal text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6 whitespace-normal">
+      <div className='relative z-10 text-center px-4 sm:px-8 max-w-4xl'>
+        <h1 className='font-menseal text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6 whitespace-normal'>
           Discover Your Next Event Adventure,
           <br />
           <span
-            className="bg-clip-text text-transparent"
+            className='bg-clip-text text-transparent'
             style={{
               backgroundImage:
-                "linear-gradient(90deg, #9ada43, #4c9e10, #b6d80e)",
+                'linear-gradient(90deg, #9ada43, #4c9e10, #b6d80e)',
             }}
           >
             with Instant Booking.
           </span>
         </h1>
 
-        <p className="text-base sm:text-lg mb-8 font-thin">
+        <p className='text-base sm:text-lg mb-8 font-thin'>
           Find events nearby, personalize your experience, and book in seconds!
         </p>
 
         {/* Updated Search Bar */}
-        <div className="flex items-center bg-[#253f3f] rounded-full px-3 sm:px-4 py-3 sm:py-4 shadow-md w-full sm:w-auto space-x-2 sm:space-x-4 max-w-2xl mx-auto text-white">
+        <div className='flex items-center bg-[#253f3f] rounded-full px-3 sm:px-4 py-3 sm:py-4 shadow-md w-full sm:w-auto space-x-2 sm:space-x-4 max-w-2xl mx-auto text-white'>
           {/* Search Input */}
-          <div className="flex items-center space-x-2 flex-grow">
+          <div className='flex items-center space-x-2 flex-grow'>
             <Image
-              src="/Searchicon.png" // Search icon image
-              alt="Search Icon"
+              src='/Searchicon.png' // Search icon image
+              alt='Search Icon'
               width={16} // Reduced size for smaller screens
               height={16}
             />
             <input
-              type="text"
-              placeholder="Search Events,Categories,location..."
-              className="flex-grow outline-none bg-transparent text-sm sm:text-base text-[#ffffff] placeholder-gray-300"
+              type='text'
+              placeholder='Search Events,Categories,location...'
+              className='flex-grow outline-none bg-transparent text-sm sm:text-base text-[#ffffff] placeholder-gray-300'
             />
           </div>
 
           {/* Location Dropdown */}
-          <div className="flex items-center space-x-2 border-l border-gray-500 pl-2 sm:pl-4">
+          <div className='flex items-center space-x-2 border-l border-gray-500 pl-2 sm:pl-4'>
             <Image
-              src="/Locationicon.png" // Location icon image
-              alt="Location Icon"
+              src='/Locationicon.png' // Location icon image
+              alt='Location Icon'
               width={16} // Reduced size for smaller screens
               height={16}
             />
             <select
-              title=""
-              className="bg-transparent outline-none text-sm sm:text-base text-white cursor-pointer"
+              title={''}
+              className='bg-transparent outline-none text-sm sm:text-base text-white cursor-pointer'
             >
-              <option value="lagos">Lagos</option>
-              <option value="abuja">Abuja</option>
-              <option value="new-york">New York</option>
+              <option value='lagos'>Lagos</option>
+              <option value='abuja'>Abuja</option>
+              <option value='new-york'>New York</option>
             </select>
           </div>
         </div>

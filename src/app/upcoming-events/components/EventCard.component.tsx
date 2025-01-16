@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
-import { useGetAllPublicEventsQuery } from '@/services/slices/events.slice';
+import { useGetUpcomingEventsQuery } from '@/services/slices/events.slice';
 import { useGetAllCategoriesQuery } from '@/services/slices/category.slice';
 import { setEvents as setStateEvents } from '@/store/slices/event.slice';
 import { setCategories as setStateCategories } from '@/store/slices/category.slice';
@@ -70,7 +70,7 @@ const EventCard = () => {
   const [events, setEvents] = useState<EventProps[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  const { data: eventsData } = useGetAllPublicEventsQuery('');
+  const { data: eventsData } = useGetUpcomingEventsQuery('');
   const { data: categoriesData } = useGetAllCategoriesQuery('');
 
   useEffect(() => {
@@ -191,7 +191,7 @@ const EventCard = () => {
             </Link>
           ))
         ) : (
-          <div>No events available</div>
+          <div>No upcoming events yet</div>
         )}
       </div>
     </div>

@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { getCookie } from '@/utils/cookie.utility';
+import React, { useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGetUserProfileQuery } from '@/services/slices/user.slice';
 import { setUserDetails } from '@/store/slices/user.slice';
+import { RootState } from '@/store/store';
 
 export default function isAuth(Component: any) {
   return function IsAuth(props: any) {
+    const token = useSelector((state: RootState) => state.user.accessToken);
     const dispatch = useDispatch();
     const router = useRouter();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const pathname = usePathname();
 
     const {
       data,
@@ -21,8 +22,6 @@ export default function isAuth(Component: any) {
     } = useGetUserProfileQuery('');
 
     useEffect(() => {
-      const token = getCookie('token');
-
       if (!token) {
         router.push('/auth/login');
         return;
@@ -37,12 +36,34 @@ export default function isAuth(Component: any) {
         return;
       }
 
-      // If valid user data exists, set authenticated state and dispatch user details
-      setIsAuthenticated(true);
-      dispatch(setUserDetails(data.body));
-    }, [data, isProfileLoading, isFetching, isError, dispatch, router]);
+      if (
+        pathname === '/auth/login' ||
+        pathname === '/auth/register' ||
+        pathname === '/auth/forgot-password' ||
+        pathname === '/auth/reset-password' ||
+        pathname === '/auth/reset' ||
+        pathname === '/auth/verify'
+      ) {
+        if (token) {
+          router.push('/profile');
+          return;
+        }
+      }
 
-    if (isProfileLoading || isFetching || !isAuthenticated) {
+      // If valid user data exists, set authenticated state and dispatch user details
+      dispatch(setUserDetails(data.body));
+    }, [
+      data,
+      isProfileLoading,
+      isFetching,
+      isError,
+      dispatch,
+      router,
+      pathname,
+      token,
+    ]);
+
+    if (isProfileLoading || isFetching) {
       return <div>Loading...</div>; // Optional: Add a spinner or loading screen
     }
 

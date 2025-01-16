@@ -12,8 +12,14 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
         body: eventDetails,
       }),
     }),
+    getOneEvent: builder.query({
+      query: (id) => `event/${id}`,
+    }),
+    getUpcomingEvents: builder.query({
+      query: () => 'event?type=upcoming',
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllPublicEventsQuery, useCreateEventMutation } = extendApiSlice;
+export const { useGetAllPublicEventsQuery, useCreateEventMutation, useGetOneEventQuery, useGetUpcomingEventsQuery } = extendApiSlice;

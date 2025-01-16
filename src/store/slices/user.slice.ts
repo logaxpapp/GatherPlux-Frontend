@@ -1,9 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCookie } from "@/utils/cookie.utility";
+import { getCookie, isTokenValid, removeCookie } from "@/utils/cookie.utility";
+
+const token = getCookie('token') as string;
+const isTokenValidAndNotExpired = isTokenValid(token);
+
+if (!isTokenValidAndNotExpired) {
+    removeCookie('token');
+}
 
 const initialState = {
     currentUser: null,
-    accessToken: getCookie('token') || null,
+    accessToken: isTokenValidAndNotExpired ? token : null,
     userDetails: {
         firstname: '',
         lastname: '',
