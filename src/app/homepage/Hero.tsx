@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import SearchBar from '@/components/SearchBar';
 
 const Hero = () => {
   return (
@@ -53,41 +53,8 @@ const Hero = () => {
           Find events nearby, personalize your experience, and book in seconds!
         </p>
 
-        {/* Updated Search Bar */}
-        <div className='flex items-center bg-[#253f3f] rounded-full px-3 sm:px-4 py-3 sm:py-4 shadow-md w-full sm:w-auto space-x-2 sm:space-x-4 max-w-2xl mx-auto text-white'>
-          {/* Search Input */}
-          <div className='flex items-center space-x-2 flex-grow'>
-            <Image
-              src='/Searchicon.png' // Search icon image
-              alt='Search Icon'
-              width={16} // Reduced size for smaller screens
-              height={16}
-            />
-            <input
-              type='text'
-              placeholder='Search Events,Categories,location...'
-              className='flex-grow outline-none bg-transparent text-sm sm:text-base text-[#ffffff] placeholder-gray-300'
-            />
-          </div>
-
-          {/* Location Dropdown */}
-          <div className='flex items-center space-x-2 border-l border-gray-500 pl-2 sm:pl-4'>
-            <Image
-              src='/Locationicon.png' // Location icon image
-              alt='Location Icon'
-              width={16} // Reduced size for smaller screens
-              height={16}
-            />
-            <select
-              title={''}
-              className='bg-transparent outline-none text-sm sm:text-base text-white cursor-pointer'
-            >
-              <option value='lagos'>Lagos</option>
-              <option value='abuja'>Abuja</option>
-              <option value='new-york'>New York</option>
-            </select>
-          </div>
-        </div>
+        {/*Search Bar */}
+        <SearchBar />
       </div>
     </section>
   );
