@@ -1,8 +1,8 @@
 
 // Giving error when uploading file
-import { baseApiSlice } from "..";
+import { clientBaseAPISlice } from "../clientBaseAPI";
 
-const extendApiSlice = baseApiSlice.injectEndpoints({
+const extendApiSlice = clientBaseAPISlice.injectEndpoints({
   endpoints: (builder) => ({
     uploadFile: builder.mutation<{ url: string; }, FormData>({
       query: (formData) => ({

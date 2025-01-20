@@ -1,18 +1,36 @@
-"use client";
-import React, { useState } from "react";
-import { FaArrowLeft, FaArrowRight, FaTrashAlt } from "react-icons/fa";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { FaArrowLeft, FaArrowRight, FaTrashAlt } from 'react-icons/fa';
+import { useGetAllAdminCountryQuery } from '@/services/slices/admin.slice';
 
-// Define the Country type for better reusability
 type Country = {
-  code: string;
+  code2: string;
   name: string;
   currency: string;
-  states: number;
+  region: string;
 };
 
 const Countries = () => {
+  const [countryData, setCountryData] = useState<Country[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [countryToDelete, setCountryToDelete] = useState<Country | null>(null); // Type definition for countryToDelete state
+  const [countryToDelete, setCountryToDelete] = useState<Country | null>(null);
+
+  const { data: countryAPIData } = useGetAllAdminCountryQuery(currentPage);
+
+  useEffect(() => {
+    if (
+      countryAPIData &&
+      countryAPIData.code === 200 &&
+      countryAPIData.body &&
+      countryAPIData.body.records
+    ) {
+      setCountryData(countryAPIData.body.records);
+      setTotalPages(countryAPIData.body.totalPages);
+      setCurrentPage(countryAPIData.body.currentPage);
+    }
+  }, [countryAPIData]);
 
   const openModal = (country: Country) => {
     setCountryToDelete(country);
@@ -26,41 +44,46 @@ const Countries = () => {
 
   const deleteCountry = () => {
     // Logic for deleting the country from your data
-    console.log("Deleted country: ", countryToDelete);
+    console.log('Deleted country: ', countryToDelete);
     closeModal(); // Close modal after deletion
   };
 
-  // Mock country data
-  const countryData: Country[] = [
-    { code: "NG", name: "Nigeria", currency: "Naira", states: 36 },
-    { code: "US", name: "United States", currency: "Dollar", states: 50 },
-    { code: "CA", name: "Canada", currency: "Canadian Dollar", states: 13 },
-  ];
+  const handlePageChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { name } = e.currentTarget;
+    if (name === 'previous') {
+      setCurrentPage(currentPage - 1);
+    } else {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   return (
-    <div className="flex h-screen bg-[#020e1e]">
-      <div className="w-full max-w-8xl mx-auto flex h-full">
-        <main className="flex-1 p-10 bg-[#020e1e] pr-10 text-white">
-          <section className="border border-[#243447] rounded-lg mt-16">
-            <div className="flex justify-between p-5">
-              <div className="flex items-center space-x-2 border border-[#243447] bg-[#020e1e] p-2 rounded-md">
-                <i className="fas fa-search text-[#93d437]"></i>
+    <div className='flex h-screen bg-[#020e1e]'>
+      <div className='w-full max-w-8xl mx-auto flex h-full'>
+        <main className='flex-1 p-10 bg-[#020e1e] pr-10 text-white'>
+          <section className='border border-[#243447] rounded-lg mt-16'>
+            <div className='flex justify-between p-5'>
+              <div className='flex items-center space-x-2 border border-[#243447] bg-[#020e1e] p-2 rounded-md'>
+                <i className='fas fa-search text-[#93d437]'></i>
                 <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-80 focus:outline-none bg-transparent text-white"
+                  type='text'
+                  placeholder='Search...'
+                  className='w-80 focus:outline-none bg-transparent text-white'
                 />
               </div>
 
-              <div className="flex space-x-4 items-center">
-                <button className="border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2">
-                  <span className="border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center">
+              <div className='flex space-x-4 items-center'>
+                <button className='border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2'>
+                  <span className='border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center'>
                     +
                   </span>
                   <span>Import Country</span>
                 </button>
-                <button className="border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2">
-                  <span className="border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center">
+                <button
+                  type='button'
+                  className='border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2'
+                >
+                  <span className='border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center'>
                     +
                   </span>
                   <span>New Country</span>
@@ -68,19 +91,19 @@ const Countries = () => {
               </div>
             </div>
 
-            <table className="min-w-full border-b border-[#243447]">
-              <thead className="bg-[#243447] border-b border-[#243447]">
-                <tr className="text-left text-white">
-                  <th className="p-3 text-base font-normal flex items-center">
-                    <input type="checkbox" className="mr-2" />
+            <table className='min-w-full border-b border-[#243447]'>
+              <thead className='bg-[#243447] border-b border-[#243447]'>
+                <tr className='text-left text-white'>
+                  <th className='p-3 text-base font-normal flex items-center'>
+                    <input type='checkbox' className='mr-2' title={''} />
                     Code
                   </th>
-                  <th className="p-3 text-base font-normal">Name</th>
-                  <th className="p-3 text-base font-normal">Currency</th>
-                  <th className="p-3 text-base font-normal">States</th>
-                  <th className="p-3 text-base font-normal">Details</th>
-                  <th className="p-3 text-base font-normal">Edit</th>
-                  <th className="p-3 text-base font-normal">Delete</th>
+                  <th className='p-3 text-base font-normal'>Name</th>
+                  <th className='p-3 text-base font-normal'>Currency</th>
+                  <th className='p-3 text-base font-normal'>States</th>
+                  <th className='p-3 text-base font-normal'>Details</th>
+                  <th className='p-3 text-base font-normal'>Edit</th>
+                  <th className='p-3 text-base font-normal'>Delete</th>
                 </tr>
               </thead>
 
@@ -88,31 +111,38 @@ const Countries = () => {
                 {countryData.map((country, index) => (
                   <tr
                     key={index}
-                    className="border-b border-[#243447] hover:bg-[#93d437]"
+                    className='border-b border-[#243447] hover:bg-[#93d437]'
                   >
-                    <td className="p-3 flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      {country.code}
+                    <td className='p-3 flex items-center'>
+                      <input type='checkbox' className='mr-2' title={''} />
+                      {country.code2}
                     </td>
-                    <td className="p-3">{country.name}</td>
-                    <td className="p-3">{country.currency}</td>
-                    <td className="p-3">{country.states}</td>
-                    <td className="p-3">
-                      <button className="flex items-center bg-[#243447] text-[#93d437] px-4 py-1 text-sm rounded-full">
+                    <td className='p-3'>{country.name}</td>
+                    <td className='p-3'>{country.currency}</td>
+                    <td className='p-3'>{country.region}</td>
+                    <td className='p-3'>
+                      <button
+                        type='button'
+                        className='flex items-center bg-[#243447] text-[#93d437] px-4 py-1 text-sm rounded-full'
+                      >
                         View
                       </button>
                     </td>
-                    <td className="p-3">
-                      <button className="flex items-center bg-[#93d437] text-[#020e1e] px-4 py-1 text-sm rounded-full">
+                    <td className='p-3'>
+                      <button
+                        type='button'
+                        className='flex items-center bg-[#93d437] text-[#020e1e] px-4 py-1 text-sm rounded-full'
+                      >
                         Edit
                       </button>
                     </td>
-                    <td className="p-3">
+                    <td className='p-3'>
                       <button
-                        className="flex items-center bg-[#243447] text-red-500 px-4 py-1 text-sm rounded-full"
+                        type='button'
+                        className='flex items-center bg-[#243447] text-red-500 px-4 py-1 text-sm rounded-full'
                         onClick={() => openModal(country)} // Open modal on click
                       >
-                        Delete <FaTrashAlt className="ml-2" />
+                        Delete <FaTrashAlt className='ml-2' />
                       </button>
                     </td>
                   </tr>
@@ -121,32 +151,29 @@ const Countries = () => {
             </table>
 
             {/* Pagination Controls */}
-            <div className="flex justify-between items-center mt-2 px-4 py-5 text-white">
-              <button className="flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded">
-                <FaArrowLeft className="text-xl" />
+            <div className='flex justify-between items-center mt-2 px-4 py-5 text-white'>
+              <button
+                type='button'
+                name='previous'
+                onClick={handlePageChange}
+                disabled={currentPage === 0}
+                className='flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded'
+              >
+                <FaArrowLeft className='text-xl' />
                 <span>Previous</span>
               </button>
-              <div className="flex items-center space-x-3">
-                <button className="w-10 h-10 flex items-center justify-center rounded-md bg-[#93d437] text-[#020e1e]">
-                  1
-                </button>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  2
-                </button>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  3
-                </button>
-                <span className="pt-1">...</span>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  8
-                </button>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  10
-                </button>
-              </div>
-              <button className="flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded">
+              <span>
+                Page {currentPage + 1} of {totalPages}
+              </span>
+              <button
+                type='button'
+                name='next'
+                onClick={handlePageChange}
+                disabled={currentPage === totalPages - 1}
+                className='flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded'
+              >
                 <span>Next</span>
-                <FaArrowRight className="text-xl" />
+                <FaArrowRight className='text-xl' />
               </button>
             </div>
           </section>
@@ -155,20 +182,22 @@ const Countries = () => {
 
       {/* Modal for confirmation */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-5 rounded-lg text-black w-96">
-            <h2 className="text-xl mb-4">
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
+          <div className='bg-white p-5 rounded-lg text-black w-96'>
+            <h2 className='text-xl mb-4'>
               Are you sure you want to delete {countryToDelete?.name}?
             </h2>
-            <div className="flex justify-end space-x-3">
+            <div className='flex justify-end space-x-3'>
               <button
-                className="px-4 py-2 bg-gray-300 rounded-md"
+                type='button'
+                className='px-4 py-2 bg-gray-300 rounded-md'
                 onClick={closeModal}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-red-600 text-white rounded-md"
+                type='button'
+                className='px-4 py-2 bg-red-600 text-white rounded-md'
                 onClick={deleteCountry}
               >
                 Confirm
