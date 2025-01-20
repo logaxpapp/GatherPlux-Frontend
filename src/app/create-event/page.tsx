@@ -183,6 +183,8 @@ export default function CreateEvent() {
     id: string | undefined,
     type: string,
   ) => {
+    console.log(time, id)
+    console.log(type);
     const updatedSessions = sessions.map((session) => {
       if (session.id === id) {
         return { ...session, [type]: time };

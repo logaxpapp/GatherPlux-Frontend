@@ -16,9 +16,10 @@ type TimeProps = {
   ) => void;
   id?: string;
   type: string;
+  startTime?:string
 };
 
-const CustomTimePicker = ({ width, handleTimeChange, id, type }: TimeProps) => {
+const CustomTimePicker = ({ width, handleTimeChange, id, type, startTime }: TimeProps) => {
   const [time, setTime] = useState<string | undefined>('');
   const [open, setOpen] = useState(false);
 
@@ -45,7 +46,7 @@ const CustomTimePicker = ({ width, handleTimeChange, id, type }: TimeProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0'>
-        <TimePicker handleSetTime={handleSetTime} selectedTime={time} />
+        <TimePicker startTime={startTime} handleSetTime={handleSetTime} selectedTime={time} />
       </PopoverContent>
     </Popover>
   );

@@ -289,6 +289,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                       handleTimeChange={handleTimeChange}
                       id={session.id}
                       type='endTime'
+                      startTime={session.startTime}
+                  
                     />
                   </div>
                 </div>
