@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
-import { useGetAllPublicEventsQuery } from '@/services/slices/events.slice';
+import { useGetUpcomingEventsQuery } from '@/services/slices/events.slice';
 import { useGetAllCategoriesQuery } from '@/services/slices/category.slice';
 import { setEvents as setStateEvents } from '@/store/slices/event.slice';
 import { setCategories as setStateCategories } from '@/store/slices/category.slice';
+import { EventProps } from '@/app/homepage/EventCard';
 
 interface CategoriesProps {
   id: number;
@@ -30,39 +31,6 @@ export const formatDate = (dateString: string) => {
   }
 };
 
-interface TicketsProps {
-  id: number;
-  name: string;
-  price: string;
-}
-
-export interface EventProps {
-  id: number;
-  images: string[];
-  category_id: number;
-  title: string;
-  start_date: string;
-  time: string;
-  city: string;
-  address: string;
-  price: number;
-  likes: number;
-  description: string;
-  tickets: TicketsProps[];
-  sessions: {
-    id: number;
-    name: string;
-    start_time: string;
-    end_time: string;
-  }[];
-  user: {
-    profile: {
-      company: string;
-      image_url: string;
-    };
-  };
-}
-
 const EventCard = () => {
   const dispatch = useDispatch();
 
@@ -70,7 +38,7 @@ const EventCard = () => {
   const [events, setEvents] = useState<EventProps[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  const { data: eventsData } = useGetAllPublicEventsQuery('');
+  const { data: eventsData } = useGetUpcomingEventsQuery('');
   const { data: categoriesData } = useGetAllCategoriesQuery('');
 
   useEffect(() => {
@@ -191,7 +159,7 @@ const EventCard = () => {
             </Link>
           ))
         ) : (
-          <div>No events available</div>
+          <div>No upcoming events yet</div>
         )}
       </div>
     </div>

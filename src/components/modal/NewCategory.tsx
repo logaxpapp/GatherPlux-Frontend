@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, Button, DialogActions } from '@mui/material';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
@@ -12,25 +12,38 @@ const NewCategoryModal: React.FC<NewCategoryModalProps> = ({ open, onClose, onSa
   const [categoryName, setCategoryName] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('Active');
+  const [error, setError] = useState('');
+  const categoryNameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      categoryNameRef.current?.focus();
+      setError('');
+    }
+  }, [open]);
 
   const handleSave = () => {
-    if (categoryName.trim() && description.trim()) {
-      onSave({ name: categoryName, description, status });
-      setCategoryName('');
-      setDescription('');
-      setStatus('Active');
-      onClose();
+    if (!categoryName.trim() || !description.trim()) {
+      setError('Both category name and description are required.');
+      return;
     }
+    onSave({ name: categoryName, description, status });
+    setCategoryName('');
+    setDescription('');
+    setStatus('Active');
+    setError('');
+    onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose} className="rounded-lg">
-      <DialogTitle className="text-xl font-bold text-gray-800 flex items-center">
+    <Dialog open={open} onClose={onClose} aria-labelledby="dialog-title">
+      <DialogTitle id="dialog-title" className="text-xl font-bold text-gray-800 flex items-center">
         <FaCheckCircle className="text-green-500 mr-2" />
         New Category
       </DialogTitle>
       <DialogContent>
         <TextField
+          inputRef={categoryNameRef}
           label="Category Name"
           fullWidth
           variant="outlined"
@@ -50,6 +63,7 @@ const NewCategoryModal: React.FC<NewCategoryModalProps> = ({ open, onClose, onSa
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter category description"
         />
+        {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700">Status</label>
           <select

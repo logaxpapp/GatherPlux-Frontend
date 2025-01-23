@@ -1,6 +1,6 @@
-import { baseApiSlice } from "..";
+import { clientBaseAPISlice } from "../clientBaseAPI";
 
-const extendApiSlice = baseApiSlice.injectEndpoints({
+const extendApiSlice = clientBaseAPISlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllPublicEvents: builder.query({
       query: () => 'event/list',
@@ -12,8 +12,17 @@ const extendApiSlice = baseApiSlice.injectEndpoints({
         body: eventDetails,
       }),
     }),
+    getOneEvent: builder.query({
+      query: (id) => `event/${id}`,
+    }),
+    getUpcomingEvents: builder.query({
+      query: () => 'event?type=upcoming',
+    }),
+    getSearchedEvents: builder.query({
+      query: (query) => `event/search?query=${query}`,
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllPublicEventsQuery, useCreateEventMutation } = extendApiSlice;
+export const { useGetAllPublicEventsQuery, useCreateEventMutation, useGetOneEventQuery, useGetUpcomingEventsQuery, useGetSearchedEventsQuery } = extendApiSlice;

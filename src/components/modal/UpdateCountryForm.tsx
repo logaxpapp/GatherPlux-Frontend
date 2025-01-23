@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
+// Define the types for the props
 type UpdateCountryFormProps = {
-  country: string; // The country name to display in the form
+  country: string | null; // The country name to display in the form
   onClose: () => void; // Callback to close the modal
 };
 
-const UpdateCountryForm: React.FC<UpdateCountryFormProps> = ({
-  country,
-  onClose,
-}) => {
+const UpdateCountryForm: React.FC<UpdateCountryFormProps> = ({ country, onClose }) => {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [currency, setCurrency] = useState("");
   const [currencyCode, setCurrencyCode] = useState("");
   const [currencySymbols, setCurrencySymbols] = useState("");
 
+  // Prepopulate fields if country is provided
+  useEffect(() => {
+    if (country) {
+      setName(country); // Example: Set the name based on the country
+      setCode("ExampleCode");
+      setCurrency("ExampleCurrency");
+      setCurrencyCode("EXC");
+      setCurrencySymbols("$");
+    }
+  }, [country]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
+    if (!name || !code || !currency || !currencyCode || !currencySymbols) {
+      alert("Please fill out all fields.");
+      return;
+    }
     console.log({ country, name, code, currency, currencyCode, currencySymbols });
   };
 
@@ -25,13 +37,8 @@ const UpdateCountryForm: React.FC<UpdateCountryFormProps> = ({
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-center text-gray-900">
-            Update Country
-          </h2>
-          <button
-            className="text-gray-500 hover:text-gray-700"
-            onClick={onClose} // Close the modal using the prop
-          >
+          <h2 className="text-2xl font-bold text-center text-gray-900">Update Country</h2>
+          <button className="text-gray-500 hover:text-gray-700" onClick={onClose}>
             &#10005;
           </button>
         </div>
@@ -39,12 +46,11 @@ const UpdateCountryForm: React.FC<UpdateCountryFormProps> = ({
           <div>
             <label className="block text-gray-700">Country</label>
             <select
-              value={country}
+              value={country || ""}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               disabled
             >
-              <option value={country}>{country}</option>
-              {/* Additional options if necessary */}
+              <option value={country || ""}>{country || "Select a country"}</option>
             </select>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -108,4 +114,32 @@ const UpdateCountryForm: React.FC<UpdateCountryFormProps> = ({
   );
 };
 
-export default UpdateCountryForm;
+const CountryUpdateContainer: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+
+  // Function to open the modal with a country name
+  const handleOpenModal = (country: string) => {
+    setSelectedCountry(country);
+    setShowModal(true);
+  };
+
+  // Function to close the modal
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <>
+      {/* Button or action that triggers the modal */}
+      <button onClick={() => handleOpenModal("USA")}>Update USA</button>
+
+      {/* Modal component */}
+      {showModal && (
+        <UpdateCountryForm country={selectedCountry} onClose={handleCloseModal} />
+      )}
+    </>
+  );
+};
+
+export default CountryUpdateContainer;

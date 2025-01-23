@@ -12,9 +12,12 @@ import EventBanner from './components/EventBanner.component';
 import EventTickets from './components/EventTickets.component';
 import PreviewEvent from './components/PreviewEvent.component';
 
-import { combinedStateAndCategoryProps } from './types/types';
+import { CombinedStateAndCategoryProps } from './types/types';
 import { useGetAllCategoriesQuery } from '@/services/slices/category.slice';
-import { useGetAllStatesQuery } from '@/services/slices/state.slice';
+import {
+  useGetAllCountriesQuery,
+  useLazyGetAllStatesQuery,
+} from '@/services/slices/state.slice';
 import { useCreateEventMutation } from '@/services/slices/events.slice';
 
 export interface SessionsProps {
@@ -34,9 +37,9 @@ export interface TicketEntry {
 
 export interface EventDetailsProps {
   title: string;
-  category: combinedStateAndCategoryProps | undefined;
+  category: CombinedStateAndCategoryProps | undefined;
   type: string;
-  state: combinedStateAndCategoryProps | undefined;
+  state: CombinedStateAndCategoryProps | undefined;
   address: string;
   description: string;
 }
@@ -46,14 +49,17 @@ export default function CreateEvent() {
 
   const [formStep, setFormStep] = useState(1);
 
-  const [categories, setCategories] = useState<combinedStateAndCategoryProps[]>(
+  const [categories, setCategories] = useState<CombinedStateAndCategoryProps[]>(
     [],
   );
-  const [states, setStates] = useState<combinedStateAndCategoryProps[]>([]);
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState<CombinedStateAndCategoryProps[]>([]);
+  const [city, setCity] = useState('');
 
   const { data: categoriesData } = useGetAllCategoriesQuery('');
-  const { data: allStates } = useGetAllStatesQuery('AG');
+  const { data: allCountries } = useGetAllCountriesQuery('');
   const [createEvent] = useCreateEventMutation();
+  const [getAllStates] = useLazyGetAllStatesQuery();
 
   useEffect(() => {
     // fetch categories
@@ -61,11 +67,11 @@ export default function CreateEvent() {
       setCategories(categoriesData.body);
     }
 
-    if (allStates && allStates.body) {
-      setStates(allStates.body);
+    if (allCountries && allCountries.body) {
+      setCountries(allCountries.body);
     }
     // fetch states
-  }, [allStates, categoriesData]);
+  }, [allCountries, categoriesData]);
 
   const [eventDetails, setEventDetails] = useState<EventDetailsProps>({
     title: '',
@@ -102,14 +108,33 @@ export default function CreateEvent() {
     setEventDetails({ ...eventDetails, type: value });
   };
 
-  const handleLocationChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const parsedData = JSON.parse(event.target.value);
+    const { code2 } = parsedData;
+
+    const fetchStates = async () => {
+      const response = await getAllStates(code2);
+      if (response.data) {
+        setStates(response.data.body);
+      }
+    };
+
+    if (code2) {
+      fetchStates();
+    }
+  };
+
+  const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const parsedData = JSON.parse(event.target.value);
     const { id } = parsedData;
     if (id) {
-      setEventDetails({ ...eventDetails, state: parsedData });
+      setEventDetails({ ...eventDetails, state: id });
     }
+  };
+
+  const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setCity(value);
   };
 
   // sessions
@@ -158,6 +183,8 @@ export default function CreateEvent() {
     id: string | undefined,
     type: string,
   ) => {
+    console.log(time, id)
+    console.log(type);
     const updatedSessions = sessions.map((session) => {
       if (session.id === id) {
         return { ...session, [type]: time };
@@ -288,7 +315,6 @@ export default function CreateEvent() {
         eventDetails.description === ''
       ) {
         console.log('fill all input fields');
-        console.log(eventDetails, sessions);
         return;
       }
     } else if (formStep === 2) {
@@ -316,9 +342,9 @@ export default function CreateEvent() {
     const newEvent = {
       title: eventDetails.title,
       category_id: eventDetails.category,
-      state_id: eventDetails.state?.id,
+      state_id: eventDetails.state,
       address: eventDetails.address,
-      city: eventDetails.state?.name,
+      city: city,
       description: eventDetails.description,
       images: [uploadedBanner],
       ticketed: eventType === 'ticketed',
@@ -360,6 +386,7 @@ export default function CreateEvent() {
               handleTitleAndDescriptionAndAddress
             }
             categories={categories}
+            countries={countries}
             states={states}
             handleCategoryChange={handleCategoryChange}
             handleEventTypeChange={handleEventTypeChange}
@@ -371,7 +398,9 @@ export default function CreateEvent() {
             handleSessionEditName={handleSessionEditName}
             handleAddSession={handleAddSession}
             handleDeleteSession={handleDeleteSession}
-            handleLocationChange={handleLocationChange}
+            handleCountryChange={handleCountryChange}
+            handleStateChange={handleStateChange}
+            handleCityChange={handleCityChange}
             eventDetails={eventDetails}
           />
         </div>

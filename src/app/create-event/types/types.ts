@@ -30,7 +30,13 @@ export interface StateProp {
   archived: boolean;
 }
 
-export interface combinedStateAndCategoryProps {
+export interface CountryProp {
+  code2: string,
+  code3: string,
+  name: string,
+}
+
+export interface CombinedStateAndCategoryProps {
   id: number;
   name: string;
   description?: string,

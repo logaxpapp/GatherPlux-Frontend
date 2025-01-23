@@ -1,95 +1,33 @@
+'use strict';
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { useDispatch } from 'react-redux';
 import Link from 'next/link';
-import { useGetAllPublicEventsQuery } from '@/services/slices/events.slice';
-import { useGetAllCategoriesQuery } from '@/services/slices/category.slice';
-import { setEvents as setStateEvents } from '@/store/slices/event.slice';
-import { setCategories as setStateCategories } from '@/store/slices/category.slice';
+import { EventProps, formatDate } from '../homepage/EventCard';
+import { useGetSearchedEventsQuery } from '@/services/slices/events.slice';
 
-interface CategoriesProps {
-  id: number;
-  name: string;
-  description: string;
-}
+const Search = () => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query');
 
-export const formatDate = (dateString: string) => {
-  try {
-    const date = new Date(dateString);
-    return date
-      .toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      })
-      .replace(',', '');
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return dateString; // Fallback to original string if formatting fails
-  }
-};
-
-interface TicketsProps {
-  id: number;
-  name: string;
-  price: string;
-}
-
-export interface EventProps {
-  id: number;
-  images: string[];
-  category_id: number;
-  title: string;
-  start_date: string;
-  time: string;
-  city: string;
-  address: string;
-  price: number;
-  likes: number;
-  description: string;
-  tickets: TicketsProps[];
-  sessions: {
-    id: number;
-    name: string;
-    start_time: string;
-    end_time: string;
-  }[];
-  user: {
-    profile: {
-      company: string;
-      image_url: string;
-    };
-  };
-}
-
-const EventCard = () => {
-  const dispatch = useDispatch();
-
-  const [categories, setCategories] = useState<CategoriesProps[]>([]);
   const [events, setEvents] = useState<EventProps[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  const { data: eventsData } = useGetAllPublicEventsQuery('');
-  const { data: categoriesData } = useGetAllCategoriesQuery('');
+  const { data: eventsSearchData } = useGetSearchedEventsQuery(query);
 
   useEffect(() => {
     setIsClient(true);
 
-    if (eventsData && eventsData.body) {
-      setEvents(eventsData.body.events.records);
-      dispatch(setStateEvents(eventsData.body.events.records));
+    if (eventsSearchData && eventsSearchData.body) {
+      setEvents(eventsSearchData.body.events.records);
     }
-
-    if (categoriesData && categoriesData.body) {
-      setCategories(categoriesData.body);
-      dispatch(setStateCategories(categoriesData.body));
-    }
-  }, [eventsData, categoriesData, dispatch]);
+  }, [eventsSearchData]);
 
   return (
     <div
-      className='bg-[#020e1e] min-h-screen py-10 relative pb-56'
+      className='bg-[#020e1e] min-h-screen py-10 relative pb-56 mt-20'
       style={{
         backgroundImage: "url('/Line.png')",
         backgroundSize: 'cover',
@@ -100,34 +38,8 @@ const EventCard = () => {
       {/* Section Heading */}
       <div className='text-center mb-8 px-4'>
         <h1 className='text-white text-4xl font-bold'>
-          Discover Unforgettable Events Content
+          Search result for &quot;{query}&quot;
         </h1>
-        <p className='text-white mt-4 max-w-2xl mx-auto'>
-          Browse a diverse selection of events hosted by top creators. Whether
-          you&apos;re looking for concerts, workshops, or social gatherings, our
-          marketplace brings unique experiences tailored for everyone.
-        </p>
-      </div>
-
-      {/* Categories Section */}
-      <div className='flex justify-center gap-4 flex-wrap mb-8'>
-        {categories && categories.length > 0 ? (
-          categories.map((category, index) => (
-            <button
-              type='button'
-              key={category.id}
-              className={`px-8 py-2 rounded-full text-sm font-semibold ${
-                index === 0
-                  ? 'bg-[#9edd45] text-black'
-                  : 'border border-gray-800 hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded'
-              }`}
-            >
-              {category.name}
-            </button>
-          ))
-        ) : (
-          <div>No categories available</div>
-        )}
       </div>
 
       {/* Events Grid */}
@@ -191,11 +103,11 @@ const EventCard = () => {
             </Link>
           ))
         ) : (
-          <div>No events available</div>
+          <div>No events found</div>
         )}
       </div>
     </div>
   );
 };
 
-export default EventCard;
+export default Search;

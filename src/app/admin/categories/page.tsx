@@ -1,22 +1,24 @@
-"use client";
+'use strict';
+'use client';
 
-import Image from "next/image";
-import React, { useState } from "react";
-import { FaPencilAlt } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { FaPencilAlt } from 'react-icons/fa';
+import { useGetAllAdminCategoriesQuery } from '@/services/slices/admin.slice';
 import NewCategoryModal from "@/components/modal/NewCategory";
+
+type EventCategory = {
+  name: string;
+  description: string;
+  archived: string; // Ensure this matches your API response (e.g., "Active"/"Archived").
+};
 
 // Delete Confirmation Modal
 interface DeleteConfirmationModalProps {
   open: boolean;
   onClose: () => void;
-  onDelete: (category: Category) => void;
-  category: Category | null;
-}
-
-interface Category {
-  name: string;
-  description: string;
-  status: string;
+  onDelete: (category: EventCategory) => void;
+  category: EventCategory | null;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -43,40 +45,49 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
             Cancel
           </button>
           <button
-  onClick={() => {
-    if (category) {
-      onDelete(category);
-      onClose();
-    }
-  }}
-  className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
->
-  Delete
-</button>
-
+            onClick={() => {
+              if (category) {
+                onDelete(category);
+                onClose();
+              }
+            }}
+            className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-// Event Categories Component
+// Main Component
 const EventCategories = () => {
+  const [eventCategories, setEventCategories] = useState<EventCategory[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [categories, setCategories] = useState(eventCategories);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<EventCategory | null>(null);
 
+  const { data: eventCategoriesAPIData } = useGetAllAdminCategoriesQuery('');
 
-  const handleSaveCategory = (newCategory: Category) => {
-    setCategories([...categories, newCategory]);
+  useEffect(() => {
+    if (
+      eventCategoriesAPIData &&
+      eventCategoriesAPIData.code === 200 &&
+      eventCategoriesAPIData.body
+    ) {
+      setEventCategories(eventCategoriesAPIData.body);
+    }
+  }, [eventCategoriesAPIData]);
+
+  const handleSaveCategory = (newCategory: EventCategory) => {
+    setEventCategories([...eventCategories, newCategory]);
+    setModalOpen(false);
   };
-  
 
-  const handleDeleteCategory = (categoryToDelete: Category) => {
-    setCategories(categories.filter((category) => category !== categoryToDelete));
+  const handleDeleteCategory = (categoryToDelete: EventCategory) => {
+    setEventCategories(eventCategories.filter(cat => cat.name !== categoryToDelete.name));
   };
-  
 
   return (
     <div className="flex h-screen bg-[#020e1e] text-white">
@@ -85,13 +96,21 @@ const EventCategories = () => {
           <header className="flex justify-end mb-6">
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <button className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-500">
+                <button
+                  type="button"
+                  title=""
+                  className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-500"
+                >
                   <i className="fas fa-envelope text-white"></i>
                 </button>
                 <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></span>
               </div>
               <div className="relative">
-                <button className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-500">
+                <button
+                  type="button"
+                  title=""
+                  className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-500"
+                >
                   <i className="fas fa-bell text-white"></i>
                 </button>
                 <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></span>
@@ -137,18 +156,18 @@ const EventCategories = () => {
                 </tr>
               </thead>
               <tbody>
-                {categories.map((category, index) => (
+                {eventCategories.map((category, index) => (
                   <tr
                     key={index}
                     className={`${
-                      index === categories.length - 1
-                        ? "border-gray-600"
-                        : "border-b border-gray-600"
+                      index === eventCategories.length - 1
+                        ? 'border-gray-600'
+                        : 'border-b border-gray-600'
                     } hover:bg-gray-700`}
                   >
                     <td className="p-3">{category.name}</td>
                     <td className="p-3">
-                      {category.description === "Not set" ? (
+                      {category.description === 'Not set' ? (
                         <span className="inline-flex items-center">
                           {category.description}
                           <FaPencilAlt className="ml-2 w-4 h-4 text-gray-500" />
@@ -157,14 +176,14 @@ const EventCategories = () => {
                         <span>{category.description}</span>
                       )}
                     </td>
-                    <td className="p-3">{category.status}</td>
+                    <td className="p-3">{category.archived}</td>
                     <td className="p-3">
                       <button
-                        className="text-sm px-3 py-1 bg-red-600 rounded-full hover:bg-red-700"
                         onClick={() => {
                           setSelectedCategory(category);
                           setDeleteModalOpen(true);
                         }}
+                        className="text-sm px-3 py-1 bg-red-600 rounded-full hover:bg-red-700"
                       >
                         Delete
                       </button>
@@ -192,15 +211,5 @@ const EventCategories = () => {
     </div>
   );
 };
-
-// Mock data for event categories
-const eventCategories = [
-  { name: "Music", description: "Concerts and live shows", status: "Active" },
-  { name: "Sports", description: "Live matches and tournaments", status: "Active" },
-  { name: "Workshops", description: "Educational and hands-on events", status: "Active" },
-  { name: "Conferences", description: "Business and professional events", status: "Inactive" },
-  { name: "Festivals", description: "Cultural and seasonal events", status: "Active" },
-  { name: "Networking", description: "Meetups and social events", status: "Inactive" },
-];
 
 export default EventCategories;
