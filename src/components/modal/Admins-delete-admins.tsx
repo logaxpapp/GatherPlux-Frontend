@@ -4,7 +4,7 @@ import { FaTrashAlt } from "react-icons/fa";
 interface DeleteAdminProps {
   onClose: () => void;
   onDelete: () => void;
-  adminName: string; // Optional for dynamic admin names
+  adminName: string; // Updated to match the Dash1 component
 }
 
 const DeleteAdmin: React.FC<DeleteAdminProps> = ({ onClose, onDelete, adminName }) => {
@@ -26,13 +26,11 @@ const DeleteAdmin: React.FC<DeleteAdminProps> = ({ onClose, onDelete, adminName 
         </div>
 
         {/* Title */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Delete Admin?
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Confirm Delete?</h2>
 
         {/* Message */}
         <p className="text-gray-500 mb-6">
-          {adminName ? `${adminName} will be permanently deleted.` : 'This admin will be permanently deleted.'}
+          {adminName ? `${adminName} will be deleted permanently.` : 'This item will be deleted permanently.'}
         </p>
 
         {/* Actions */}

@@ -1,7 +1,7 @@
 export default function EventDescription() {
   return (
     <div
-      className="bg-[#020e1e] py-10 px-10 relative"
+      className="bg-[#020e1e] py-10 px-10 relative "
       style={{
         backgroundImage: "url('/Line.png')",
         backgroundSize: "cover",

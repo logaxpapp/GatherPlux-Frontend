@@ -1,76 +1,53 @@
 "use client";
 
-import React, { useState } from "react";
 import Image from "next/image";
-import { FaTrashAlt } from "react-icons/fa";
-import NewAdminForm from "@/components/modal/Admins-new-admin";
+import React, { useState } from "react";
+import { FaPencilAlt } from "react-icons/fa";
+import NewCategoryModal from "@/components/modal/NewCategory";
 import DeleteAdmin from "@/components/modal/Admins-delete-admins";
 
-// Define the User type
-interface User {
-  firstname: string;
-  lastname: string;
-  email: string;
-}
+const EventCategories = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [categories, setCategories] = useState(eventCategories);
+  const [selectedCategory, setSelectedCategory] = useState<{ name: string; description: string; status: string } | null>(null);
 
-const Admins = () => {
-  // Use the User type in your state
-  const [userData, setUserData] = useState<User[]>([
-    {
-      firstname: "Emmanuel",
-      lastname: "Ujah",
-      email: "ujahemmanuel72@gmail.com",
-    },
-    // Add more user data if needed
-  ]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<User | null>(null);
-
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
-
-  const handleOpenDeleteModal = (user: User) => {
-    setUserToDelete(user);
-    setIsDeleteModalOpen(true);
+  const handleSaveCategory = (newCategory: { name: string; description: string; status: string }) => {
+    setCategories([...categories, newCategory]);
   };
 
-  const handleCloseDeleteModal = () => {
-    setUserToDelete(null);
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleDeleteUser = () => {
-    if (userToDelete) {
-      setUserData((prevData) =>
-        prevData.filter((user) => user.email !== userToDelete.email)
-      );
-    }
-    handleCloseDeleteModal();
+  const handleDeleteCategory = (categoryToDelete: { name: string; description: string; status: string } | null) => {
+    setCategories(categories.filter((category) => category !== categoryToDelete));
   };
 
   return (
-    <div className="flex h-screen bg-[#1f2937] text-white">
+    <div className="flex h-screen bg-[#020e1e] text-white">
       <div className="w-full mx-auto flex h-full">
-        <main className="flex-1 p-10 bg-[#020e1e] pr-10">
+        <main className="flex-1 p-10">
           <header className="flex justify-end mb-6">
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <button className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-[#020e1e] text-white">
-                  <i className="fas fa-envelope"></i>
+                <button className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-500">
+                  <i className="fas fa-envelope text-white"></i>
                 </button>
                 <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></span>
               </div>
               <div className="relative">
-                <button className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-[#020e1e] text-white">
-                  <i className="fas fa-bell"></i>
+                <button className="flex items-center justify-center w-10 h-10 rounded-md border border-gray-500">
+                  <i className="fas fa-bell text-white"></i>
                 </button>
                 <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-white"></span>
               </div>
-              <div className="flex items-center space-x-2 rounded-md border border-gray-300 px-1 py-1 bg-[#020e1e] text-white">
+              <div className="flex items-center space-x-2 rounded-md border border-gray-500 px-1 py-1">
                 <div className="w-7 h-7 rounded-full border border-gray-300 overflow-hidden">
-                  <Image src="/avatar.jpg" alt="avatar" width={28} height={28} />
+                  <Image
+                    src="/avatar.jpg"
+                    alt="avatar"
+                    width={50}
+                    height={50}
+                    className="w-full h-full"
+                  />
                 </div>
                 <div className="flex items-center">
                   <span className="font-medium">Emmanuel</span>
@@ -80,49 +57,57 @@ const Admins = () => {
             </div>
           </header>
 
-          <section className="border rounded-lg border-gray-500">
-            <div className="flex justify-between items-center bg-[#020e1e] pt-5 pb-3">
-              <h2 className="text-xl font-bold pl-16">Admins</h2>
+          <section className="rounded-lg overflow-hidden border border-gray-600">
+            <div className="flex justify-between items-center py-5 px-6">
+              <h2 className="text-xl font-bold">Event Categories</h2>
               <button
-                onClick={handleOpenModal}
-                className="mr-5 bg-gray-100 py-1 px-4 rounded-full border border-gray-300 text-sm text-[#011c39]"
+                className="flex items-center px-4 py-2 bg-[#243447] text-white rounded-lg shadow-sm hover:bg-[#1f2d3b]"
+                onClick={() => setModalOpen(true)}
               >
-                + New Admin
+                <div className="flex items-center justify-center w-6 h-6 border border-gray-400 rounded-full mr-2">
+                  <span className="text-white">+</span>
+                </div>
+                New Category
               </button>
             </div>
-
-            <table className="min-w-full border-b border-gray-500 rounded-t">
-              <thead className="bg-[#2d3748] border-b border-gray-500">
-                <tr className="text-left">
-                  <th className="pl-3 pr-1 text-base font-normal">
-                    <input type="checkbox" />
-                  </th>
-                  <th className="p-3 text-base font-normal">First Name</th>
-                  <th className="p-3 text-base font-normal">Last Name</th>
-                  <th className="p-3 text-base font-normal">Email</th>
-                  <th className="p-3 text-base font-normal"></th>
+            <table className="min-w-full text-left">
+              <thead>
+                <tr className="text-left bg-[#1a2938] border-b border-gray-600">
+                  <th className="p-3 text-base font-normal">Category Name</th>
+                  <th className="p-3 text-base font-normal">Description</th>
+                  <th className="p-3 text-base font-normal">Status</th>
+                  <th className="p-3 text-base font-normal">Actions</th>
                 </tr>
               </thead>
-
               <tbody>
-                {userData.map((user, index) => (
+                {categories.map((category, index) => (
                   <tr
                     key={index}
-                    className="border-b border-gray-500 hover:bg-gray-600"
+                    className={`${
+                      index === categories.length - 1 ? "border-gray-600" : "border-b border-gray-600"
+                    } hover:bg-gray-700`}
                   >
-                    <td className="pl-3 pr-1">
-                      <input type="checkbox" />
+                    <td className="p-3">{category.name}</td>
+                    <td className="p-3">
+                      {category.description === "Not set" ? (
+                        <span className="inline-flex items-center">
+                          {category.description}
+                          <FaPencilAlt className="ml-2 w-4 h-4 text-gray-500" />
+                        </span>
+                      ) : (
+                        <span>{category.description}</span>
+                      )}
                     </td>
-                    <td className="p-3">{user.firstname}</td>
-                    <td className="p-3">{user.lastname}</td>
-                    <td className="p-3">{user.email}</td>
-                    <td className="p-3 flex justify-between items-center">
+                    <td className="p-3">{category.status}</td>
+                    <td className="p-3">
                       <button
-                        onClick={() => handleOpenDeleteModal(user)}
-                        className="bg-red-100 text-red-600 px-4 py-1 text-sm rounded-full flex items-center space-x-2 font-medium"
+                        className="text-sm px-3 py-1 bg-red-600 rounded-full hover:bg-red-700"
+                        onClick={() => {
+                          setSelectedCategory(category);
+                          setDeleteModalOpen(true);
+                        }}
                       >
-                        <span>Delete</span>
-                        <FaTrashAlt />
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -133,17 +118,34 @@ const Admins = () => {
         </main>
       </div>
 
-      {/* Modals */}
-      {isModalOpen && <NewAdminForm onClose={handleCloseModal} />}
-      {isDeleteModalOpen && userToDelete && (
+      <NewCategoryModal
+        open={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={handleSaveCategory}
+      />
+
+      {isDeleteModalOpen && (
         <DeleteAdmin
-          onClose={handleCloseDeleteModal}
-          onDelete={handleDeleteUser}
-          adminName={`${userToDelete.firstname} ${userToDelete.lastname}`}
+          onClose={() => setDeleteModalOpen(false)}
+          onDelete={() => {
+            handleDeleteCategory(selectedCategory);
+            setDeleteModalOpen(false);
+          }}
+          itemName={selectedCategory?.name || ""}
         />
       )}
     </div>
   );
 };
 
-export default Admins;
+// Mock data for event categories
+const eventCategories = [
+  { name: "Music", description: "Concerts and live shows", status: "Active" },
+  { name: "Sports", description: "Live matches and tournaments", status: "Active" },
+  { name: "Workshops", description: "Educational and hands-on events", status: "Active" },
+  { name: "Conferences", description: "Business and professional events", status: "Inactive" },
+  { name: "Festivals", description: "Cultural and seasonal events", status: "Active" },
+  { name: "Networking", description: "Meetups and social events", status: "Inactive" },
+];
+
+export default EventCategories;

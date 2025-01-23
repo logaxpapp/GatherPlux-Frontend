@@ -1,8 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import { FaArrowLeft, FaArrowRight, FaTrashAlt } from "react-icons/fa";
 
-// Define the Country type for better reusability
+import React, { useState } from "react";
+import { FaTrashAlt } from "react-icons/fa";
+import UpdateCountryForm from "@/components/modal/UpdateCountryForm";
+import CountryImportForm from "@/components/modal/CountryImportForm";
+import NewCountryForm from "@/components/modal/NewCountryForm";
+
 type Country = {
   code: string;
   name: string;
@@ -11,26 +14,44 @@ type Country = {
 };
 
 const Countries = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [countryToDelete, setCountryToDelete] = useState<Country | null>(null); // Type definition for countryToDelete state
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isNewCountryModalOpen, setIsNewCountryModalOpen] = useState(false);
+  const [countryToDelete, setCountryToDelete] = useState<Country | null>(null);
+  const [countryToEdit, setCountryToEdit] = useState<Country | null>(null);
 
-  const openModal = (country: Country) => {
+  const openEditModal = (country: Country) => {
+    setCountryToEdit(country);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setCountryToEdit(null);
+    setIsEditModalOpen(false);
+  };
+
+  const openDeleteModal = (country: Country) => {
     setCountryToDelete(country);
-    setIsModalOpen(true);
+    setIsDeleteModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeDeleteModal = () => {
     setCountryToDelete(null);
+    setIsDeleteModalOpen(false);
   };
+
+  const openImportModal = () => setIsImportModalOpen(true);
+  const closeImportModal = () => setIsImportModalOpen(false);
+
+  const openNewCountryModal = () => setIsNewCountryModalOpen(true);
+  const closeNewCountryModal = () => setIsNewCountryModalOpen(false);
 
   const deleteCountry = () => {
-    // Logic for deleting the country from your data
-    console.log("Deleted country: ", countryToDelete);
-    closeModal(); // Close modal after deletion
+    console.log("Deleted country:", countryToDelete);
+    closeDeleteModal();
   };
 
-  // Mock country data
   const countryData: Country[] = [
     { code: "NG", name: "Nigeria", currency: "Naira", states: 36 },
     { code: "US", name: "United States", currency: "Dollar", states: 50 },
@@ -53,16 +74,18 @@ const Countries = () => {
               </div>
 
               <div className="flex space-x-4 items-center">
-                <button className="border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2">
-                  <span className="border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center">
-                    +
-                  </span>
+                <button
+                  className="border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2"
+                  onClick={openImportModal}
+                >
+                  <span className="border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center">+</span>
                   <span>Import Country</span>
                 </button>
-                <button className="border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2">
-                  <span className="border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center">
-                    +
-                  </span>
+                <button
+                  className="border border-[#93d437] text-[#93d437] px-4 py-2 rounded-md flex items-center space-x-2"
+                  onClick={openNewCountryModal}
+                >
+                  <span className="border border-[#93d437] rounded-full w-6 h-6 flex items-center justify-center">+</span>
                   <span>New Country</span>
                 </button>
               </div>
@@ -86,10 +109,7 @@ const Countries = () => {
 
               <tbody>
                 {countryData.map((country, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-[#243447] hover:bg-[#93d437]"
-                  >
+                  <tr key={index} className="border-b border-[#243447] hover:bg-[#93d437]">
                     <td className="p-3 flex items-center">
                       <input type="checkbox" className="mr-2" />
                       {country.code}
@@ -103,14 +123,17 @@ const Countries = () => {
                       </button>
                     </td>
                     <td className="p-3">
-                      <button className="flex items-center bg-[#93d437] text-[#020e1e] px-4 py-1 text-sm rounded-full">
+                      <button
+                        onClick={() => openEditModal(country)}
+                        className="flex items-center bg-[#93d437] text-[#020e1e] px-4 py-1 text-sm rounded-full"
+                      >
                         Edit
                       </button>
                     </td>
                     <td className="p-3">
                       <button
                         className="flex items-center bg-[#243447] text-red-500 px-4 py-1 text-sm rounded-full"
-                        onClick={() => openModal(country)} // Open modal on click
+                        onClick={() => openDeleteModal(country)}
                       >
                         Delete <FaTrashAlt className="ml-2" />
                       </button>
@@ -119,64 +142,35 @@ const Countries = () => {
                 ))}
               </tbody>
             </table>
-
-            {/* Pagination Controls */}
-            <div className="flex justify-between items-center mt-2 px-4 py-5 text-white">
-              <button className="flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded">
-                <FaArrowLeft className="text-xl" />
-                <span>Previous</span>
-              </button>
-              <div className="flex items-center space-x-3">
-                <button className="w-10 h-10 flex items-center justify-center rounded-md bg-[#93d437] text-[#020e1e]">
-                  1
-                </button>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  2
-                </button>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  3
-                </button>
-                <span className="pt-1">...</span>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  8
-                </button>
-                <button className="w-10 h-10 flex items-center justify-center text-[#93d437]">
-                  10
-                </button>
-              </div>
-              <button className="flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded">
-                <span>Next</span>
-                <FaArrowRight className="text-xl" />
-              </button>
-            </div>
           </section>
         </main>
       </div>
 
-      {/* Modal for confirmation */}
-      {isModalOpen && (
+      {isEditModalOpen && countryToEdit && (
+        <UpdateCountryForm country={countryToEdit} onClose={closeEditModal} />
+      )}
+
+      {isDeleteModalOpen && countryToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-5 rounded-lg text-black w-96">
             <h2 className="text-xl mb-4">
               Are you sure you want to delete {countryToDelete?.name}?
             </h2>
             <div className="flex justify-end space-x-3">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded-md"
-                onClick={closeModal}
-              >
+              <button className="px-4 py-2 bg-gray-300 rounded-md" onClick={closeDeleteModal}>
                 Cancel
               </button>
-              <button
-                className="px-4 py-2 bg-red-600 text-white rounded-md"
-                onClick={deleteCountry}
-              >
+              <button className="px-4 py-2 bg-red-600 text-white rounded-md" onClick={deleteCountry}>
                 Confirm
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {isImportModalOpen && <CountryImportForm onClose={closeImportModal} />}
+
+      {isNewCountryModalOpen && <NewCountryForm onClose={closeNewCountryModal} />}
     </div>
   );
 };

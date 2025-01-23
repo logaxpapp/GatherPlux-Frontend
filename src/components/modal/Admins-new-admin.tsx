@@ -36,7 +36,7 @@ const NewAdminForm: React.FC<NewAdminFormProps> = ({ onClose }) => {
               <input
                 type="text"
                 id="firstName"
-                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-[#A6D361FF] "
                 placeholder="First name"
               />
             </div>

@@ -1,7 +1,8 @@
 "use client";
 
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { FaTrashAlt, FaSearch } from "react-icons/fa";
+import DeleteAdmin from "@/components/modal/Admins-delete-admins";
 
 type User = {
   firstname: string;
@@ -9,11 +10,14 @@ type User = {
   email: string;
   phone: string;
   country: string;
+ 
 };
 
 const Countries = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const itemsPerPage = 15;
 
   const userData: User[] = [
@@ -23,27 +27,6 @@ const Countries = () => {
       email: "john.doe@example.com",
       phone: "+123456789",
       country: "USA",
-    },
-    {
-      firstname: "Jane",
-      lastname: "Smith",
-      email: "jane.smith@example.com",
-      phone: "+987654321",
-      country: "Canada",
-    },
-    {
-      firstname: "Jane",
-      lastname: "Smith",
-      email: "jane.smith@example.com",
-      phone: "+987654321",
-      country: "Canada",
-    },
-    {
-      firstname: "Jane",
-      lastname: "Smith",
-      email: "jane.smith@example.com",
-      phone: "+987654321",
-      country: "Canada",
     },
     {
       firstname: "Jane",
@@ -65,16 +48,24 @@ const Countries = () => {
   const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
-  const handlePageChange = (pageNumber: SetStateAction<number>) => {
+  const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
+  const handleDeleteClick = (user: User) => {
+    setUserToDelete(user);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setUserToDelete(null);
+  };
+
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen">
       <div className="w-full mx-auto flex h-full">
         <main className="flex-1 p-10">
-        
-
           {/* Search */}
           <div className="mb-6 flex justify-center">
             <div className="relative w-1/2">
@@ -92,45 +83,48 @@ const Countries = () => {
 
           {/* Users Table */}
           <section className="border-[0.5px] border-[#455870] rounded-lg bg-[#0e1925] text-white">
-
-
-
-            <div className="flex justify-between items-center   p-4">
+            <div className="flex justify-between items-center p-4">
               <h2 className="text-xl font-bold">Users</h2>
             </div>
 
-            <table className="min-w-full   rounded-t">
-              <thead>
-                <tr>
-                  <th className="p-3 bg-[#2c3e50]">Firstname</th>
-                  <th className="p-3 bg-[#2c3e50]">Lastname</th>
-                  <th className="p-3 bg-[#2c3e50]">Email</th>
-                  <th className="p-3 bg-[#2c3e50]">Phone</th>
-                  <th className="p-3 bg-[#2c3e50]">Country</th>
-                  <th className="p-3 bg-[#2c3e50]">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentUsers.map((user, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-[#34495e] hover:bg-[#2c3e50]"
-                  >
-                    <td className="p-3">{user.firstname}</td>
-                    <td className="p-3">{user.lastname}</td>
-                    <td className="p-3">{user.email}</td>
-                    <td className="p-3">{user.phone}</td>
-                    <td className="p-3">{user.country}</td>
-                    <td className="p-3">
-                      <button className="bg-[#f44336] text-white px-4 py-1 rounded-full flex items-center space-x-2">
-                        <FaTrashAlt />
-                        <span>Delete</span>
-                      </button>
-                    </td>
+            {/* Scrollable Table */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full rounded-t">
+                <thead>
+                  <tr>
+                    <th className="p-3 bg-[#2c3e50]">Firstname</th>
+                    <th className="p-3 bg-[#2c3e50]">Lastname</th>
+                    <th className="p-3 bg-[#2c3e50]">Email</th>
+                    <th className="p-3 bg-[#2c3e50]">Phone</th>
+                    <th className="p-3 bg-[#2c3e50]">Country</th>
+                    <th className="p-3 bg-[#2c3e50]">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {currentUsers.map((user, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-[#34495e] hover:bg-[#2c3e50]"
+                    >
+                      <td className="p-3">{user.firstname}</td>
+                      <td className="p-3">{user.lastname}</td>
+                      <td className="p-3">{user.email}</td>
+                      <td className="p-3">{user.phone}</td>
+                      <td className="p-3">{user.country}</td>
+                      <td className="p-3">
+                        <button
+                          onClick={() => handleDeleteClick(user)}
+                          className="bg-[#f44336] text-white px-4 py-1 rounded-full flex items-center space-x-2"
+                        >
+                          <FaTrashAlt />
+                          <span>Delete</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             {/* Pagination */}
             <div className="flex justify-between items-center mt-4 px-4 py-5">
@@ -152,6 +146,18 @@ const Countries = () => {
           </section>
         </main>
       </div>
+
+      {/* Delete Modal */}
+      {isModalOpen && userToDelete && (
+        <DeleteAdmin
+          user={userToDelete}
+          onClose={handleModalClose}
+          onDelete={() => {
+            console.log(`Deleting user: ${userToDelete.firstname}`);
+            handleModalClose();
+          }}
+        />
+      )}
     </div>
   );
 };
