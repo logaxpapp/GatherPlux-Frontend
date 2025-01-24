@@ -7,7 +7,7 @@ import UpdateCountryForm from "@/components/modal/UpdateCountryForm";
 import CountryImportForm from "@/components/modal/CountryImportForm";
 import NewCountryForm from "@/components/modal/NewCountryForm";
 
-type Country = {
+export type Country = {
   code2: string;
   name: string;
   currency: string;
@@ -19,7 +19,7 @@ const Countries = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isNewCountryModalOpen, setIsNewCountryModalOpen] = useState(false);
-  const [countryToEdit, setCountryToEdit] = useState<Country | null>(null);
+  // const [countryToEdit, setCountryToEdit] = useState<Country | null>(null);
   const [countryData, setCountryData] = useState<Country[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -53,14 +53,15 @@ const Countries = () => {
 
   // Modals: Open & Close
   const openEditModal = (country: Country) => {
-    setCountryToEdit(country);
+    // setCountryToEdit(country);
+    console.log(country)
     setIsEditModalOpen(true);
   };
 
-  const closeEditModal = () => {
-    setCountryToEdit(null);
-    setIsEditModalOpen(false);
-  };
+  // const closeEditModal = () => {
+    // setCountryToEdit(null);
+    // setIsEditModalOpen(false);
+  // };
 
   const openDeleteModal = (country: Country) => {
     setCountryToDelete(country);
@@ -73,10 +74,10 @@ const Countries = () => {
   };
 
   const openImportModal = () => setIsImportModalOpen(true);
-  const closeImportModal = () => setIsImportModalOpen(false);
+  // const closeImportModal = () => setIsImportModalOpen(false);
 
   const openNewCountryModal = () => setIsNewCountryModalOpen(true);
-  const closeNewCountryModal = () => setIsNewCountryModalOpen(false);
+  // const closeNewCountryModal = () => setIsNewCountryModalOpen(false);
 
   const deleteCountry = () => {
     if (countryToDelete) {
@@ -220,7 +221,7 @@ const Countries = () => {
 
       {/* Modals */}
       {isEditModalOpen && (
-        <UpdateCountryForm country={countryToEdit} onClose={closeEditModal} />
+        <UpdateCountryForm  />
       )}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -247,8 +248,12 @@ const Countries = () => {
           </div>
         </div>
       )}
-      {isImportModalOpen && <CountryImportForm onClose={closeImportModal} />}
-      {isNewCountryModalOpen && <NewCountryForm onClose={closeNewCountryModal} />}
+      {isImportModalOpen && <CountryImportForm 
+      //onClose={closeImportModal}
+       />}
+      {isNewCountryModalOpen && <NewCountryForm 
+      // onClose={closeNewCountryModal} 
+      />}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 interface NewCategoryModalProps {
   open: boolean;
   onClose: () => void;
-  onSave: (category: { name: string; description: string; status: string }) => void;
+  onSave: (category: { name: string; description: string; archived: string }) => void;
 }
 
 const NewCategoryModal: React.FC<NewCategoryModalProps> = ({ open, onClose, onSave }) => {
@@ -27,7 +27,7 @@ const NewCategoryModal: React.FC<NewCategoryModalProps> = ({ open, onClose, onSa
       setError('Both category name and description are required.');
       return;
     }
-    onSave({ name: categoryName, description, status });
+    onSave({ name: categoryName, description, archived:status });
     setCategoryName('');
     setDescription('');
     setStatus('Active');

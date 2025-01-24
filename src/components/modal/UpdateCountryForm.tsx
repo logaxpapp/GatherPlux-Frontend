@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Country } from "@/app/admin/country/page";
 import React, { useState, useEffect } from "react";
 
 // Define the types for the props
 type UpdateCountryFormProps = {
-  country: string | null; // The country name to display in the form
+  country: Country | null; // The country name to display in the form
   onClose: () => void; // Callback to close the modal
 };
 
@@ -16,7 +18,7 @@ const UpdateCountryForm: React.FC<UpdateCountryFormProps> = ({ country, onClose 
   // Prepopulate fields if country is provided
   useEffect(() => {
     if (country) {
-      setName(country); // Example: Set the name based on the country
+      setName(country.name); // Example: Set the name based on the country
       setCode("ExampleCode");
       setCurrency("ExampleCurrency");
       setCurrencyCode("EXC");
@@ -46,11 +48,11 @@ const UpdateCountryForm: React.FC<UpdateCountryFormProps> = ({ country, onClose 
           <div>
             <label className="block text-gray-700">Country</label>
             <select
-              value={country || ""}
+              value={country?.code2 || ""}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               disabled
             >
-              <option value={country || ""}>{country || "Select a country"}</option>
+              <option value={country?.code2 || ""}>{country?.name || "Select a country"}</option>
             </select>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -136,7 +138,9 @@ const CountryUpdateContainer: React.FC = () => {
 
       {/* Modal component */}
       {showModal && (
-        <UpdateCountryForm country={selectedCountry} onClose={handleCloseModal} />
+        <UpdateCountryForm 
+            country={{ name:'', code2:'', currency:'', region:'' }} 
+            onClose={handleCloseModal} />
       )}
     </>
   );

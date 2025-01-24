@@ -200,6 +200,7 @@ const EventCategories = () => {
         open={isModalOpen}
         onClose={() => setModalOpen(false)}
         onSave={handleSaveCategory}
+        
       />
 
       <DeleteConfirmationModal
