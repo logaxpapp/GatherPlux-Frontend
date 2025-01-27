@@ -181,8 +181,7 @@ const Dash1 = () => {
         <DeleteAdmin
           onClose={closeModal}
           onDelete={confirmDelete}
-          adminName={selectedAdmin || ""}
-        />
+          adminName={selectedAdmin || ""} adminId={0}        />
       )}
     </div>
   );

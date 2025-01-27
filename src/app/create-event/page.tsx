@@ -375,7 +375,7 @@ export default function CreateEvent() {
     <div className='py-32 px-10 bg-[#020e1e]'>
       <div className='flex items-center space-x-10'>
         <FaArrowLeftLong className='text-[38px] cursor-pointer' />
-        <h2 className='text-[38px] font-bold'>Create a New Event</h2>
+        <h2 className=' text-[18px] sm:text-[38px] font-bold'>Create a New Event</h2>
       </div>
       <ProgressBar currentStep={formStep} />
 
@@ -445,45 +445,54 @@ export default function CreateEvent() {
         </div>
       )}
 
-      <div className='flex justify-between mt-20 mx-20'>
-        {formStep > 1 && formStep < 4 && (
-          <button
-            type='button'
-            className='border-none mr-8'
-            onClick={handleGoBack}
-          >
-            {formStep === 2 ? 'Go back to Edit Event' : 'Go back'}
-          </button>
-        )}
+<div className="flex flex-wrap justify-between mt-20 mx-10 space-y-4 sm:space-y-0">
+  {/* Go Back Button */}
+  {formStep > 1 && formStep < 4 && (
+    <div className="whitespace-nowrap w-full sm:w-auto sm:ml-10">
+      <button
+        type="button"
+        className="border-none sm:mr-8 w-full sm:w-auto text-center"
+        onClick={handleGoBack}
+      >
+        {formStep === 2 ? 'Go back to Edit Event' : 'Go back'}
+      </button>
+    </div>
+  )}
 
-        {formStep !== 4 && (
-          <button
-            type='button'
-            className='w-60 h-[42px] bg-[#9EDD45] text-black rounded-full'
-            onClick={handleSaveAndContinue}
-          >
-            Save & Continue
-          </button>
-        )}
+  {/* Save & Continue Button */}
+  {formStep !== 4 && (
+    <div className="w-full sm:w-auto">
+      <button
+        type="button"
+        className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+        onClick={handleSaveAndContinue}
+      >
+        Save & Continue
+      </button>
+    </div>
+  )}
 
-        {formStep === 4 && (
-          <div className='flex justify-end mt-6 space-x-4'>
-            <button
-              type='button'
-              className='bg-gray-600 px-4 py-2 rounded-md text-white'
-            >
-              Save for Later
-            </button>
-            <button
-              type='button'
-              onClick={handleCreateEvent}
-              className='bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold'
-            >
-              Publish Event
-            </button>
-          </div>
-        )}
-      </div>
+  {/* Final Step Buttons */}
+  {formStep === 4 && (
+    <div className="flex justify-between w-full sm:w-auto space-x-4">
+      <button
+        type="button"
+        className="bg-gray-600 px-4 py-2 rounded-md text-white w-full sm:w-auto"
+      >
+        Save for Later
+      </button>
+      <button
+        type="button"
+        onClick={handleCreateEvent}
+        className="bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold w-full sm:w-auto"
+      >
+        Publish Event
+      </button>
+    </div>
+  )}
+</div>
+
+
     </div>
   );
 }

@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@iconify/react": "^5.1.0",
+    "@mui/material": "^6.4.0",
     "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@react-google-maps/api": "^2.20.5",
@@ -29,6 +32,7 @@
     "react-redux": "^9.1.2",
     "react-world-flags": "^1.6.0",
     "tailwind-merge": "^2.5.5",
+    "tailwind-scrollbar": "^3.1.0",
     "tailwind-scrollbar-hide": "^1.1.7",
     "uuid": "^11.0.3"
   },

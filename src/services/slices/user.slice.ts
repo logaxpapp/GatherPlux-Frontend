@@ -1,6 +1,6 @@
-import { baseApiSlice } from "..";
+import { clientBaseAPISlice } from "../clientBaseAPI";
 
-const extendApiSlice = baseApiSlice.injectEndpoints({
+const extendApiSlice = clientBaseAPISlice.injectEndpoints({
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (body) => ({

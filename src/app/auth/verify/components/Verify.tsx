@@ -51,7 +51,7 @@ export default function EmailVerification() {
         <title>Email Verification</title>
       </Head>
       <div
-        className='flex items-center justify-center min-h-screen relative bg-gradient-to-br from-[#011926] to-[#002B41]'
+        className="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#011926] to-[#002B41]"
         style={{
           backgroundImage:
             'radial-gradient(circle at 50% 30%, rgba(0, 255, 102, 0.1), transparent 50%), radial-gradient(circle at 10% 70%, rgba(51, 170, 255, 0.1), transparent 90%)',
@@ -60,7 +60,7 @@ export default function EmailVerification() {
         }}
       >
         <div
-          className='w-full max-w-md p-6 text-white rounded-3xl shadow-lg mx-auto'
+          className="w-full max-w-sm md:max-w-md lg:max-w-lg p-6 sm:p-8 text-white rounded-3xl shadow-lg mx-auto"
           style={{
             background: 'linear-gradient(to bottom, #102730, #123739, #10212d)',
             borderTop: '5px solid #9EDD45',
@@ -69,15 +69,15 @@ export default function EmailVerification() {
             borderBottom: '1px solid #9EDD45',
           }}
         >
-          <h1 className='text-3xl font-bold text-center mb-4'>
+          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-4">
             Email Verification
           </h1>
-          <p className='text-center text-gray-400 mb-6'>
+          <p className="text-center text-gray-400 mb-6">
             We have sent a 6-digit OTP to{' '}
-            <span className='text-white'>{email}</span>. Please enter the code
+            <span className="text-white">{email}</span>. Please enter the code
             below to verify your mail.
           </p>
-          <div className='flex flex-col items-center gap-4 mb-6'>
+          <div className="flex flex-col items-center gap-4 mb-6">
             <OTPInput
               length={6}
               onChange={handleOtpChange}
@@ -85,10 +85,13 @@ export default function EmailVerification() {
             />
             {isLoading && <Loader />}
           </div>
-          <div className='text-center mt-4'>
-            <p className='text-gray-400'>
+          <div className="text-center mt-4">
+            <p className="text-gray-400">
               Didn’t receive the code?{' '}
-              <button type='button' className='text-[#9EDD45] hover:underline'>
+              <button
+                type="button"
+                className="text-[#9EDD45] hover:underline focus:outline-none"
+              >
                 Resend code
               </button>
             </p>
@@ -97,4 +100,5 @@ export default function EmailVerification() {
       </div>
     </>
   );
+  
 }

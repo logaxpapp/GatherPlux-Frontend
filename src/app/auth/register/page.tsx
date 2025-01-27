@@ -43,7 +43,7 @@ export default function Signup() {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen relative bg-gradient-to-br from-[#011926] to-[#002B41]"
+      className="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 relative bg-gradient-to-br from-[#011926] to-[#002B41]"
       style={{
         backgroundImage: `
           radial-gradient(circle at 50% 30%, rgba(0, 255, 102, 0.1), transparent 50%),
@@ -53,7 +53,7 @@ export default function Signup() {
       }}
     >
       <div
-        className="w-full max-w-md p-8 text-white rounded-3xl shadow-lg"
+        className="w-full sm:max-w-md p-6 sm:p-8 text-white rounded-3xl shadow-lg"
         style={{
           background: 'linear-gradient(to bottom, #102730, #123739, #10212d)',
           borderTop: '5px solid #9EDD45',
@@ -62,70 +62,77 @@ export default function Signup() {
           borderBottom: '1px solid #9EDD45',
         }}
       >
-        <h1 className="text-3xl font-bold text-center mb-2">Create Account</h1>
-        <p className="text-center text-gray-400 mb-6">Sign up to discover and book amazing events!</p>
-
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">Create Account</h1>
+        <p className="text-center text-gray-400 text-sm sm:text-base mb-6">
+          Sign up to discover and book amazing events!
+        </p>
+  
         <form className="space-y-4" onSubmit={handleSubmit}>
+          {/* Full Name */}
           <div>
             <label className="block text-sm font-medium mb-1 text-[#dbdae3]">Full Name</label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
-              <Image src={Profile.src} alt="Profile" width={24} height={24} className="mr-2" />
+              <Image src={Profile.src} alt="Profile" width={24} height={24} className="w-6 sm:w-8 mr-2" />
               <input
                 type="text"
                 placeholder="Enter full name"
                 name="fullName"
-                className="w-full p-2 bg-transparent border-none focus:ring-0 focus:outline-none text-white"
+                className="w-full p-2 bg-transparent border-none focus:ring-0 focus:outline-none text-white text-sm sm:text-base"
                 required
               />
             </div>
           </div>
-
+  
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium mb-1 text-[#dbdae3]">Email</label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
-              <Image src={Mail.src} alt="Mail" width={24} height={24} className="mr-2" />
+              <Image src={Mail.src} alt="Mail" width={24} height={24} className="w-6 sm:w-8 mr-2" />
               <input
                 type="email"
                 name="email"
                 placeholder="Enter email address"
-                className="w-full p-2 bg-transparent border-none focus:ring-0 focus:outline-none text-white"
+                className="w-full p-2 bg-transparent border-none focus:ring-0 focus:outline-none text-white text-sm sm:text-base"
                 required
               />
             </div>
           </div>
-
+  
+          {/* Password */}
           <div>
             <label className="block text-sm font-medium mb-1 text-[#dbdae3]">Password</label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
-              <Image src={Lock.src} alt="Lock" width={24} height={24} className="mr-2" />
+              <Image src={Lock.src} alt="Lock" width={24} height={24} className="w-6 sm:w-8 mr-2" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Enter your password"
-                className="w-full p-2 bg-transparent border-none focus:ring-0 focus:outline-none text-white"
+                className="w-full p-2 bg-transparent border-none focus:ring-0 focus:outline-none text-white text-sm sm:text-base"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-400 ml-2"
+                className="text-gray-400 ml-2 text-sm sm:text-base"
               >
                 {showPassword ? '🙈' : '👁️'}
               </button>
             </div>
           </div>
-
+  
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-[#9EDD45] text-black font-medium rounded-md hover:bg-[#6EDD46] transition"
+            className="w-full py-2 sm:py-3 bg-[#9EDD45] text-black font-medium rounded-md hover:bg-[#6EDD46] transition text-sm sm:text-base"
           >
             {isLoading && <Loader />}
             Create Account
           </button>
         </form>
-
+  
+        {/* Footer */}
         <div className="text-center mt-4 text-gray-400">
-          <p>
+          <p className="text-sm sm:text-base">
             Already have an account?{' '}
             <a href="/auth/login" className="text-[#9EDD45] hover:underline">
               Log In
@@ -133,18 +140,19 @@ export default function Signup() {
           </p>
           <div className="flex items-center my-4">
             <hr className="flex-grow border-gray-600" />
-            <span className="mx-2">or</span>
+            <span className="mx-2 text-sm sm:text-base">or</span>
             <hr className="flex-grow border-gray-600" />
           </div>
           <button
             type="button"
-            className="flex items-center justify-center w-full py-2 bg-white text-black font-medium rounded-md hover:bg-gray-100 transition"
+            className="flex items-center justify-center w-full py-2 sm:py-3 bg-white text-black font-medium rounded-md hover:bg-gray-100 transition text-sm sm:text-base"
           >
-            <FcGoogle className="text-xl mr-2" />
+            <FcGoogle className="text-lg sm:text-xl mr-2" />
             Signup with Google
           </button>
         </div>
       </div>
     </div>
   );
+  
 }
