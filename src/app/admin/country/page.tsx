@@ -24,28 +24,8 @@ const Countries = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [countryToDelete, setCountryToDelete] = useState<Country | null>(null);
-  // const [countryData, setCountryData] = useState<Country[]>([]);
-  // const [currentPage, setCurrentPage] = useState(0);
-  // const [totalPages, setTotalPages] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [countryToDelete, setCountryToDelete] = useState<Country | null>(null);
 
   const { data: countryAPIData } = useGetAllAdminCountryQuery(currentPage);
-
-  useEffect(() => {
-    if (
-      countryAPIData &&
-      countryAPIData.code === 200 &&
-      countryAPIData.body &&
-      countryAPIData.body.records
-    ) {
-      setCountryData(countryAPIData.body.records);
-      setTotalPages(countryAPIData.body.totalPages);
-      setCurrentPage(countryAPIData.body.currentPage);
-    }
-  }, [countryAPIData]);
-
-  // const { data: countryAPIData } = useGetAllAdminCountryQuery(currentPage);
 
   // Update country data on API data change
   useEffect(() => {
@@ -119,9 +99,9 @@ const Countries = () => {
               <div className="flex items-center space-x-2 border border-[#243447] bg-[#020e1e] p-2 rounded-md">
                 <i className="fas fa-search text-[#93d437]"></i>
                 <input
-                  type='text'
-                  placeholder='Search...'
-                  className='w-80 focus:outline-none bg-transparent text-white'
+                  type="text"
+                  placeholder="Search..."
+                  className="w-80 focus:outline-none bg-transparent text-white"
                 />
               </div>
 
@@ -169,7 +149,7 @@ const Countries = () => {
                 {countryData.map((country, index) => (
                   <tr
                     key={index}
-                    className='border-b border-[#243447] hover:bg-[#93d437]'
+                    className="border-b border-[#243447] hover:bg-[#93d437]"
                   >
                     <td className="p-3 flex items-center">
                       <input type="checkbox" className="mr-2" title="" />
@@ -195,13 +175,13 @@ const Countries = () => {
                         Edit
                       </button>
                     </td>
-                    <td className='p-3'>
+                    <td className="p-3">
                       <button
                         type="button"
                         className="flex items-center bg-[#243447] text-red-500 px-4 py-1 text-sm rounded-full"
                         onClick={() => openDeleteModal(country)}
                       >
-                        Delete <FaTrashAlt className='ml-2' />
+                        Delete <FaTrashAlt className="ml-2" />
                       </button>
                     </td>
                   </tr>
@@ -232,7 +212,7 @@ const Countries = () => {
                 className="flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded"
               >
                 <span>Next</span>
-                <FaArrowRight className='text-xl' />
+                <FaArrowRight className="text-xl" />
               </button>
             </div>
           </section>
@@ -249,17 +229,10 @@ const Countries = () => {
             <h2 className="text-xl mb-4">
               Are you sure you want to delete {countryToDelete?.name}?
             </h2>
-            <div className='flex justify-end space-x-3'>
+            <div className="flex justify-end space-x-3">
               <button
-                type='button'
-                className='px-4 py-2 bg-gray-300 rounded-md'
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-              <button
-                type='button'
-                className='px-4 py-2 bg-red-600 text-white rounded-md'
+                type="button"
+                className="px-4 py-2 bg-red-500 text-white rounded"
                 onClick={deleteCountry}
               >
                 Delete

@@ -23,7 +23,7 @@ const NewSubscriptionPlanForm: React.FC<NewSubscriptionPlanFormProps> = ({ onClo
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 text-gray-600">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-center text-gray-900">
@@ -43,7 +43,8 @@ const NewSubscriptionPlanForm: React.FC<NewSubscriptionPlanFormProps> = ({ onClo
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 border rounded-lg  focus:outline-none"
+              className="w-full p-2 border rounded-lg
+              focus:ring-1 focus:ring-primary-500   focus:outline-none"
             />
           </div>
           <div>
@@ -52,7 +53,8 @@ const NewSubscriptionPlanForm: React.FC<NewSubscriptionPlanFormProps> = ({ onClo
               type="text"
               value={freePeriod}
               onChange={(e) => setFreePeriod(e.target.value)}
-              className="w-full p-2 border rounded-lg  focus:outline-none"
+              className="w-full p-2 border rounded-lg  
+              focus:ring-1 focus:ring-primary-500 focus:outline-none"
             />
           </div>
           <div>
@@ -60,7 +62,8 @@ const NewSubscriptionPlanForm: React.FC<NewSubscriptionPlanFormProps> = ({ onClo
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-2 border rounded-lg  focus:outline-none h-28 resize-none"
+              className="w-full p-2 border rounded-lg 
+              focus:ring-1 focus:ring-primary-500  focus:outline-none h-28 resize-none"
             ></textarea>
           </div>
           <div className="flex items-center">

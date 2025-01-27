@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { FaTrashAlt } from 'react-icons/fa';
 import NewAdminForm from '@/components/modal/Admins-new-admin';
 import DeleteAdmin from '@/components/modal/Admins-delete-admins';
 import { useGetAllAdminsQuery } from '@/services/slices/admin.slice';
@@ -50,7 +49,7 @@ const Admins = () => {
   const handleDeleteUser = () => {
     if (userToDelete) {
       setUserData((prevData) =>
-        prevData.filter((user) => user.email !== userToDelete.email),
+        prevData.filter((user) => user.email !== userToDelete.email)
       );
     }
     handleCloseDeleteModal();
@@ -99,18 +98,18 @@ const Admins = () => {
             </div>
           </header>
 
-          <section className='border rounded-lg border-gray-500'>
-            <div className='flex justify-between items-center bg-[#020e1e] pt-5 pb-3'>
-              <h2 className='text-xl font-bold pl-16'>Admins</h2>
+          <section className="border rounded-lg border-gray-500">
+            <div className="flex justify-between items-center bg-[#020e1e] pt-5 pb-3">
+              <h2 className="text-xl font-bold pl-16">Admins</h2>
               <button
-                type='button'
+                type="button"
                 onClick={handleOpenModal}
-                className='mr-5 bg-gray-100 py-1 px-4 rounded-full border border-gray-300 text-sm text-[#011c39]'
+                className="mr-5 bg-gray-100 py-1 px-4 rounded-full border border-gray-300 text-sm text-[#011c39] flex items-center space-x-2"
               >
-                <div className="flex items-center justify-center w-6 h-6 border border-gray-400 rounded-full mr-2">
-                  <span className="text-white">+</span>
+                <div className="flex items-center justify-center w-5 h-5 border border-gray-400 rounded-full">
+                  <span className="text-black">+</span>
                 </div>
-                New Admin
+                <span>New Admin</span>
               </button>
             </div>
 
@@ -156,11 +155,8 @@ const Admins = () => {
         </main>
       </div>
 
-      <NewAdminForm
-        open={isModalOpen}
-        onClose={handleCloseModal}
-      />
-
+     {/* Modals */}
+     {isModalOpen && <NewAdminForm open={isModalOpen} onClose={handleCloseModal} />}
       {isDeleteModalOpen && userToDelete && (
         <DeleteAdmin
           onClose={handleCloseDeleteModal}
