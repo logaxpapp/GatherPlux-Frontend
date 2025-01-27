@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
- 
+import { FaTrashAlt } from 'react-icons/fa';
 import NewAdminForm from '@/components/modal/Admins-new-admin';
 import DeleteAdmin from '@/components/modal/Admins-delete-admins';
 import { useGetAllAdminsQuery } from '@/services/slices/admin.slice';

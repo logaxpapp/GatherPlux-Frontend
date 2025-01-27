@@ -125,9 +125,9 @@ const EventCategories = () => {
                     className="w-full h-full"
                   />
                 </div>
-                <div className="flex items-center">
-                  <span className="font-medium">Emmanuel</span>
-                  <i className="fas fa-chevron-down ml-1 text-xs pl-1"></i>
+                <div className='flex items-center'>
+                  <span className='font-medium'>Emmanuel</span>
+                  <i className='fas fa-chevron-down ml-1 text-xs pl-1'></i>
                 </div>
               </div>
             </div>
@@ -146,13 +146,13 @@ const EventCategories = () => {
                 New Category
               </button>
             </div>
-            <table className="min-w-full text-left">
+            <table className='min-w-full text-left'>
               <thead>
-                <tr className="text-left bg-[#1a2938] border-b border-gray-600">
-                  <th className="p-3 text-base font-normal">Category Name</th>
-                  <th className="p-3 text-base font-normal">Description</th>
-                  <th className="p-3 text-base font-normal">Status</th>
-                  <th className="p-3 text-base font-normal">Actions</th>
+                <tr className='text-left bg-[#1a2938] border-b border-gray-600'>
+                  <th className='p-3 text-base font-normal'>Category Name</th>
+                  <th className='p-3 text-base font-normal'>Description</th>
+                  <th className='p-3 text-base font-normal'>Status</th>
+                  <th className='p-3 text-base font-normal'>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,7 +170,7 @@ const EventCategories = () => {
                       {category.description === 'Not set' ? (
                         <span className="inline-flex items-center">
                           {category.description}
-                          <FaPencilAlt className="ml-2 w-4 h-4 text-gray-500" />
+                          <FaPencilAlt className='ml-2 w-4 h-4 text-gray-500' />
                         </span>
                       ) : (
                         <span>{category.description}</span>
