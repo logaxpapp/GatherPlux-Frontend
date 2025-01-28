@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
-
 import { useDeleteAdminMutation } from '@/services/slices/admin.slice';
 
 interface DeleteAdminProps {

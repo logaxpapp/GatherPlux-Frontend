@@ -1,52 +1,55 @@
-import React from 'react';
-import Image from 'next/image';
-import { EventProps } from '@/app/homepage/EventCard';
+import React from "react";
+import Image from "next/image";
+import { EventProps } from "@/app/homepage/EventCard";
 
 // Define the prop types for the component
 interface EventDescriptionProps {
   onOpenModal: () => void;
   event: EventProps;
 }
-
 const EventDescription: React.FC<EventDescriptionProps> = ({
   onOpenModal,
   event,
 }) => {
-  const formattedDate = new Date(event.start_date).toLocaleDateString('en-GB', {
-    weekday: 'long', // Full day of the week
-    day: 'numeric', // Numeric day of the month
-    month: 'long', // Full month name
-    year: 'numeric', // Full year
+  const ticket = {
+    price: event.price,
+    type: "",
+  };
+  const formattedDate = new Date(event.start_date).toLocaleDateString("en-GB", {
+    weekday: "long", // Full day of the week
+    day: "numeric", // Numeric day of the month
+    month: "long", // Full month name
+    year: "numeric", // Full year
   });
 
   return (
     <div
-      className='bg-[#020e1e] py-10 px-10 relative'
+      className="bg-[#020e1e] py-10 px-10 relative "
       style={{
         backgroundImage: "url('/Line.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
         opacity: 0.8,
       }}
     >
       {/* Image Section */}
-      <div className='mb-8 flex justify-center'>
+      <div className="mb-8 flex justify-center mt-10">
         <Image
           height={400}
           width={600}
-          src={event.images[0] || '/banner.png'}
-          alt='Event Banner'
-          className='rounded-lg'
+          src={event.images[0] || "/banner.png"}
+          alt="Event Banner"
+          className="rounded-lg"
         />
       </div>
 
-      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10'>
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 ">
         {/* Left Content */}
         <div>
           {/* Event Description */}
-          <div className='mb-8'>
-            <h2 className='text-2xl font-bold mb-4'>Event Description</h2>
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4">Event Description</h2>
             <p>{event.description}</p>
           </div>
 
@@ -89,23 +92,23 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
         </div>
 
         {/* Ticket Section */}
-        <div className='bg-[#0b1a30] p-6 rounded-lg'>
-          <h3 className='text-lg font-bold text-white mb-4'>Date and Time</h3>
-          <div className='flex items-center text-sm text-gray-400 mb-2'>
+        <div className="bg-[#0b1a30] p-6 rounded-lg">
+          <h3 className="text-lg font-bold text-white mb-4">Date and Time</h3>
+          <div className="flex items-center text-sm text-gray-400 mb-2">
             <Image
-              src='/calendar-icon.png' // Replace with actual icon
-              alt='Calendar'
-              className='mr-2'
+              src="/calendar-icon.png" // Replace with actual icon
+              alt="Calendar"
+              className="mr-2"
               width={16}
               height={16}
             />
-            {formattedDate !== 'Invalid Date' && formattedDate}
+            {formattedDate !== "Invalid Date" && formattedDate}
           </div>
-          <div className='flex items-center text-sm text-gray-400'>
+          <div className="flex items-center text-sm text-gray-400">
             <Image
-              src='/clock-icon.png' // Replace with actual icon
-              alt='Clock'
-              className='mr-2'
+              src="/clock-icon.png" // Replace with actual icon
+              alt="Clock"
+              className="mr-2"
               width={16}
               height={16}
             />
@@ -124,46 +127,46 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
             </p>
           </div>
           <button
-            type='button'
-            className='text-[#9edd45] text-sm font-medium mt-4'
+            type="button"
+            className="text-[#9edd45] text-sm font-medium mt-4"
           >
             + Add to Calendar
           </button>
-          <hr className='my-4 border-gray-600' />
+          <hr className="my-4 border-gray-600" />
 
-          <h3 className='text-lg font-bold text-white mb-4'>
+          <h3 className="text-lg font-bold text-white mb-4">
             Ticket Information
           </h3>
-          <div className='space-y-4'>
+          <div className="space-y-4">
             {event.tickets && event.tickets.length > 0 ? (
               event.tickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className='flex items-center justify-between text-white'
+                  className="flex items-center justify-between text-white"
                 >
-                  <div className='flex items-center gap-2'>
+                  <div className="flex items-center gap-2">
                     <Image
-                      src='/ticket-icon.png' // Replace with actual ticket icon
-                      alt='Ticket'
+                      src="/ticket-icon.png" // Replace with actual ticket icon
+                      alt="Ticket"
                       width={16}
                       height={16}
                     />
-                    <span className='type-medium'>{ticket.name}</span>
-                    <span className='text-sm text-gray-400'>
+                    <span className="type-medium">{ticket.name}</span>
+                    <span className="text-sm text-gray-400">
                       ₦{ticket.price} each
                     </span>
                   </div>
-                  <div className='flex items-center gap-2'>
+                  <div className="flex items-center gap-2">
                     <button
-                      type='button'
-                      className='text-[#9edd45] bg-gray-800 px-2 py-1 rounded'
+                      type="button"
+                      className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded"
                     >
                       +
                     </button>
-                    <span className='text-white'>0</span>
+                    <span className="text-white">0</span>
                     <button
-                      type='button'
-                      className='text-[#9edd45] bg-gray-800 px-2 py-1 rounded'
+                      type="button"
+                      className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded"
                     >
                       -
                     </button>
@@ -174,27 +177,68 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
               <p>Free event</p>
             )}
           </div>
-          <hr className='my-4 border-gray-600' />
-          <div className='flex justify-between items-center text-white'>
+          <hr className="my-4 border-gray-600" />
+          <div className="flex justify-between items-center text-white">
             <span>Total</span>
-            <span className='font-bold'>₦0</span>
+            <span className="font-bold">₦0</span>
           </div>
           <button
-            type='button'
-            className='bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2'
+            type="button"
+            className="bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2"
             onClick={onOpenModal} // Trigger the modal via the prop
           >
             <Image
-              src='/ticket.png' // Replace with actual icon
-              alt='Buy Ticket'
+              src="/ion_ticket.svg" // Replace with actual ticket icon
+              alt="Ticket"
               width={16}
               height={16}
             />
-            Buy Tickets
+            <span className="font-medium">{ticket.type}</span>
           </button>
         </div>
+        <span className="text-md text-[#f1df2c] ml-6">
+          ₦{ticket.price} each
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <button className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded border border-rose-50 w-8">
+          +
+        </button>
+        <span className="text-white">0</span>
+        <button className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded border border-rose-50 w-8">
+          -
+        </button>
       </div>
     </div>
   );
+
+  {
+    /* <p className="font-sm text-xs">Amounts of tickets (12)</p>
+  </div>
+  <hr className="my-4 border-gray-600" />
+  <div className="flex justify-between items-center text-white text-2xl">
+    <span>Total</span>
+    <span className="font-bold">₦200</span>
+    
+  </div>
+  <button
+    className="bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2"
+    onClick={onOpenModal} // Trigger the modal via the prop
+  >
+    <Image
+      src="/ticket.png" // Replace with actual icon
+      alt="Buy Ticket"
+      width={16}
+      height={16}
+    />
+    Buy Tickets
+  </button> */
+  }
+  {
+    /* </div> */
+  }
+  //   </div>
+  // </div>
+  // );
 };
 export default EventDescription;

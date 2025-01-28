@@ -12,12 +12,12 @@ const EventBanner: React.FC<EventBannerProps> = ({
   selectedFile,
 }) => {
   return (
-    <div className='px-20 w-6/12 mb-36'>
+    <div className=' sm:px-20 sm:w-6/12 mb-36 '>
       <h1 className='text-[32px] font-normal mb-4'>Upload Image</h1>
 
       {/* Input container */}
       <div
-        className='w-full border rounded px-4 py-2 '
+        className='w-full border rounded px-10 py-2 '
         style={{ backgroundColor: '#1b2634', borderColor: '#434b57' }}
       >
         <input

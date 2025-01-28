@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { FaTrashAlt } from 'react-icons/fa';
 import NewAdminForm from '@/components/modal/Admins-new-admin';
 import DeleteAdmin from '@/components/modal/Admins-delete-admins';
 import { useGetAllAdminsQuery } from '@/services/slices/admin.slice';
@@ -50,7 +49,7 @@ const Admins = () => {
   const handleDeleteUser = () => {
     if (userToDelete) {
       setUserData((prevData) =>
-        prevData.filter((user) => user.email !== userToDelete.email),
+        prevData.filter((user) => user.email !== userToDelete.email)
       );
     }
     handleCloseDeleteModal();
@@ -65,7 +64,7 @@ const Admins = () => {
               <div className='relative'>
                 <button
                   type='button'
-                  title={''}
+                  title=''
                   className='flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-[#020e1e] text-white'
                 >
                   <i className='fas fa-envelope'></i>
@@ -75,7 +74,7 @@ const Admins = () => {
               <div className='relative'>
                 <button
                   type='button'
-                  title={''}
+                  title=''
                   className='flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-[#020e1e] text-white'
                 >
                   <i className='fas fa-bell'></i>
@@ -99,15 +98,18 @@ const Admins = () => {
             </div>
           </header>
 
-          <section className='border rounded-lg border-gray-500'>
-            <div className='flex justify-between items-center bg-[#020e1e] pt-5 pb-3'>
-              <h2 className='text-xl font-bold pl-16'>Admins</h2>
+          <section className="border rounded-lg border-gray-500">
+            <div className="flex justify-between items-center bg-[#020e1e] pt-5 pb-3">
+              <h2 className="text-xl font-bold pl-16">Admins</h2>
               <button
-                type='button'
+                type="button"
                 onClick={handleOpenModal}
-                className='mr-5 bg-gray-100 py-1 px-4 rounded-full border border-gray-300 text-sm text-[#011c39]'
+                className="mr-5 bg-gray-100 py-1 px-4 rounded-full border border-gray-300 text-sm text-[#011c39] flex items-center space-x-2"
               >
-                + New Admin
+                <div className="flex items-center justify-center w-5 h-5 border border-gray-400 rounded-full">
+                  <span className="text-black">+</span>
+                </div>
+                <span>New Admin</span>
               </button>
             </div>
 
@@ -115,8 +117,7 @@ const Admins = () => {
               <thead className='bg-[#2d3748] border-b border-gray-500'>
                 <tr className='text-left'>
                   <th className='pl-3 pr-1 text-base font-normal'>
-                    {''}
-                    <input type='checkbox' title={''} />
+                    <input type='checkbox' title='' />
                   </th>
                   <th className='p-3 text-base font-normal'>First Name</th>
                   <th className='p-3 text-base font-normal'>Last Name</th>
@@ -124,7 +125,6 @@ const Admins = () => {
                   <th className='p-3 text-base font-normal'></th>
                 </tr>
               </thead>
-
               <tbody>
                 {userData.map((user) => (
                   <tr
@@ -132,7 +132,7 @@ const Admins = () => {
                     className='border-b border-gray-500 hover:bg-gray-600'
                   >
                     <td className='pl-3 pr-1'>
-                      <input type='checkbox' title={''} />
+                      <input type='checkbox' title='' />
                     </td>
                     <td className='p-3'>{user.firstname}</td>
                     <td className='p-3'>{user.lastname}</td>
@@ -140,12 +140,11 @@ const Admins = () => {
                     <td className='p-3 flex justify-between items-center'>
                       <button
                         type='button'
-                        title={''}
+                        title=''
                         onClick={() => handleOpenDeleteModal(user)}
                         className='bg-red-100 text-red-600 px-4 py-1 text-sm rounded-full flex items-center space-x-2 font-medium'
                       >
-                        <span>Delete</span>
-                        <FaTrashAlt />
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -156,8 +155,8 @@ const Admins = () => {
         </main>
       </div>
 
-      {/* Modals */}
-      {isModalOpen && <NewAdminForm onClose={handleCloseModal} />}
+     {/* Modals */}
+     {isModalOpen && <NewAdminForm open={isModalOpen} onClose={handleCloseModal} />}
       {isDeleteModalOpen && userToDelete && (
         <DeleteAdmin
           onClose={handleCloseDeleteModal}

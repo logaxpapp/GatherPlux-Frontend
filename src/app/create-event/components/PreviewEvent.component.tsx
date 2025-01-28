@@ -69,7 +69,7 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
   
 
   return (
-    <div className='min-h-screen bg-[#020e1e] text-white px-10 py-10'>
+    <div className='min-h-screen bg-[#020e1e] text-white  sm:px-10 py-10'>
       {/* Event Card */}
       <div className='max-w-[1100px] mx-auto border border-[#9EDD45] rounded-xl p-6 bg-[#020e1e] shadow-md'>
         {/* Event Image */}
@@ -151,7 +151,7 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
           </div>
 
           {/* Right Section */}
-          <div className='w-full lg:w-1/2 max-w-[300px] ml-auto bg-[#1b2634] border-[#9EDD45] rounded-lg p-6 border-2'>
+          <div className='w-full lg:w-1/2 max-w-[300px] ml-auto bg-[#1b2634] border-[#9EDD45] rounded-lg p-6 '>
             {/* Date and Time */}
             <div className='mb-4'>
               <h2 className='font-bold text-xl mb-1'>Date and Time</h2>

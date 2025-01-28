@@ -30,14 +30,13 @@ const EventTickets: React.FC<EventTicketsProps> = ({
   deleteTicketEntry,
 }) => {
   return (
-    <div className='max-w-4xl px-20 space-y-8'>
+    <div className='max-w-4xl px-4 sm:px-6 lg:px-8 mx-auto space-y-8'>
       {/* Event Type Selection */}
       <div>
         <h2 className='text-[27px] font-normal mb-6'>
           What type of event are you running?
         </h2>
-
-        <div className='grid grid-cols-2 gap-6'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
           {/* Ticketed Event */}
           <div
             className={`p-6 border-2 rounded-lg cursor-pointer text-center 
@@ -48,11 +47,10 @@ const EventTickets: React.FC<EventTicketsProps> = ({
               }`}
             onClick={() => handleEventTypeOnTicket('ticketed')}
           >
-            <IoTicketOutline className='w-8 h-8 mb-3' />
+            <IoTicketOutline className='w-8 h-8 mb-3 mx-auto' />
             <h3 className='text-xl font-medium'>Ticketed Event</h3>
             <p>My event requires tickets for entry</p>
           </div>
-
           {/* Free Event */}
           <div
             className={`p-6 border-2 rounded-lg cursor-pointer text-center 
@@ -63,7 +61,7 @@ const EventTickets: React.FC<EventTicketsProps> = ({
               }`}
             onClick={() => handleEventTypeOnTicket('free')}
           >
-            <Image src={freeSvg} alt='free' className='w-8 h-8 mb-3' />
+            <Image src={freeSvg} alt='free' className='w-8 h-8 mb-3 mx-auto' />
             <h3 className='text-xl font-medium'>Free Event</h3>
             <p>I&apos;m running a free event</p>
           </div>
@@ -76,12 +74,11 @@ const EventTickets: React.FC<EventTicketsProps> = ({
           <h2 className='text-[27px] font-normal mb-6'>
             What tickets are you selling?
           </h2>
-
           <div className='space-y-4 relative'>
             {tickets.map((ticket, index) => (
-              <div key={ticket.id} className='flex gap-4'>
+              <div key={ticket.id} className='flex flex-wrap gap-4'>
                 {/* Ticket Name */}
-                <div className='w-[300px]'>
+                <div className='w-full sm:w-[300px]'>
                   <label className='block text-sm font-medium mb-1'>
                     Ticket Name
                   </label>
@@ -97,12 +94,12 @@ const EventTickets: React.FC<EventTicketsProps> = ({
                 </div>
 
                 {/* Ticket Price */}
-                <div className='w-[150px]'>
+                <div className='w-full sm:w-[150px]'>
                   <label className='block text-sm font-medium mb-1'>
                     Ticket Price
                   </label>
                   <div className='relative'>
-                    <span className='absolute left-2 top-1/2 -translate-y-1/2 '>
+                    <span className='absolute left-2 top-1/2 -translate-y-1/2'>
                       ₦
                     </span>
                     <input
@@ -119,7 +116,7 @@ const EventTickets: React.FC<EventTicketsProps> = ({
                 </div>
 
                 {/* How Many Person Ticket */}
-                <div className='w-[150px]'>
+                <div className='w-full sm:w-[150px]'>
                   <label className='block text-sm font-medium mb-1 whitespace-nowrap'>
                     How many person ticket?
                   </label>
@@ -129,7 +126,7 @@ const EventTickets: React.FC<EventTicketsProps> = ({
                     onChange={(e) =>
                       updateTicket(ticket.id, 'people', e.target.value)
                     }
-                    className='w-full px-3 py-2 border border-gray-500 rounded focus:outline-none bg-[#1B2634]   text-gray-400'
+                    className='w-full px-3 py-2 border border-gray-500 rounded focus:outline-none bg-[#1B2634] text-gray-400'
                   >
                     {[1, 5, 10, 25, 50].map((num) => (
                       <option key={num} value={num}>
@@ -158,7 +155,7 @@ const EventTickets: React.FC<EventTicketsProps> = ({
               title={''}
               type='button'
               onClick={addTicketEntry}
-              className='absolute right-0 top-0 text-[#9EDD45]  hover:text-green-700'
+              className='absolute right-0 top-0 text-[#9EDD45] hover:text-green-700'
             >
               <CiCirclePlus className='w-8 h-8' />
             </button>
@@ -171,20 +168,19 @@ const EventTickets: React.FC<EventTicketsProps> = ({
         <h2 className='text-[27px] font-normal mb-6'>
           How many tickets are you selling?
         </h2>
-        <div className='grid grid-cols-6 gap-4 mb-4'>
-          {[
-            100, 500, 1000, 3000, 5000, 10000, 20000, 50000, 100000, 500000,
-            1000000,
-          ].map((num) => (
-            <button
-              type='button'
-              key={num}
-              className='px-4 py-2 border rounded hover:bg-[#9EDD45]/20 focus:bg-[#9EDD45] focus:text-black bg-[#1B2634]   text-gray-400 border-gray-500'
-              onClick={() => handleNumberOfTickets(num)}
-            >
-              {num.toLocaleString()}
-            </button>
-          ))}
+        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-4'>
+          {[100, 500, 1000, 3000, 5000, 10000, 20000, 50000, 100000, 500000, 1000000].map(
+            (num) => (
+              <button
+                type='button'
+                key={num}
+                className='px-4 py-2 border rounded hover:bg-[#9EDD45]/20 focus:bg-[#9EDD45] focus:text-black bg-[#1B2634] text-gray-400 border-gray-500'
+                onClick={() => handleNumberOfTickets(num)}
+              >
+                {num.toLocaleString()}
+              </button>
+            ),
+          )}
         </div>
         <input
           type='number'

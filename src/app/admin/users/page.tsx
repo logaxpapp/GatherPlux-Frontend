@@ -1,10 +1,12 @@
 'use client';
 
-import { SetStateAction, useEffect, useState } from 'react';
+import DeleteAdmin from "@/components/modal/Admins-delete-admins";
+import { useEffect, useState } from 'react';
 import { FaTrashAlt, FaSearch } from 'react-icons/fa';
 import { useGetAllUsersQuery } from '@/services/slices/admin.slice';
 
 type User = {
+  id: number; // assuming there is an id field
   firstname: string;
   lastname: string;
   email: string;
@@ -17,6 +19,8 @@ const Countries = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   const { data: usersAPIData } = useGetAllUsersQuery(currentPage);
 
@@ -33,12 +37,31 @@ const Countries = () => {
     }
   }, [usersAPIData]);
 
-  const handlePageChange = (pageNumber: SetStateAction<number>) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 0 && pageNumber < totalPages) {
+      setCurrentPage(pageNumber);
+    }
   };
 
+  const handleDeleteClick = (user: User) => {
+    setUserToDelete(user);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setUserToDelete(null);
+  };
+
+  const filteredUsers = userData.filter(
+    (user) =>
+      user.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className='flex h-screen '>
+    <div className='flex h-screen'>
       <div className='w-full mx-auto flex h-full'>
         <main className='flex-1 p-10'>
           {/* Search */}
@@ -58,23 +81,23 @@ const Countries = () => {
 
           {/* Users Table */}
           <section className='border-[0.5px] border-[#455870] rounded-lg bg-[#0e1925] text-white'>
-            <div className='flex justify-between items-center   p-4'>
+            <div className='flex justify-between items-center p-4'>
               <h2 className='text-xl font-bold'>Users</h2>
             </div>
 
-            <table className='min-w-full   rounded-t'>
+            <table className='min-w-full rounded-t'>
               <thead>
                 <tr>
                   <th className='p-3 bg-[#2c3e50]'>Firstname</th>
                   <th className='p-3 bg-[#2c3e50]'>Lastname</th>
                   <th className='p-3 bg-[#2c3e50]'>Email</th>
                   <th className='p-3 bg-[#2c3e50]'>Phone</th>
-                  <th className='p-3 bg-[#2c3e50]'>Country</th>
+                  <th className='p-3 bg-[#2c3e50]'>City</th>
                   <th className='p-3 bg-[#2c3e50]'>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {userData.map((user, index) => (
+                {filteredUsers.map((user, index) => (
                   <tr
                     key={index}
                     className='border-b border-[#34495e] hover:bg-[#2c3e50]'
@@ -86,7 +109,7 @@ const Countries = () => {
                     <td className='p-3'>{user.city}</td>
                     <td className='p-3'>
                       <button
-                        type='button'
+                        onClick={() => handleDeleteClick(user)}
                         className='bg-[#f44336] text-white px-4 py-1 rounded-full flex items-center space-x-2'
                       >
                         <FaTrashAlt />
@@ -120,6 +143,19 @@ const Countries = () => {
           </section>
         </main>
       </div>
+
+      {/* Delete Modal */}
+      {isModalOpen && userToDelete && (
+        <DeleteAdmin
+          adminName={`${userToDelete.firstname} ${userToDelete.lastname}`}
+          adminId={userToDelete.id} // use the id or email or any unique field
+          onClose={handleModalClose}
+          onDelete={() => {
+            console.log(`Deleting user: ${userToDelete.firstname}`);
+            handleModalClose();
+          }}
+        />
+      )}
     </div>
   );
 };
