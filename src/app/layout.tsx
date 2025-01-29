@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import { metadata } from './metadata';
 import { store } from '@/store/store';
 import './globals.css';
+import ToastProvider from '@/helpers/higherOrderComponent/ToastProvider';
 
 // Font configurations
 const geistSans = localFont({
@@ -37,7 +38,9 @@ export default function RootLayout({
       >
         <Provider store={store}>
           <Navbar />
-          <main>{children}</main>
+          <main>
+            <ToastProvider>{children}</ToastProvider>
+          </main>
           <Footer />
         </Provider>
       </body>

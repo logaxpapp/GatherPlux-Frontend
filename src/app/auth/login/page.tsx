@@ -14,7 +14,7 @@ import Loader from '@/components/Loader';
 import { setToken } from '@/store/slices/user.slice';
 import { setCookie } from '@/utils/cookie.utility';
 import Link from 'next/link';
-import isAuth from '@/helpers/higherOrderComponent/isAuthenticated';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const router = useRouter();
@@ -35,9 +35,9 @@ const Login = () => {
     };
 
     if (userData.username === '' || userData.password === '') {
-      // toast.error("Please fill all fields", {
-      //   position: 'top-right'
-      // });
+      toast.error('Please fill all fields', {
+        position: 'top-right',
+      });
       return;
     }
 
@@ -51,20 +51,27 @@ const Login = () => {
       ) {
         setCookie('token', response.body.access_token);
         dispatch(setToken(response.body.access_token));
-        router.push('/profile');
+        console.log('User role:', response.body.role);
+        console.log(
+          'Redirecting to:',
+          response.body.role === 'superadin' ? '/admin/messages' : '/profile',
+        );
+        router.push(
+          response.body.role === 'superadin' ? '/admin/messages' : '/profile',
+        );
       }
 
       if (response && response.status === 401) {
-        // toast.error("Invalid credentials", {
-        //   position: 'top-right'
-        // });
+        toast.error('Invalid credentials', {
+          position: 'top-right',
+        });
         return 'invalid credentials';
       }
 
       if (response && response.error) {
-        // toast.error(response.error, {
-        //   position: 'top-right'
-        // });
+        toast.error(response.error, {
+          position: 'top-right',
+        });
         return response.error;
       }
     } catch (err) {
@@ -93,11 +100,13 @@ const Login = () => {
           borderBottom: '1px solid #9EDD45',
         }}
       >
-        <h1 className='text-2xl sm:text-3xl font-bold text-center mb-2'>Login</h1>
+        <h1 className='text-2xl sm:text-3xl font-bold text-center mb-2'>
+          Login
+        </h1>
         <p className='text-center text-gray-400 text-sm sm:text-base mb-6'>
           Login to book your next great experience
         </p>
-  
+
         {/* Form */}
         <form className='space-y-4' onSubmit={handleSubmit}>
           {/* Email */}
@@ -121,7 +130,7 @@ const Login = () => {
               />
             </div>
           </div>
-  
+
           {/* Password */}
           <div>
             <label className='block text-sm font-medium mb-1 text-[#dbdae3]'>
@@ -150,14 +159,14 @@ const Login = () => {
               </button>
             </div>
           </div>
-  
+
           <Link
             href='/auth/forgot-password'
             className='flex items-center justify-end text-[#9EDD45] text-sm sm:text-base pb-6'
           >
             Forgot password
           </Link>
-  
+
           {/* Submit Button */}
           <button
             type='submit'
@@ -167,7 +176,7 @@ const Login = () => {
             Login
           </button>
         </form>
-  
+
         {/* Footer */}
         <div className='mt-4 text-gray-400'>
           <p className='text-sm sm:text-base'>
@@ -192,4 +201,4 @@ const Login = () => {
   );
 };
 
-export default isAuth(Login);
+export default Login;

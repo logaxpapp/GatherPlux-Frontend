@@ -1,28 +1,40 @@
 'use client';
 
-import DeleteAdmin from "@/components/modal/Admins-delete-admins";
+import DeleteAdmin from '@/components/modal/Admins-delete-admins';
 import { useEffect, useState } from 'react';
 import { FaTrashAlt, FaSearch } from 'react-icons/fa';
-import { useGetAllUsersQuery } from '@/services/slices/admin.slice';
+import {
+  useGetAllUsersQuery,
+  useLazySearchUsersQuery,
+} from '@/services/slices/admin.slice';
+import { useDebounce } from '@/helpers/hooks/useDebounce';
 
 type User = {
   id: number; // assuming there is an id field
-  firstname: string;
-  lastname: string;
-  email: string;
+  firstname: string | null;
+  lastname: string | null;
+  email: string | null;
   phone: string;
   city: string;
 };
 
-const Countries = () => {
+const Users = () => {
   const [userData, setUserData] = useState<User[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [searchPage, setSearchPage] = useState(0);
+
+  const [canDebounce, setCanDebounce] = useState(false);
+  const debouncedQuery: string = useDebounce(
+    canDebounce ? searchQuery : '',
+    300,
+  );
 
   const { data: usersAPIData } = useGetAllUsersQuery(currentPage);
+  const [searchUsers] = useLazySearchUsersQuery();
 
   useEffect(() => {
     if (
@@ -37,9 +49,67 @@ const Countries = () => {
     }
   }, [usersAPIData]);
 
+  useEffect(() => {
+    if (!debouncedQuery || debouncedQuery.length < 3) {
+      // Load all users if no search query
+      if (usersAPIData?.body?.records) {
+        setUserData(usersAPIData.body.records);
+        setTotalPages(usersAPIData.body.totalPages);
+        setCurrentPage(usersAPIData.body.currentPage);
+      }
+      return;
+    }
+
+    const searchUsersData = async () => {
+      try {
+        const response = await searchUsers({
+          query: debouncedQuery,
+          page: searchPage,
+        }).unwrap();
+
+        if (response?.code === 200) {
+          setUserData(response.body.records);
+          setTotalPages(response.body.totalPages);
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+      }
+    };
+
+    searchUsersData();
+  }, [debouncedQuery, searchPage, usersAPIData, searchUsers]);
+
+  // Handle search query change
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setSearchQuery(value);
+
+    if (value.length >= 3) {
+      setCanDebounce(true);
+      setSearchPage(0); // Reset search pagination
+    } else {
+      // If search is cleared, reset and fetch all users
+      setCanDebounce(false);
+      setSearchPage(0);
+      setCurrentPage(0);
+      if (usersAPIData?.body?.records) {
+        setUserData(usersAPIData.body.records);
+        setTotalPages(usersAPIData.body.totalPages);
+      }
+    }
+  };
+
   const handlePageChange = (pageNumber: number) => {
-    if (pageNumber >= 0 && pageNumber < totalPages) {
-      setCurrentPage(pageNumber);
+    if (searchQuery.length >= 3) {
+      // If searching, update searchPage
+      if (pageNumber >= 0 && pageNumber < totalPages) {
+        setSearchPage(pageNumber);
+      }
+    } else {
+      // If not searching, update normal pagination
+      if (pageNumber >= 0 && pageNumber < totalPages) {
+        setCurrentPage(pageNumber);
+      }
     }
   };
 
@@ -53,12 +123,12 @@ const Countries = () => {
     setUserToDelete(null);
   };
 
-  const filteredUsers = userData.filter(
-    (user) =>
-      user.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredUsers = userData.filter(
+  //   (user) =>
+  //     user.firstname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     user.lastname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     user.email?.toLowerCase().includes(searchQuery.toLowerCase()),
+  // );
 
   return (
     <div className='flex h-screen'>
@@ -71,7 +141,7 @@ const Countries = () => {
                 type='text'
                 placeholder='Search users...'
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className='w-full p-2 pl-10 bg-[#1e2a38] text-white border border-gray-500 rounded-md'
                 aria-label='Search users'
               />
@@ -97,7 +167,7 @@ const Countries = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user, index) => (
+                {userData.map((user, index) => (
                   <tr
                     key={index}
                     className='border-b border-[#34495e] hover:bg-[#2c3e50]'
@@ -109,6 +179,7 @@ const Countries = () => {
                     <td className='p-3'>{user.city}</td>
                     <td className='p-3'>
                       <button
+                        type='button'
                         onClick={() => handleDeleteClick(user)}
                         className='bg-[#f44336] text-white px-4 py-1 rounded-full flex items-center space-x-2'
                       >
@@ -131,6 +202,9 @@ const Countries = () => {
               >
                 Previous
               </button>
+              <span>
+                Page {currentPage} of {totalPages ? totalPages - 1 : 0}
+              </span>
               <button
                 type='button'
                 onClick={() => handlePageChange(currentPage + 1)}
@@ -160,4 +234,4 @@ const Countries = () => {
   );
 };
 
-export default Countries;
+export default Users;

@@ -49,7 +49,7 @@ const Admins = () => {
   const handleDeleteUser = () => {
     if (userToDelete) {
       setUserData((prevData) =>
-        prevData.filter((user) => user.email !== userToDelete.email)
+        prevData.filter((user) => user.email !== userToDelete.email),
       );
     }
     handleCloseDeleteModal();
@@ -64,7 +64,7 @@ const Admins = () => {
               <div className='relative'>
                 <button
                   type='button'
-                  title=''
+                  title={''}
                   className='flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-[#020e1e] text-white'
                 >
                   <i className='fas fa-envelope'></i>
@@ -74,7 +74,7 @@ const Admins = () => {
               <div className='relative'>
                 <button
                   type='button'
-                  title=''
+                  title={''}
                   className='flex items-center justify-center w-10 h-10 rounded-md border border-gray-300 bg-[#020e1e] text-white'
                 >
                   <i className='fas fa-bell'></i>
@@ -98,16 +98,16 @@ const Admins = () => {
             </div>
           </header>
 
-          <section className="border rounded-lg border-gray-500">
-            <div className="flex justify-between items-center bg-[#020e1e] pt-5 pb-3">
-              <h2 className="text-xl font-bold pl-16">Admins</h2>
+          <section className='border rounded-lg border-gray-500'>
+            <div className='flex justify-between items-center bg-[#020e1e] pt-5 pb-3'>
+              <h2 className='text-xl font-bold pl-16'>Admins</h2>
               <button
-                type="button"
+                type='button'
                 onClick={handleOpenModal}
-                className="mr-5 bg-gray-100 py-1 px-4 rounded-full border border-gray-300 text-sm text-[#011c39] flex items-center space-x-2"
+                className='mr-5 bg-gray-100 py-1 px-4 rounded-full border border-gray-300 text-sm text-[#011c39] flex items-center space-x-2'
               >
-                <div className="flex items-center justify-center w-5 h-5 border border-gray-400 rounded-full">
-                  <span className="text-black">+</span>
+                <div className='flex items-center justify-center w-5 h-5 border border-gray-400 rounded-full'>
+                  <span className='text-black'>+</span>
                 </div>
                 <span>New Admin</span>
               </button>
@@ -117,7 +117,7 @@ const Admins = () => {
               <thead className='bg-[#2d3748] border-b border-gray-500'>
                 <tr className='text-left'>
                   <th className='pl-3 pr-1 text-base font-normal'>
-                    <input type='checkbox' title='' />
+                    <input type='checkbox' title={''} />
                   </th>
                   <th className='p-3 text-base font-normal'>First Name</th>
                   <th className='p-3 text-base font-normal'>Last Name</th>
@@ -132,7 +132,7 @@ const Admins = () => {
                     className='border-b border-gray-500 hover:bg-gray-600'
                   >
                     <td className='pl-3 pr-1'>
-                      <input type='checkbox' title='' />
+                      <input type='checkbox' title={''} />
                     </td>
                     <td className='p-3'>{user.firstname}</td>
                     <td className='p-3'>{user.lastname}</td>
@@ -155,8 +155,10 @@ const Admins = () => {
         </main>
       </div>
 
-     {/* Modals */}
-     {isModalOpen && <NewAdminForm open={isModalOpen} onClose={handleCloseModal} />}
+      {/* Modals */}
+      {isModalOpen && (
+        <NewAdminForm open={isModalOpen} onClose={handleCloseModal} />
+      )}
       {isDeleteModalOpen && userToDelete && (
         <DeleteAdmin
           onClose={handleCloseDeleteModal}

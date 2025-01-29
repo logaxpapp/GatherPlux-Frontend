@@ -27,8 +27,21 @@ const extendApiSlice = adminBaseAPISlice.injectEndpoints({
     getAllAdminCategories: builder.query({
       query: () => 'base/category',
     }),
+    createCountry: builder.mutation({
+      query: (countryDetails) => ({
+        url: 'base/country',
+        method: 'POST',
+        body: countryDetails,
+      }),
+    }),
+    searchCountry: builder.query({
+      query: ({ query, page }) => `base/country?search=${query}&page=${page}&size=10&sortDirection=asc`,
+    }),
+    searchUsers: builder.query({
+      query: ({ query, page }) => `user?search=${query}&page=${page}&size=10&role=user&sortBy=id&sortDirection=desc`,
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllUsersQuery, useGetAllAdminsQuery, useCreateAdminMutation, useDeleteAdminMutation, useGetAllAdminCountryQuery, useGetAllAdminCategoriesQuery } = extendApiSlice;
+export const { useGetAllUsersQuery, useGetAllAdminsQuery, useCreateAdminMutation, useDeleteAdminMutation, useGetAllAdminCountryQuery, useGetAllAdminCategoriesQuery, useCreateCountryMutation, useLazySearchCountryQuery, useLazySearchUsersQuery } = extendApiSlice;
