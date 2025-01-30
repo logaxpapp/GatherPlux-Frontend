@@ -19,6 +19,10 @@ import {
   FaTimes,
   FaArrowLeft, // Icon for Back button
 } from "react-icons/fa";
+import { removeCookie } from "@/utils/cookie.utility";
+import { useDispatch } from "react-redux";
+import { logOut } from "@/store/slices/user.slice";
+import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
 
 // NavItem Component
 function NavItem({
@@ -42,8 +46,8 @@ function NavItem({
           isActive
             ? "bg-[#243447] text-[#93d437] font-bold"
             : href
-            ? "text-white hover:bg-[#243447]"
-            : "bg-[#93d437] text-[#020e1e] font-bold"
+              ? "text-white hover:bg-[#243447]"
+              : "bg-[#93d437] text-[#020e1e] font-bold"
         } ${className}`}
       >
         {icon}
@@ -53,9 +57,10 @@ function NavItem({
   );
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -63,6 +68,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const goBack = () => {
     router.back();
+  };
+
+  const handleLogout = () => {
+    removeCookie("token");
+    dispatch(logOut());
+    router.replace("/");
+    setIsSidebarOpen(false); // Close sidebar after logout
   };
 
   return (
@@ -99,19 +111,50 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <nav className="space-y-3">
             <NavItem label="Dashboard" icon={undefined} />
-            <NavItem icon={<FaBuilding />} label="Company" href="/admin/company" />
+            <NavItem
+              icon={<FaBuilding />}
+              label="Company"
+              href="/admin/company"
+            />
             <NavItem icon={<FaGlobe />} label="Country" href="/admin/country" />
             <NavItem icon={<FaUsers />} label="Users" href="/admin/users" />
-            <NavItem icon={<FaUserShield />} label="Admins" href="/admin/admins" />
-            <NavItem icon={<FaCreditCard />} label="Billing plans" href="/admin/billing" />
-            <NavItem icon={<FaComments />} label="Messages" href="/admin/messages" />
-            <NavItem icon={<FaKey />} label="Change password" href="/admin/resetpassword" />
-            <NavItem icon={<FaTags />} label="Categories" href="/admin/categories" />
+            <NavItem
+              icon={<FaUserShield />}
+              label="Admins"
+              href="/admin/admins"
+            />
+            <NavItem
+              icon={<FaCreditCard />}
+              label="Billing plans"
+              href="/admin/billing"
+            />
+            <NavItem
+              icon={<FaComments />}
+              label="Messages"
+              href="/admin/messages"
+            />
+            <NavItem
+              icon={<FaKey />}
+              label="Change password"
+              href="/admin/resetpassword"
+            />
+            <NavItem
+              icon={<FaTags />}
+              label="Categories"
+              href="/admin/categories"
+            />
             <NavItem icon={<FaStar />} label="Ratings" href="/admin/ratings" />
           </nav>
           <nav className="mt-16 space-y-4">
             <NavItem icon={<FaCog />} label="Settings" href="/admin/settings" />
-            <NavItem icon={<FaSignOutAlt />} label="Log out" href="/admin/logout" />
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="mt-8 w-full py-2 bg-[#f00] text-white rounded-md flex items-center justify-center"
+            >
+              <FaSignOutAlt className="mr-2" />
+              Logout
+            </button>
           </nav>
         </aside>
 
@@ -120,4 +163,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
     </div>
   );
-}
+};
+
+export default isAuth(AdminLayout);

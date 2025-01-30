@@ -1,18 +1,19 @@
-'use strict';
-'use client';
+"use strict";
+"use client";
 
-import { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-import Profile from '../../../../public/profile.svg';
-import Mail from '../../../../public/sms-tracking.svg';
-import Lock from '../../../../public/lock.svg';
-import { useCreateUserMutation } from '@/services/slices/user.slice';
-import Loader from '@/components/Loader';
+import Profile from "../../../../public/profile.svg";
+import Mail from "../../../../public/sms-tracking.svg";
+import Lock from "../../../../public/lock.svg";
+import { useCreateUserMutation } from "@/services/slices/user.slice";
+import Loader from "@/components/Loader";
+import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
 
-export default function Signup() {
+const Signup = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [signUpUser, { isLoading }] = useCreateUserMutation();
@@ -22,9 +23,9 @@ export default function Signup() {
 
     const formData = new FormData(e.currentTarget);
     const userData = {
-      name: formData.get('fullName'),
-      email: formData.get('email'),
-      password: formData.get('password'),
+      name: formData.get("fullName"),
+      email: formData.get("email"),
+      password: formData.get("password"),
     };
 
     if (!userData.email || !userData.password || !userData.name) {
@@ -33,11 +34,15 @@ export default function Signup() {
 
     try {
       const response = await signUpUser(userData).unwrap();
-      if (response && response.code === 200 && response.message === 'SUCCESSFUL') {
+      if (
+        response &&
+        response.code === 200 &&
+        response.message === "SUCCESSFUL"
+      ) {
         router.push(`/auth/verify?email=${userData.email}`);
       }
     } catch (err) {
-      console.error('An error occurred when signing user up:', err);
+      console.error("An error occurred when signing user up:", err);
     }
   };
 
@@ -48,31 +53,41 @@ export default function Signup() {
         backgroundImage: `
           radial-gradient(circle at 50% 30%, rgba(0, 255, 102, 0.1), transparent 50%),
           radial-gradient(circle at 10% 70%, rgba(51, 170, 255, 0.1), transparent 90%)`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <div
         className="w-full sm:max-w-md p-6 sm:p-8 text-white rounded-3xl shadow-lg"
         style={{
-          background: 'linear-gradient(to bottom, #102730, #123739, #10212d)',
-          borderTop: '5px solid #9EDD45',
-          borderLeft: '1px solid #9EDD45',
-          borderRight: '1px solid #9EDD45',
-          borderBottom: '1px solid #9EDD45',
+          background: "linear-gradient(to bottom, #102730, #123739, #10212d)",
+          borderTop: "5px solid #9EDD45",
+          borderLeft: "1px solid #9EDD45",
+          borderRight: "1px solid #9EDD45",
+          borderBottom: "1px solid #9EDD45",
         }}
       >
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">Create Account</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">
+          Create Account
+        </h1>
         <p className="text-center text-gray-400 text-sm sm:text-base mb-6">
           Sign up to discover and book amazing events!
         </p>
-  
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Full Name */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-[#dbdae3]">Full Name</label>
+            <label className="block text-sm font-medium mb-1 text-[#dbdae3]">
+              Full Name
+            </label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
-              <Image src={Profile.src} alt="Profile" width={24} height={24} className="w-6 sm:w-8 mr-2" />
+              <Image
+                src={Profile.src}
+                alt="Profile"
+                width={24}
+                height={24}
+                className="w-6 sm:w-8 mr-2"
+              />
               <input
                 type="text"
                 placeholder="Enter full name"
@@ -82,12 +97,20 @@ export default function Signup() {
               />
             </div>
           </div>
-  
+
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-[#dbdae3]">Email</label>
+            <label className="block text-sm font-medium mb-1 text-[#dbdae3]">
+              Email
+            </label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
-              <Image src={Mail.src} alt="Mail" width={24} height={24} className="w-6 sm:w-8 mr-2" />
+              <Image
+                src={Mail.src}
+                alt="Mail"
+                width={24}
+                height={24}
+                className="w-6 sm:w-8 mr-2"
+              />
               <input
                 type="email"
                 name="email"
@@ -97,14 +120,22 @@ export default function Signup() {
               />
             </div>
           </div>
-  
+
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-[#dbdae3]">Password</label>
+            <label className="block text-sm font-medium mb-1 text-[#dbdae3]">
+              Password
+            </label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
-              <Image src={Lock.src} alt="Lock" width={24} height={24} className="w-6 sm:w-8 mr-2" />
+              <Image
+                src={Lock.src}
+                alt="Lock"
+                width={24}
+                height={24}
+                className="w-6 sm:w-8 mr-2"
+              />
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Enter your password"
                 className="w-full p-2 bg-transparent border-none focus:ring-0 focus:outline-none text-white text-sm sm:text-base"
@@ -115,11 +146,11 @@ export default function Signup() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="text-gray-400 ml-2 text-sm sm:text-base"
               >
-                {showPassword ? '🙈' : '👁️'}
+                {showPassword ? "🙈" : "👁️"}
               </button>
             </div>
           </div>
-  
+
           {/* Submit Button */}
           <button
             type="submit"
@@ -129,11 +160,11 @@ export default function Signup() {
             Create Account
           </button>
         </form>
-  
+
         {/* Footer */}
         <div className="text-center mt-4 text-gray-400">
           <p className="text-sm sm:text-base">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <a href="/auth/login" className="text-[#9EDD45] hover:underline">
               Log In
             </a>
@@ -154,5 +185,6 @@ export default function Signup() {
       </div>
     </div>
   );
-  
-}
+};
+
+export default isAuth(Signup);

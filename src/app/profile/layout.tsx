@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   FiUser,
   FiLock,
@@ -8,12 +8,12 @@ import {
   FiBookmark,
   FiMail,
   FiMenu,
-} from 'react-icons/fi';
-import { usePathname, useRouter } from 'next/navigation';
-import { removeCookie } from '@/utils/cookie.utility';
-import { useDispatch } from 'react-redux';
-import { logOut } from '@/store/slices/user.slice';
-import isAuth from '@/helpers/higherOrderComponent/isAuthenticated';
+} from "react-icons/fi";
+import { usePathname, useRouter } from "next/navigation";
+import { removeCookie } from "@/utils/cookie.utility";
+import { useDispatch } from "react-redux";
+import { logOut } from "@/store/slices/user.slice";
+import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
 
 const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -28,14 +28,14 @@ const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleLogout = () => {
-    removeCookie('token');
+    removeCookie("token");
     dispatch(logOut());
-    router.push('/auth/login');
+    router.replace("/auth/login");
     setIsSidebarOpen(false); // Close sidebar after logout
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    const sidebar = document.getElementById('sidebar');
+    const sidebar = document.getElementById("sidebar");
     if (sidebar && !sidebar.contains(event.target as Node)) {
       setIsSidebarOpen(false);
     }
@@ -43,12 +43,12 @@ const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (isSidebarOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSidebarOpen]);
 
@@ -70,14 +70,14 @@ const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
         <div
           id="sidebar"
           className={`fixed inset-y-0 left-0 z-20 bg-[#020e1e] mt-10 sm:mt-0 p-16 sm:p-6 border-r border-gray-700 transition-transform duration-300 ${
-            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           } md:relative md:translate-x-0`}
         >
           <div className="flex justify-between mb-8">
             <button
               type="button"
               className="pr-14 pl-6 py-2 bg-[#93d437] text-[#0b1326] font-bold rounded-md hover:bg-[#a4de4a] text-lg"
-              onClick={() => handleNavigation('/dashboard')}
+              onClick={() => handleNavigation("/dashboard")}
             >
               Dashboard
             </button>
@@ -94,49 +94,49 @@ const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
           <ul className="space-y-4">
             <li
               className={`cursor-pointer flex items-center space-x-2 text-white px-4 py-2 rounded-md ${
-                pathname === '/profile' ? 'bg-[#243447]' : 'hover:bg-[#243447]'
+                pathname === "/profile" ? "bg-[#243447]" : "hover:bg-[#243447]"
               } transition duration-200 text-sm`}
-              onClick={() => handleNavigation('/profile')}
+              onClick={() => handleNavigation("/profile")}
             >
               <FiUser className="w-4 h-4" />
               <span>Account Info</span>
             </li>
             <li
               className="cursor-pointer flex items-center space-x-2 text-white px-4 py-2 rounded-md hover:bg-[#243447] transition duration-200 text-sm"
-              onClick={() => handleNavigation('/profile/change-email')}
+              onClick={() => handleNavigation("/profile/change-email")}
             >
               <FiMail className="w-4 h-4" />
               <span>Change Email</span>
             </li>
             <li
               className={`cursor-pointer flex items-center space-x-2 text-white px-4 py-2 rounded-md ${
-                pathname === '/profile/password'
-                  ? 'bg-[#243447]'
-                  : 'hover:bg-[#243447]'
+                pathname === "/profile/password"
+                  ? "bg-[#243447]"
+                  : "hover:bg-[#243447]"
               } transition duration-200 text-sm`}
-              onClick={() => handleNavigation('/profile/reset-password')}
+              onClick={() => handleNavigation("/profile/reset-password")}
             >
               <FiLock className="w-4 h-4" />
               <span>Password</span>
             </li>
             <li
               className={`cursor-pointer flex items-center space-x-2 text-white px-4 py-2 rounded-md ${
-                pathname === '/profile/bookings'
-                  ? 'bg-[#243447]'
-                  : 'hover:bg-[#243447]'
+                pathname === "/profile/bookings"
+                  ? "bg-[#243447]"
+                  : "hover:bg-[#243447]"
               } transition duration-200 text-sm`}
-              onClick={() => handleNavigation('/profile/bookings')}
+              onClick={() => handleNavigation("/profile/bookings")}
             >
               <FiBook className="w-4 h-4" />
               <span>Bookings</span>
             </li>
             <li
               className={`cursor-pointer flex items-center space-x-2 text-white px-4 py-2 rounded-md ${
-                pathname === '/profile/bookmark'
-                  ? 'bg-[#243447]'
-                  : 'hover:bg-[#243447]'
+                pathname === "/profile/bookmark"
+                  ? "bg-[#243447]"
+                  : "hover:bg-[#243447]"
               } transition duration-200 text-sm`}
-              onClick={() => handleNavigation('/profile/bookmark')}
+              onClick={() => handleNavigation("/profile/bookmark")}
             >
               <FiBookmark className="w-4 h-4" />
               <span>Bookmark</span>

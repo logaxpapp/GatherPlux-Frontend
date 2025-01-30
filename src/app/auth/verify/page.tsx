@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { Suspense } from "react";
 
-import EmailVerification from './components/Verify';
+import EmailVerification from "./components/Verify";
+import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
 
-const Page = () => {
+const Verify = () => {
   return (
     <Suspense>
       <EmailVerification />
@@ -10,4 +11,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default isAuth(Verify);

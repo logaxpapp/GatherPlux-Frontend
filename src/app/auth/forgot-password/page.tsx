@@ -1,7 +1,7 @@
 import React from "react";
 
 import ForgotPassword from "./components/Forgot.Password";
-
+import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
 
 const Page = () => {
   return (
@@ -9,7 +9,6 @@ const Page = () => {
       <ForgotPassword />
     </div>
   );
-
 };
 
-export default Page;
+export default isAuth(Page);

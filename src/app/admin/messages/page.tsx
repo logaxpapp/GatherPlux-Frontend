@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 
 // Define the message type
@@ -47,9 +46,7 @@ const Messages: React.FC = () => {
   // Mark a message as read
   const markAsRead = (id: number) => {
     setMessages((prevMessages) =>
-      prevMessages.map((msg) =>
-        msg.id === id ? { ...msg, read: true } : msg
-      )
+      prevMessages.map((msg) => (msg.id === id ? { ...msg, read: true } : msg)),
     );
   };
 
@@ -83,7 +80,9 @@ const Messages: React.FC = () => {
 
 const truncateContent = (content: string, wordLimit: number = 4) => {
   const words = content.split(" ");
-  return words.length > wordLimit ? `${words.slice(0, wordLimit).join(" ")}...` : content;
+  return words.length > wordLimit
+    ? `${words.slice(0, wordLimit).join(" ")}...`
+    : content;
 };
 
 // Message List Component
@@ -143,12 +142,6 @@ type MessageItemProps = {
   onDelete: () => void;
 };
 
-
-
-
-
-
-
 const MessageItem: React.FC<MessageItemProps> = ({
   message,
   onClick,
@@ -162,7 +155,9 @@ const MessageItem: React.FC<MessageItemProps> = ({
       </div>
       <div>
         <h3 className="font-bold">{message.sender}</h3>
-        <p className="text-sm text-gray-500">{truncateContent(message.content)}</p>
+        <p className="text-sm text-gray-500">
+          {truncateContent(message.content)}
+        </p>
       </div>
     </div>
     <div className="flex items-center space-x-4">
@@ -190,11 +185,6 @@ const MessageItem: React.FC<MessageItemProps> = ({
     </div>
   </div>
 );
-
-
-
-
-
 
 // Message Detail Component
 type MessageDetailProps = {
