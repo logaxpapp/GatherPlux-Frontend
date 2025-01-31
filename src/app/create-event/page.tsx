@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { v4 as uuid } from 'uuid';
-import { FaArrowLeftLong } from 'react-icons/fa6';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from "react";
+import { v4 as uuid } from "uuid";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-import ProgressBar from './components/ProgressBar.component';
-import EventDetails from './components/EventDetails.component';
-import EventBanner from './components/EventBanner.component';
-import EventTickets from './components/EventTickets.component';
-import PreviewEvent from './components/PreviewEvent.component';
+import ProgressBar from "./components/ProgressBar.component";
+import EventDetails from "./components/EventDetails.component";
+import EventBanner from "./components/EventBanner.component";
+import EventTickets from "./components/EventTickets.component";
+import PreviewEvent from "./components/PreviewEvent.component";
 
-import { CombinedStateAndCategoryProps } from './types/types';
-import { useGetAllCategoriesQuery } from '@/services/slices/category.slice';
+import { CombinedStateAndCategoryProps } from "./types/types";
+import { useGetAllCategoriesQuery } from "@/services/slices/category.slice";
 import {
   useGetAllCountriesQuery,
   useLazyGetAllStatesQuery,
-} from '@/services/slices/state.slice';
-import { useCreateEventMutation } from '@/services/slices/events.slice';
+} from "@/services/slices/state.slice";
+import { useCreateEventMutation } from "@/services/slices/events.slice";
 
 export interface SessionsProps {
   id: string;
@@ -54,10 +54,10 @@ export default function CreateEvent() {
   );
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState<CombinedStateAndCategoryProps[]>([]);
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState("");
 
-  const { data: categoriesData } = useGetAllCategoriesQuery('');
-  const { data: allCountries } = useGetAllCountriesQuery('');
+  const { data: categoriesData } = useGetAllCategoriesQuery("");
+  const { data: allCountries } = useGetAllCountriesQuery("");
   const [createEvent] = useCreateEventMutation();
   const [getAllStates] = useLazyGetAllStatesQuery();
 
@@ -74,12 +74,12 @@ export default function CreateEvent() {
   }, [allCountries, categoriesData]);
 
   const [eventDetails, setEventDetails] = useState<EventDetailsProps>({
-    title: '',
+    title: "",
     category: undefined,
-    type: 'one-time',
-    address: '',
+    type: "one-time",
+    address: "",
     state: undefined,
-    description: '',
+    description: "",
   });
 
   const handleTitleAndDescriptionAndAddress = (
@@ -142,8 +142,8 @@ export default function CreateEvent() {
     {
       id: uuid(),
       startDate: undefined,
-      startTime: '',
-      endTime: '',
+      startTime: "",
+      endTime: "",
     },
   ]);
   const [isMultipleSession, setIsMultipleSession] = useState(false);
@@ -152,13 +152,13 @@ export default function CreateEvent() {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { value } = event.target;
-    setIsMultipleSession(value === 'multiple');
+    setIsMultipleSession(value === "multiple");
   };
 
   const handleAddSession = () => {
     setSessions([
       ...sessions,
-      { id: uuid(), startDate: undefined, startTime: '', endTime: '' },
+      { id: uuid(), startDate: undefined, startTime: "", endTime: "" },
     ]);
   };
 
@@ -183,8 +183,6 @@ export default function CreateEvent() {
     id: string | undefined,
     type: string,
   ) => {
-    console.log(time, id)
-    console.log(type);
     const updatedSessions = sessions.map((session) => {
       if (session.id === id) {
         return { ...session, [type]: time };
@@ -208,7 +206,7 @@ export default function CreateEvent() {
 
   // file upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadedBanner, setUploadedBanner] = useState<string | null>('');
+  const [uploadedBanner, setUploadedBanner] = useState<string | null>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -216,10 +214,10 @@ export default function CreateEvent() {
       const file = e.target.files[0];
 
       // Check file type
-      const validTypes = ['image/jpeg', 'image/gif', 'image/png'];
+      const validTypes = ["image/jpeg", "image/gif", "image/png"];
       if (!validTypes.includes(file.type)) {
         console.error(
-          'Invalid file type. Please upload JPG, GIF, or PNG files only.',
+          "Invalid file type. Please upload JPG, GIF, or PNG files only.",
         );
         return;
       }
@@ -230,14 +228,14 @@ export default function CreateEvent() {
       img.onload = () => {
         if (img.width < 1170 || img.height < 504) {
           console.error(
-            'Image must be at least 1170 pixels wide by 504 pixels high.',
+            "Image must be at least 1170 pixels wide by 504 pixels high.",
           );
           return;
         }
       };
       setSelectedFile(file);
       const formData = new FormData();
-      formData.append('files', file);
+      formData.append("files", file);
 
       // Had to upload file with axios, was getting error in the fileUploads.slice.ts
       try {
@@ -246,7 +244,7 @@ export default function CreateEvent() {
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           },
         );
@@ -254,25 +252,25 @@ export default function CreateEvent() {
         if (response.data.body.length > 0) {
           setUploadedBanner(response.data.body[0].secure_url);
         } else {
-          console.error('Error uploading file');
+          console.error("Error uploading file");
         }
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error("Error uploading file:", error);
       }
     }
   };
 
   // tickets
-  const [eventType, setEventType] = useState<string>('ticketed');
+  const [eventType, setEventType] = useState<string>("ticketed");
   const [tickets, setTickets] = useState<TicketEntry[]>([
-    { id: uuid(), name: '', price: '0.00', people: 1 },
+    { id: uuid(), name: "", price: "0.00", people: 1 },
   ]);
-  const [numberOfTickets, setNumberOfTickets] = useState<number | ''>('');
+  const [numberOfTickets, setNumberOfTickets] = useState<number | "">("");
 
   const addTicketEntry = () => {
     setTickets([
       ...tickets,
-      { id: uuid(), name: '', price: '0.00', people: 1 },
+      { id: uuid(), name: "", price: "0.00", people: 1 },
     ]);
   };
 
@@ -283,7 +281,7 @@ export default function CreateEvent() {
 
   const updateTicket = (
     id: string,
-    field: 'name' | 'price' | 'people',
+    field: "name" | "price" | "people",
     value: string,
   ) => {
     setTickets(
@@ -300,34 +298,34 @@ export default function CreateEvent() {
     setEventType(value);
   };
 
-  const handleNumberOfTickets = (value: number | '') => {
+  const handleNumberOfTickets = (value: number | "") => {
     setNumberOfTickets(value);
   };
 
   const handleSaveAndContinue = () => {
     if (formStep === 1) {
       if (
-        eventDetails.title === '' ||
+        eventDetails.title === "" ||
         eventDetails.category === undefined ||
-        eventDetails.type === '' ||
+        eventDetails.type === "" ||
         sessions.length === 0 ||
         eventDetails.state === undefined ||
-        eventDetails.description === ''
+        eventDetails.description === ""
       ) {
-        console.log('fill all input fields');
+        console.log("fill all input fields");
         return;
       }
     } else if (formStep === 2) {
       if (!selectedFile) {
-        console.log('select a file');
+        console.log("select a file");
         return;
       }
     } else if (formStep === 3) {
       if (
-        eventType === 'ticketed' &&
-        tickets.some((ticket) => ticket.name === '' || ticket.price === '0.00')
+        eventType === "ticketed" &&
+        tickets.some((ticket) => ticket.name === "" || ticket.price === "0.00")
       ) {
-        console.log('fill all ticket fields');
+        console.log("fill all ticket fields");
         return;
       }
     }
@@ -347,9 +345,9 @@ export default function CreateEvent() {
       city: city,
       description: eventDetails.description,
       images: [uploadedBanner],
-      ticketed: eventType === 'ticketed',
+      ticketed: eventType === "ticketed",
       tickets:
-        eventType === 'ticketed'
+        eventType === "ticketed"
           ? tickets.map((ticket) => ({
               name: ticket.name,
               price: ticket.price,
@@ -363,24 +361,26 @@ export default function CreateEvent() {
     };
     const response = await createEvent(newEvent);
     if (response.data) {
-      router.push('/');
+      router.push("/");
     }
 
-    if ('error' in response) {
+    if ("error" in response) {
       console.log(response.error);
     }
   };
 
   return (
-    <div className='py-32 px-10 bg-[#020e1e]'>
-      <div className='flex items-center space-x-10'>
-        <FaArrowLeftLong className='text-[38px] cursor-pointer' />
-        <h2 className=' text-[18px] sm:text-[38px] font-bold'>Create a New Event</h2>
+    <div className="py-32 px-10 bg-[#020e1e]">
+      <div className="flex items-center space-x-10">
+        <FaArrowLeftLong className="text-[38px] cursor-pointer" />
+        <h2 className=" text-[18px] sm:text-[38px] font-bold">
+          Create a New Event
+        </h2>
       </div>
       <ProgressBar currentStep={formStep} />
 
       {formStep === 1 && (
-        <div className='animate-fadeIn'>
+        <div className="animate-fadeIn">
           <EventDetails
             handleTitleAndDescriptionAndAddress={
               handleTitleAndDescriptionAndAddress
@@ -407,7 +407,7 @@ export default function CreateEvent() {
       )}
 
       {formStep === 2 && (
-        <div className='animate-slideIn'>
+        <div className="animate-slideIn">
           <EventBanner
             fileInputRef={fileInputRef}
             handleFileChange={handleFileChange}
@@ -417,7 +417,7 @@ export default function CreateEvent() {
       )}
 
       {formStep === 3 && (
-        <div className='animate-slideIn'>
+        <div className="animate-slideIn">
           <EventTickets
             eventType={eventType}
             handleEventTypeOnTicket={handleEventTypeOnTicket}
@@ -432,7 +432,7 @@ export default function CreateEvent() {
       )}
 
       {formStep === 4 && (
-        <div className='animate-fadeIn'>
+        <div className="animate-fadeIn">
           <PreviewEvent
             uploadedBanner={uploadedBanner}
             eventDetails={eventDetails}
@@ -445,54 +445,52 @@ export default function CreateEvent() {
         </div>
       )}
 
-<div className="flex flex-wrap justify-between mt-20 mx-10 space-y-4 sm:space-y-0">
-  {/* Go Back Button */}
-  {formStep > 1 && formStep < 4 && (
-    <div className="whitespace-nowrap w-full sm:w-auto sm:ml-10">
-      <button
-        type="button"
-        className="border-none sm:mr-8 w-full sm:w-auto text-center"
-        onClick={handleGoBack}
-      >
-        {formStep === 2 ? 'Go back to Edit Event' : 'Go back'}
-      </button>
-    </div>
-  )}
+      <div className="flex flex-wrap justify-between mt-20 mx-10 space-y-4 sm:space-y-0">
+        {/* Go Back Button */}
+        {formStep > 1 && formStep < 4 && (
+          <div className="whitespace-nowrap w-full sm:w-auto sm:ml-10">
+            <button
+              type="button"
+              className="border-none sm:mr-8 w-full sm:w-auto text-center"
+              onClick={handleGoBack}
+            >
+              {formStep === 2 ? "Go back to Edit Event" : "Go back"}
+            </button>
+          </div>
+        )}
 
-  {/* Save & Continue Button */}
-  {formStep !== 4 && (
-    <div className="w-full sm:w-auto">
-      <button
-        type="button"
-        className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
-        onClick={handleSaveAndContinue}
-      >
-        Save & Continue
-      </button>
-    </div>
-  )}
+        {/* Save & Continue Button */}
+        {formStep !== 4 && (
+          <div className="w-full sm:w-auto">
+            <button
+              type="button"
+              className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+              onClick={handleSaveAndContinue}
+            >
+              Save & Continue
+            </button>
+          </div>
+        )}
 
-  {/* Final Step Buttons */}
-  {formStep === 4 && (
-    <div className="flex justify-between w-full sm:w-auto space-x-4">
-      <button
-        type="button"
-        className="bg-gray-600 px-4 py-2 rounded-md text-white w-full sm:w-auto"
-      >
-        Save for Later
-      </button>
-      <button
-        type="button"
-        onClick={handleCreateEvent}
-        className="bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold w-full sm:w-auto"
-      >
-        Publish Event
-      </button>
-    </div>
-  )}
-</div>
-
-
+        {/* Final Step Buttons */}
+        {formStep === 4 && (
+          <div className="flex justify-between w-full sm:w-auto space-x-4">
+            <button
+              type="button"
+              className="bg-gray-600 px-4 py-2 rounded-md text-white w-full sm:w-auto"
+            >
+              Save for Later
+            </button>
+            <button
+              type="button"
+              onClick={handleCreateEvent}
+              className="bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold w-full sm:w-auto"
+            >
+              Publish Event
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

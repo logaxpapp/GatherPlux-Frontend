@@ -18,8 +18,6 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const [startTimeIndex, setStartTimeIndex] = useState(0);
   const [hoveredTime, setHoveredTime] = useState<string | null>(null);
 
-
-
   // Generate times with 30-minute intervals (24-hour format)
   // const generateTimeSlots = () => {
   //   const times = [];
@@ -107,29 +105,33 @@ const TimePicker: React.FC<TimePickerProps> = ({
     ],
   };
 
-  if(startTime){
-    const splittedTime = startTime.split(' ');
+  if (startTime) {
+    const splittedTime = startTime.split(" ");
     // console.log()
-    const startTimeToCompare = splittedTime[0].length == 4 ? `0${splittedTime[0]}` : splittedTime[0]
+    const startTimeToCompare =
+      splittedTime[0].length == 4 ? `0${splittedTime[0]}` : splittedTime[0];
     // if(splittedTime[0].length == 4){
     //   splittedTime[0]=`0${splittedTime[0]}`
-    // } 
-     Object.entries(groupedTimeSlots).forEach(([period, times], key) => {
-      if(period== splittedTime[1]){
-        if(startSlotIndex != key){
-          setStartSlotIndex(key)
+    // }
+    Object.entries(groupedTimeSlots).forEach(([period, times], key) => {
+      if (period == splittedTime[1]) {
+        if (startSlotIndex != key) {
+          setStartSlotIndex(key);
         }
-        console.log('the index matches man')
-        times.forEach((time, index)=>{
-          
+        console.log("the index matches man");
+        times.forEach((time, index) => {
           console.log(time == startTimeToCompare, `${time} ${splittedTime[0]}`);
-          if(time === startTimeToCompare && startSlotIndex == key && startTimeIndex != index){
-            setStartTimeIndex(index)
+          if (
+            time === startTimeToCompare &&
+            startSlotIndex == key &&
+            startTimeIndex != index
+          ) {
+            setStartTimeIndex(index);
           }
-        })
+        });
       }
-    })
-    console.log('hey we got a start time here man', startTime);
+    });
+    console.log("hey we got a start time here man", startTime);
   }
   const handleSelectedTime = (time: string) => {
     const formattedTime = formatTimeFor12Hour(time);
@@ -161,7 +163,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
                       const isSelected = selectedTime === time;
                       const isHovered = hoveredTime === time;
                       return (
-                        < >
+                        <>
                           {timeIndex >= startTimeIndex && (
                             <Button
                               key={time}
@@ -171,7 +173,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
                                 "hover:bg-white hover:text-[#9EDD45]",
                                 isSelected &&
                                   "bg-white font-bold text-[#9EDD45] hover:bg-blue-100",
-                                "group relative"
+                                "group relative",
                               )}
                               onClick={handleSelectedTime.bind(null, time)}
                               onMouseEnter={() => setHoveredTime(time)}
@@ -183,7 +185,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
                               <div
                                 className={cn(
                                   "absolute right-4 opacity-0 transition-opacity duration-200",
-                                  (isSelected || isHovered) && "opacity-100"
+                                  (isSelected || isHovered) && "opacity-100",
                                 )}
                               >
                                 <Check
@@ -191,7 +193,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
                                     "w-4 h-4",
                                     isSelected
                                       ? "text-[#9EDD45]"
-                                      : "text-gray-600"
+                                      : "text-gray-600",
                                   )}
                                 />
                               </div>

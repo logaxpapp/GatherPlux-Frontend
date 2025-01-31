@@ -9,7 +9,7 @@ export interface EventDetailsProps {
   handleTitleAndDescriptionAndAddress: (
     event:
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
   categories: CombinedStateAndCategoryProps[];
   countries: CountryProp[];
@@ -26,7 +26,7 @@ export interface EventDetailsProps {
   handleTimeChange: (
     time: string | undefined,
     id: string | undefined,
-    type: string
+    type: string,
   ) => void;
   handleSessionEditName: (id: string, name: string) => void;
   handleAddSession: () => void;
@@ -159,7 +159,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         </div>
       </div>
 
-      {/* SESSIONS */}
       <div className="pb-6 pt-12">
         {/* Border Line */}
         <div className="border-b border-gray-700 mb-6"></div>
@@ -202,24 +201,24 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           </div>
 
           {/* Session Input Fields */}
-          <div className='space-y-6'>
+          <div className="space-y-6 mt-6">
             {sessions.map((session: SessionsProps, index) => (
               <div
                 key={session.id}
-                className='grid grid-cols-12 gap-4 items-center'
+                className="grid grid-cols-12 gap-4 items-center"
               >
                 {/* Session Name (only for multiple sessions) */}
                 {isMultipleSession && (
-                  <div className='col-span-12 mb-2 flex items-center justify-between'>
-                    <div className='flex items-center space-x-2'>
+                  <div className="col-span-12 mb-2 flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
                       {editingId !== session.id && (
                         <>
-                          <h2 className='text-lg text-white font-semibold'>
+                          <h2 className="text-lg text-white font-semibold">
                             {session.name || `Session ${index + 1}`}
                           </h2>
                           <button
-                            type='button'
-                            className='text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition'
+                            type="button"
+                            className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
                             onClick={() => handleSessionNameEdit(session.id)}
                           >
                             ✏️ edit name
@@ -229,14 +228,14 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                       {editingId === session.id && (
                         <>
                           <input
-                            type='text'
-                            placeholder='Enter session name'
-                            className='h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-[250px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]'
+                            type="text"
+                            placeholder="Enter session name"
+                            className="h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-[250px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]"
                             onChange={handleSessionNameChange}
                           />
                           <button
-                            type='button'
-                            className='text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition'
+                            type="button"
+                            className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
                             onClick={handleSaveSessionName}
                           >
                             save name
@@ -248,11 +247,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 )}
 
                 {/* Start Date */}
-                <div className='col-span-4'>
-                  <label className='block text-sm text-gray-400 mb-2'>
-                    Start Date <span className='text-red-500'>*</span>
+                <div className="col-span-4">
+                  <label className="block text-sm text-gray-400 mb-2">
+                    Start Date <span className="text-red-500">*</span>
                   </label>
-                  <div className='relative'>
+                  <div className="relative">
                     <CustomCalendar
                       handleStartDateChange={handleStartDateChange}
                       id={session.id}
@@ -261,42 +260,41 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 </div>
 
                 {/* Start Time */}
-                <div className='col-span-3'>
-                  <label className='block text-sm text-gray-400 mb-2'>
-                    Start Time <span className='text-red-500'>*</span>
+                <div className="col-span-3">
+                  <label className="block text-sm text-gray-400 mb-2">
+                    Start Time <span className="text-red-500">*</span>
                   </label>
-                  <div className='relative'>
+                  <div className="relative">
                     <CustomTimePicker
                       handleTimeChange={handleTimeChange}
                       id={session.id}
-                      type='startTime'
+                      type="startTime"
                     />
                   </div>
                 </div>
 
                 {/* End Time */}
-                <div className='col-span-3'>
-                  <label className='block text-sm text-gray-400 mb-2'>
+                <div className="col-span-3">
+                  <label className="block text-sm text-gray-400 mb-2">
                     End Time
                   </label>
-                  <div className='relative'>
+                  <div className="relative">
                     <CustomTimePicker
                       handleTimeChange={handleTimeChange}
                       id={session.id}
-                      type='endTime'
+                      type="endTime"
                       startTime={session.startTime}
-                  
                     />
                   </div>
                 </div>
 
                 {/* Add Session Button */}
                 {index < 1 && isMultipleSession && (
-                  <div className='col-span-2 justify-end'>
+                  <div className="col-span-2 justify-end">
                     <button
-                      title={''}
-                      type='button'
-                      className='text-[#9edd45] text-[24px] hover:text-[#76b434] transition'
+                      title={""}
+                      type="button"
+                      className="text-[#9edd45] text-[24px] hover:text-[#76b434] transition"
                       onClick={handleAddSession}
                     >
                       <CiCirclePlus />
@@ -304,11 +302,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                   </div>
                 )}
                 {index >= 1 && (
-                  <div className='col-span-2 justify-end'>
+                  <div className="col-span-2 justify-end">
                     <button
-                      title={''}
-                      type='button'
-                      className='text-[#f00] text-[24px] hover:text-[#f00] transition'
+                      title={""}
+                      type="button"
+                      className="text-[#f00] text-[24px] hover:text-[#f00] transition"
                       onClick={() => handleDeleteSession(session.id)}
                     >
                       <CiTrash />
@@ -320,225 +318,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           </div>
         </div>
 
-        {/* Session Input Fields */}
-        <div className="space-y-6">
-          {sessions.map((session: SessionsProps, index) => (
-            <div
-              key={session.id}
-              className="grid grid-cols-12 gap-4 items-center"
-            >
-              {/* Session Name (only for multiple sessions) */}
-              {isMultipleSession && (
-                <div className="col-span-12 mb-2 flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    {editingId !== session.id && (
-                      <>
-                        <h2 className="text-lg text-white font-semibold">
-                          {session.name || `Session ${index + 1}`}
-                        </h2>
-                        <button
-                          type="button"
-                          className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
-                          onClick={() => handleSessionNameEdit(session.id)}
-                        >
-                          ✏️ edit name
-                        </button>
-                      </>
-                    )}
-                    {editingId === session.id && (
-                      <>
-                        <input
-                          type="text"
-                          placeholder="Enter session name"
-                          className="h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-[250px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]"
-                          onChange={handleSessionNameChange}
-                        />
-                        <button
-                          type="button"
-                          className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
-                          onClick={handleSaveSessionName}
-                        >
-                          save name
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Session Input Fields */}
-              <div className="space-y-6">
-                {sessions.map((session: SessionsProps, index) => (
-                  <div
-                    key={session.id}
-                    className="grid grid-cols-12 gap-4 items-center"
-                  >
-                    {/* Session Name (only for multiple sessions) */}
-                    {isMultipleSession && (
-                      <div className="col-span-12 mb-2 flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          {editingId !== session.id && (
-                            <>
-                              <h2 className="text-lg text-white font-semibold">
-                                {session.name || `Session ${index + 1}`}
-                              </h2>
-                              <button
-                                type="button"
-                                className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
-                                onClick={() =>
-                                  handleSessionNameEdit(session.id)
-                                }
-                              >
-                                ✏️ edit name
-                              </button>
-                            </>
-                          )}
-                          {editingId === session.id && (
-                            <>
-                              <input
-                                type="text"
-                                placeholder="Enter session name"
-                                className="h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-[250px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]"
-                                onChange={handleSessionNameChange}
-                              />
-                              <button
-                                type="button"
-                                className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
-                                onClick={handleSaveSessionName}
-                              >
-                                save name
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Start Date */}
-                    <div className="col-span-4">
-                      <label className="block text-sm text-gray-400 mb-2">
-                        Start Date <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <CustomCalendar
-                          handleStartDateChange={handleStartDateChange}
-                          id={session.id}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Start Time */}
-                    <div className="col-span-3">
-                      <label className="block text-sm text-gray-400 mb-2">
-                        Start Time <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <CustomTimePicker
-                          handleTimeChange={handleTimeChange}
-                          id={session.id}
-                          type="startTime"
-                        />
-                      </div>
-                    </div>
-
-                    {/* End Time */}
-                    <div className="col-span-3">
-                      <label className="block text-sm text-gray-400 mb-2">
-                        End Time
-                      </label>
-                      <div className="relative">
-                        <CustomTimePicker
-                          handleTimeChange={handleTimeChange}
-                          id={session.id}
-                          type="endTime"
-                          startTime={session.startTime}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Add Session Button */}
-                    {index < 1 && isMultipleSession && (
-                      <div className="col-span-2 justify-end">
-                        <button
-                          title={""}
-                          type="button"
-                          className="text-[#9edd45] text-[24px] hover:text-[#76b434] transition"
-                          onClick={handleAddSession}
-                        >
-                          <CiCirclePlus />
-                        </button>
-                      </div>
-                    )}
-                    {index >= 1 && (
-                      <div className="col-span-2 justify-end">
-                        <button
-                          title={""}
-                          type="button"
-                          className="text-[#f00] text-[24px] hover:text-[#f00] transition"
-                          onClick={() => handleDeleteSession(session.id)}
-                        >
-                          <CiTrash />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div className="col-span-12 sm:col-span-3">
-                <label className="block text-sm text-gray-400 mb-2">
-                  Start Time <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <CustomTimePicker
-                    handleTimeChange={handleTimeChange}
-                    id={session.id}
-                    type="startTime"
-                  />
-                </div>
-              </div>
-              <div className="col-span-12 sm:col-span-3">
-                <label className="block text-sm text-gray-400 mb-2">
-                  End Time
-                </label>
-                <div className="relative">
-                  <CustomTimePicker
-                    handleTimeChange={handleTimeChange}
-                    id={session.id}
-                    type="endTime"
-                  />
-                </div>
-              </div>
-
-              {index < 1 && isMultipleSession && (
-                <div className="col-span-12 sm:col-span-2 justify-end">
-                  <button
-                    title={""}
-                    type="button"
-                    className="text-[#9edd45] text-[24px] hover:text-[#76b434] transition"
-                    onClick={handleAddSession}
-                  >
-                    <CiCirclePlus />
-                  </button>
-                </div>
-              )}
-              {index >= 1 && (
-                <div className="col-span-12 sm:col-span-2 justify-end">
-                  <button
-                    title={""}
-                    type="button"
-                    className="text-[#f00] text-[24px] hover:text-[#f00] transition"
-                    onClick={() => handleDeleteSession(session.id)}
-                  >
-                    <CiTrash />
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-        {/* </div> */}
-
         {/* LOCATION */}
         <div className="pb-6 pt-12">
           {/* Border Line */}
@@ -548,29 +327,29 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           <h3 className="font-semibold text-[24px] mb-4">Location</h3>
 
           {/* Event Country */}
-          <div className='grid grid-cols-12 gap-4 items-center my-8'>
+          <div className="grid grid-cols-12 gap-4 items-center my-8">
             {/* Select Box with Inline Label */}
-            <div className='col-span-8 relative'>
+            <div className="col-span-8 relative">
               <label
-                htmlFor='location'
-                className='absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1'
+                htmlFor="location"
+                className="absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1"
               >
-                The Country where your event will take place?{' '}
-                <span className='text-red-500'>*</span>
+                The Country where your event will take place?{" "}
+                <span className="text-red-500">*</span>
               </label>
               <select
-                id='location'
-                className='w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#9edd45] appearance-none'
+                id="location"
+                className="w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#9edd45] appearance-none"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 1rem center',
-                  backgroundSize: '1em',
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1em",
                 }}
                 onChange={handleCountryChange}
-                defaultValue=''
+                defaultValue=""
               >
-                <option value='' disabled>
+                <option value="" disabled>
                   Please select one
                 </option>
                 {countries?.map((eachCountry) => (
@@ -587,29 +366,29 @@ const EventDetails: React.FC<EventDetailsProps> = ({
 
           {/* Event State */}
           {states.length > 0 && (
-            <div className='grid grid-cols-12 gap-4 items-center my-8'>
+            <div className="grid grid-cols-12 gap-4 items-center my-8">
               {/* Select Box with Inline Label */}
-              <div className='col-span-8 relative'>
+              <div className="col-span-8 relative">
                 <label
-                  htmlFor='location'
-                  className='absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1'
+                  htmlFor="location"
+                  className="absolute -top-3 left-4 bg-gray-900 text-[14px] text-gray-400 px-1"
                 >
-                  The State where your event will take place?{' '}
-                  <span className='text-red-500'>*</span>
+                  The State where your event will take place?{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <select
-                  id='location'
-                  className='w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#9edd45] appearance-none'
+                  id="location"
+                  className="w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#9edd45] appearance-none"
                   style={{
                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 1rem center',
-                    backgroundSize: '1em',
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 1rem center",
+                    backgroundSize: "1em",
                   }}
                   onChange={handleStateChange}
-                  defaultValue=''
+                  defaultValue=""
                 >
-                  <option value='' disabled>
+                  <option value="" disabled>
                     Please select one
                   </option>
                   {states?.map((eachState) => (
