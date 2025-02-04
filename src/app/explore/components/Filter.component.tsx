@@ -6,32 +6,33 @@ export default function Filter() {
 
   return (
     <>
-      {/* Hamburger Menu */}
-      <button
-        className="md:hidden fixed top-4 left-4 z-50 bg-[#9EDD45] p-2 rounded-full shadow-lg"
-        onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-6 h-6 text-white"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
+    {/* Hamburger Menu */}
+<button
+  className="md:hidden fixed top-0 left-0 w-full h-[60px] bg-[#1C2A36] z-50 flex items-center px-4 shadow-lg"
+  onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    stroke="currentColor"
+    className="w-6 h-6 text-white"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4 6h16M4 12h16M4 18h16"
+    />
+  </svg>
+</button>
+
 
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full bg-[#1C2A36] max-w-[342px] w-full md:w-auto transform transition-transform duration-300 ${
           isSidebarVisible ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:static md:max-h-[1400px] p-4 rounded-2xl z-40`}
+        } md:translate-x-0 md:static md:max-h-[1400px] p-4 rounded-2xl z-40  overflow-y-auto scrollbar-hide`}
       >
         <h2 className="font-semibold text-[32px] my-6">Filter</h2>
         <div>

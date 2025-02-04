@@ -318,6 +318,114 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           </div>
         </div>
 
+        {/* Session Input Fields */}
+        <div className="space-y-6">
+          {sessions.map((session: SessionsProps, index) => (
+            <div
+              key={session.id}
+              className="grid grid-cols-12 gap-4 items-center"
+            >
+              {/* Session Name (only for multiple sessions) */}
+              {isMultipleSession && (
+                <div className="col-span-12 mb-2 flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    {editingId !== session.id && (
+                      <>
+                        <h2 className="text-lg text-white font-semibold">
+                          {session.name || `Session ${index + 1}`}
+                        </h2>
+                        <button
+                          type="button"
+                          className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
+                          onClick={() => handleSessionNameEdit(session.id)}
+                        >
+                          ✏️ edit name
+                        </button>
+                      </>
+                    )}
+                    {/* {editingId === session.id && (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="Enter session name"
+                          className="h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-[250px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]"
+                          onChange={handleSessionNameChange}
+                        />
+                        <button
+                          type="button"
+                          className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
+                          onClick={handleSaveSessionName}
+                        >
+                          save name
+                        </button>
+                      </>
+                    )} */}
+                  </div>
+                </div>
+              )}
+
+              {/* Session Input Fields */}
+      
+
+              {/* <div className="col-span-12 sm:col-span-3">
+                <label className="block text-sm text-gray-400 mb-2">
+                  Start Time <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <CustomTimePicker
+                    handleTimeChange={handleTimeChange}
+                    id={session.id}
+                    type="startTime"
+                  />
+                </div>
+              </div>
+              <div className="col-span-12 sm:col-span-3">
+                <label className="block text-sm text-gray-400 mb-2">
+                  End Time
+                </label>
+                <div className="relative">
+                  <CustomTimePicker
+                    handleTimeChange={handleTimeChange}
+                    id={session.id}
+                    type="endTime"
+                  />
+                </div>
+              </div> */}
+
+              {/* {index < 1 && isMultipleSession && (
+                <div className="col-span-12 sm:col-span-2 justify-end">
+                  <button
+                    title={""}
+                    type="button"
+                    className="text-[#9edd45] text-[24px] hover:text-[#76b434] transition"
+                    onClick={handleAddSession}
+                  >
+                    <CiCirclePlus />
+                  </button>
+                </div>
+              )} */}
+              {/* {index >= 1 && (
+                <div className="col-span-12 sm:col-span-2 justify-end">
+                  <button
+                    title={""}
+                    type="button"
+                    className="text-[#f00] text-[24px] hover:text-[#f00] transition"
+                    onClick={() => handleDeleteSession(session.id)}
+                  >
+                    <CiTrash />
+                  </button>
+                </div>
+              )} */}
+            </div>
+          ))}
+        </div>
+
+
+
+
+        
+        {/* </div> */}
+
         {/* LOCATION */}
         <div className="pb-6 pt-12">
           {/* Border Line */}

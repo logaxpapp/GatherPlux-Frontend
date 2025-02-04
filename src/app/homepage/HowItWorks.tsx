@@ -13,7 +13,7 @@ const HowItWorks = () => {
       }}
     >
       {/* Main Heading */}
-      <h2 className='text-white text-3xl lg:text-4xl font-bold text-center mb-12'>
+      <h2 className='text-white text-2xl lg:text-4xl font-bold text-center mb-12'>
         Event Discovery and Creation in Three Steps
       </h2>
 
@@ -44,7 +44,7 @@ const HowItWorks = () => {
           <div className='space-y-8'>
             {/* Step 1 */}
             <div>
-              <h3 className='text-white text-2xl font-semibold'>
+              <h3 className='text-white text-xl sm:text-2xl font-semibold'>
                 Browse or List an Event
               </h3>
               <p className='text-gray-400 mt-2'>
@@ -57,7 +57,7 @@ const HowItWorks = () => {
 
             {/* Step 2 */}
             <div>
-              <h3 className='text-white text-2xl font-semibold'>
+              <h3 className='text-white text-xl sm:text-2xl  font-semibold'>
                 Book Your Spot or Sell Tickets
               </h3>
               <p className='text-gray-400 mt-2'>
@@ -70,7 +70,7 @@ const HowItWorks = () => {
 
             {/* Step 3 */}
             <div>
-              <h3 className='text-white text-2xl font-semibold'>
+              <h3 className='text-white text-xl sm:text-2xl  font-semibold'>
                 Show Up and Enjoy
               </h3>
               <p className='text-gray-400 mt-2'>

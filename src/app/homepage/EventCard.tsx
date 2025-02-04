@@ -99,7 +99,7 @@ const EventCard = () => {
     >
       {/* Section Heading */}
       <div className='text-center mb-8 px-4'>
-        <h1 className='text-white text-4xl font-bold'>
+        <h1 className='text-white text-2xl sm:text-4xl font-bold'>
           Discover Unforgettable Events Content
         </h1>
         <p className='text-white mt-4 max-w-2xl mx-auto'>

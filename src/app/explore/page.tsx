@@ -1,6 +1,7 @@
-import Image from "next/image";
+ 
 import Filter from "./components/Filter.component";
 import EventCard from "./components/EventCard.component";
+import SearchBar from '@/components/SearchBar';
 
 export default function Explore() {
   return (
@@ -59,39 +60,7 @@ export default function Explore() {
           </h1>
 
           {/* Search Bar */}
-          <div className="flex flex-col sm:flex-row items-center bg-[#253f3f] rounded-full px-4 py-4 shadow-md w-full sm:w-auto space-x-4 max-w-2xl mx-auto text-white">
-            <div className="flex items-center space-x-2 flex-grow">
-              <Image
-                src="/Searchicon.png"
-                alt="Search Icon"
-                width={20}
-                height={20}
-              />
-              <input
-                type="text"
-                placeholder="Search Events, Categories, Location..."
-                className="flex-grow outline-none bg-transparent text-white placeholder-gray-300"
-              />
-            </div>
-
-            {/* Location Dropdown */}
-            <div className="flex items-center space-x-2 border-l border-gray-500 pl-4">
-              <Image
-                src="/Locationicon.png"
-                alt="Location Icon"
-                width={20}
-                height={20}
-              />
-              <select
-                className="bg-transparent outline-none text-white cursor-pointer"
-                aria-label="Select location"
-              >
-                <option value="lagos">Lagos</option>
-                <option value="abuja">Abuja</option>
-                <option value="new-york">New York</option>
-              </select>
-            </div>
-          </div>
+          <SearchBar />
         </div>
       </div>
 

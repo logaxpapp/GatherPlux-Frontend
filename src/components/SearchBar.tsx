@@ -82,47 +82,61 @@ const SearchBar: React.FC = () => {
   }, [allCountries, countries]);
 
   return (
-    <div className='flex items-center bg-[#253f3f] rounded-full px-3 sm:px-4 py-3 sm:py-4 shadow-md w-full sm:w-auto space-x-2 sm:space-x-4 max-w-2xl mx-auto text-white'>
+    <div className='flex items-center bg-[#253f3f] rounded-full px-2 sm:px-4 py-2 sm:py-4 shadow-md w-full sm:w-auto space-x-2 sm:space-x-4 max-w-2xl mx-auto text-white'>
       {/* Search Input */}
       <div className='flex items-center space-x-2 flex-grow'>
         <Image
           src='/Searchicon.png' // Search icon image
           alt='Search Icon'
-          width={16} // Reduced size for smaller screens
-          height={16}
+          width={14} // Reduced size for smaller screens
+          height={14}
         />
         <input
           type='text'
-          placeholder='Search Events,Categories,location...'
+          placeholder='Search Events, Categories, Location...'
           onChange={handleChange}
           value={searchQuery}
-          className='flex-grow outline-none bg-transparent text-sm sm:text-base text-[#ffffff] placeholder-gray-300'
+          className='flex-grow outline-none bg-transparent text-xs sm:text-base text-[#ffffff] placeholder-gray-300'
         />
       </div>
-
-      {/* Location Dropdown */}
-      <div className='flex items-center space-x-2 border-l border-gray-500 pl-2 sm:pl-4'>
-        <Image
-          src='/Locationicon.png' // Location icon image
-          alt='Location Icon'
-          width={16} // Reduced size for smaller screens
-          height={16}
-        />
-        <select
-          title={''}
-          className='bg-transparent outline-none text-sm sm:text-base text-white cursor-pointer'
-          defaultValue={userCountry || ''}
-          onChange={handleCountryChange}
+  
+    {/* Location Dropdown */}
+<div className='flex items-center space-x-1 sm:space-x-2 border-l border-gray-500 pl-2 sm:pl-4'>
+  <Image
+    src='/Locationicon.png' // Location icon image
+    alt='Location Icon'
+    width={14} // Reduced size for smaller screens
+    height={14}
+    className='shrink-0'
+  />
+  <select
+    title='Select a country'
+    className='bg-gray-800 outline-none text-xs sm:text-base text-white cursor-pointer max-w-[80px] sm:max-w-full rounded border border-gray-600 hover:border-gray-400 '
+    defaultValue={userCountry || ''}
+    onChange={handleCountryChange}
+  >
+    <option value="" disabled hidden>
+      Select a country
+    </option>
+    {countries?.length ? (
+      countries.map(({ name, code2 }) => (
+        <option
+          value={JSON.stringify({ name, code2 })}
+          key={code2}
+          className='bg-gray-700 text-white hover:bg-gray-600 pr-9'
         >
-          {countries?.map((eachCountry) => (
-            <option value={JSON.stringify(eachCountry)} key={eachCountry.code2}>
-              {eachCountry.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          {name}
+        </option>
+      ))
+    ) : (
+      <option disabled>No countries available</option>
+    )}
+  </select>
+</div>
+
     </div>
   );
+  
 };
 
 export default SearchBar;
