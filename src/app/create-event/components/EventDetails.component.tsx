@@ -320,7 +320,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
 
         {/* Session Input Fields */}
         <div className="space-y-6">
-          {sessions.map((session: SessionsProps, index) => (
+          {sessions.map((session: SessionsProps) => (
             <div
               key={session.id}
               className="grid grid-cols-12 gap-4 items-center"
@@ -331,16 +331,16 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                   <div className="flex items-center space-x-2">
                     {editingId !== session.id && (
                       <>
-                        <h2 className="text-lg text-white font-semibold">
+                        {/* <h2 className="text-lg text-white font-semibold">
                           {session.name || `Session ${index + 1}`}
-                        </h2>
-                        <button
+                        </h2> */}
+                        {/* <button
                           type="button"
                           className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
                           onClick={() => handleSessionNameEdit(session.id)}
                         >
                           ✏️ edit name
-                        </button>
+                        </button> */}
                       </>
                     )}
                     {/* {editingId === session.id && (
