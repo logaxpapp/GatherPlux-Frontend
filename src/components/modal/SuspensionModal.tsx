@@ -4,9 +4,14 @@ import { FaTimes } from "react-icons/fa";
 interface SuspensionModalProps {
   onClose: () => void;
   onSubmit: (reason: string, description: string) => void;
+  eventName?: string;
 }
 
-const SuspensionModal: React.FC<SuspensionModalProps> = ({ onClose, onSubmit }) => {
+const SuspensionModal: React.FC<SuspensionModalProps> = ({
+  onClose,
+  onSubmit,
+  eventName,
+}) => {
   const [reason, setReason] = useState("Violation of Companies Guideline");
   const [description, setDescription] = useState("");
 
@@ -19,12 +24,18 @@ const SuspensionModal: React.FC<SuspensionModalProps> = ({ onClose, onSubmit }) 
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-gray-900 text-white rounded-lg shadow-lg max-w-md w-full p-6 relative border border-primary-500">
         {/* Close Button */}
-        <button className="absolute top-4 right-4 text-primary-500 hover:text-primary-500" onClick={onClose} aria-label="Close Modal">
+        <button
+          className="absolute top-4 right-4 text-primary-500 hover:text-primary-500"
+          onClick={onClose}
+          aria-label="Close Modal"
+        >
           <FaTimes size={24} />
         </button>
 
         {/* Title */}
-        <h2 className="text-xl font-semibold mb-4">Reason for Account Suspension</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Reason for Suspending {eventName}
+        </h2>
 
         {/* Reason Dropdown */}
         <label className="block text-sm mb-2">Reason for Suspension</label>

@@ -19,6 +19,7 @@ import {
   useLazyGetAllStatesQuery,
 } from "@/services/slices/state.slice";
 import { useCreateEventMutation } from "@/services/slices/events.slice";
+import { toast } from "react-toastify";
 
 export interface SessionsProps {
   id: string;
@@ -263,15 +264,12 @@ export default function CreateEvent() {
   // tickets
   const [eventType, setEventType] = useState<string>("ticketed");
   const [tickets, setTickets] = useState<TicketEntry[]>([
-    { id: uuid(), name: "", price: "0.00", people: 1 },
+    { id: uuid(), name: "", price: "", people: 1 },
   ]);
   const [numberOfTickets, setNumberOfTickets] = useState<number | "">("");
 
   const addTicketEntry = () => {
-    setTickets([
-      ...tickets,
-      { id: uuid(), name: "", price: "0.00", people: 1 },
-    ]);
+    setTickets([...tickets, { id: uuid(), name: "", price: "", people: 1 }]);
   };
 
   const deleteTicketEntry = (id: string) => {
@@ -361,6 +359,9 @@ export default function CreateEvent() {
     };
     const response = await createEvent(newEvent);
     if (response.data) {
+      toast.success("Event created successfully", {
+        position: "top-right",
+      });
       router.push("/");
     }
 

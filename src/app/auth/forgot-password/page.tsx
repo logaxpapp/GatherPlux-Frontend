@@ -1,3 +1,6 @@
+"use strict";
+"use client";
+
 import React from "react";
 
 import ForgotPassword from "./components/Forgot.Password";

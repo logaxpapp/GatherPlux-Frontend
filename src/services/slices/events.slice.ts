@@ -3,12 +3,12 @@ import { clientBaseAPISlice } from "../clientBaseAPI";
 const extendApiSlice = clientBaseAPISlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllPublicEvents: builder.query({
-      query: () => 'event/list',
+      query: (page = 0) => `event/list?page=${page}&size=10`,
     }),
     createEvent: builder.mutation({
       query: (eventDetails) => ({
-        url: 'event',
-        method: 'POST',
+        url: "event",
+        method: "POST",
         body: eventDetails,
       }),
     }),
@@ -16,13 +16,24 @@ const extendApiSlice = clientBaseAPISlice.injectEndpoints({
       query: (id) => `event/${id}`,
     }),
     getUpcomingEvents: builder.query({
-      query: () => 'event?type=upcoming',
+      query: () => "event?type=UPCOMING",
     }),
     getSearchedEvents: builder.query({
-      query: (query) => `event/search?query=${query}`,
+      query: (query) => `event?search=${query}`,
+    }),
+    searchEvents: builder.query({
+      query: ({ query, page }) =>
+        `event?search=${query}&page=${page}&size=10&sortDirection=desc`,
     }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllPublicEventsQuery, useCreateEventMutation, useGetOneEventQuery, useGetUpcomingEventsQuery, useGetSearchedEventsQuery } = extendApiSlice;
+export const {
+  useGetAllPublicEventsQuery,
+  useCreateEventMutation,
+  useGetOneEventQuery,
+  useGetUpcomingEventsQuery,
+  useGetSearchedEventsQuery,
+  useLazySearchEventsQuery,
+} = extendApiSlice;

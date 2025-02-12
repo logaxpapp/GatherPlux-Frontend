@@ -1,3 +1,6 @@
+"use strict";
+"use client";
+
 import React, { Suspense } from "react";
 
 import EmailVerification from "./components/Verify";

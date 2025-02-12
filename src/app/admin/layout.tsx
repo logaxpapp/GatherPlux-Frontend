@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   FaGlobe,
-  FaBuilding,
+  // FaBuilding,
   FaUsers,
   FaUserShield,
   FaCreditCard,
@@ -24,7 +24,6 @@ import { useDispatch } from "react-redux";
 import { logOut } from "@/store/slices/user.slice";
 import Image from "next/image";
 import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
-// import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
 
 // NavItem Component
 function NavItem({
@@ -102,57 +101,81 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
       <div className="flex w-full max-w-7xl h-full pt-24">
         {/* Sidebar */}
-      {/* Sidebar */}
-<aside
-  className={`fixed inset-y-0 left-0 transform ${
-    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-  } md:translate-x-0 transition-transform duration-300 bg-[#020e1e] p-5 border-r border-[#243447] w-64 md:static`}
-  style={{ height: "calc(100% - 100px)" }}
->
-  <div className="flex items-center text-[#93d437] text-xl font-bold mb-8">
-    Admin Panel
-  </div>
-  <nav className="space-y-3">
-    <NavItem label="Dashboard" icon={undefined} />
-    <NavItem icon={<FaBuilding />} label="Company" href="/admin/company" />
-    <NavItem icon={<FaGlobe />} label="Country" href="/admin/country" />
+        {/* Sidebar */}
+        <aside
+          className={`fixed inset-y-0 left-0 transform ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0 transition-transform duration-300 bg-[#020e1e] p-5 border-r border-[#243447] w-64 md:static`}
+          style={{ height: "calc(100% - 100px)" }}
+        >
+          <div className="flex items-center text-[#93d437] text-xl font-bold mb-8">
+            Admin Panel
+          </div>
+          <nav className="space-y-3">
+            <NavItem label="Dashboard" icon={undefined} />
+            {/* <NavItem
+              icon={<FaBuilding />}
+              label="Company"
+              href="/admin/company"
+            /> */}
+            <NavItem icon={<FaGlobe />} label="Country" href="/admin/country" />
 
-    <NavItem
-  icon={<Image src="/driver.png" alt="Manage Event" width={20} height={20} />}
-  label="Manage Event"
-  href="/admin/manage-event"
-/>
+            <NavItem
+              icon={
+                <Image
+                  src="/driver.png"
+                  alt="Manage Event"
+                  width={20}
+                  height={20}
+                />
+              }
+              label="Manage Event"
+              href="/admin/manage-event"
+            />
 
+            <NavItem icon={<FaUsers />} label="Users" href="/admin/users" />
+            <NavItem
+              icon={<FaUserShield />}
+              label="Admins"
+              href="/admin/admins"
+            />
+            <NavItem
+              icon={<FaCreditCard />}
+              label="Billing plans"
+              href="/admin/billing"
+            />
+            <NavItem
+              icon={<FaComments />}
+              label="Messages"
+              href="/admin/messages"
+            />
+            <NavItem
+              icon={<FaKey />}
+              label="Change password"
+              href="/admin/resetpassword"
+            />
+            <NavItem
+              icon={<FaTags />}
+              label="Categories"
+              href="/admin/categories"
+            />
+            <NavItem icon={<FaStar />} label="Ratings" href="/admin/ratings" />
 
+            {/* Manage Event with driver.png */}
+          </nav>
 
-
-
-
-    <NavItem icon={<FaUsers />} label="Users" href="/admin/users" />
-    <NavItem icon={<FaUserShield />} label="Admins" href="/admin/admins" />
-    <NavItem icon={<FaCreditCard />} label="Billing plans" href="/admin/billing" />
-    <NavItem icon={<FaComments />} label="Messages" href="/admin/messages" />
-    <NavItem icon={<FaKey />} label="Change password" href="/admin/resetpassword" />
-    <NavItem icon={<FaTags />} label="Categories" href="/admin/categories" />
-    <NavItem icon={<FaStar />} label="Ratings" href="/admin/ratings" />
-
-    {/* Manage Event with driver.png */}
-   
-  </nav>
-
-  <nav className="mt-16 space-y-4">
-    <NavItem icon={<FaCog />} label="Settings" href="/admin/settings" />
-    <button
-      type="button"
-      onClick={handleLogout}
-      className="mt-8 w-full py-2 bg-[#f00] text-white rounded-md flex items-center justify-center"
-    >
-      <FaSignOutAlt className="mr-2" />
-      Logout
-    </button>
-  </nav>
-</aside>
-
+          <nav className="mt-16 space-y-4">
+            <NavItem icon={<FaCog />} label="Settings" href="/admin/settings" />
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="mt-8 w-full py-2 bg-[#f00] text-white rounded-md flex items-center justify-center"
+            >
+              <FaSignOutAlt className="mr-2" />
+              Logout
+            </button>
+          </nav>
+        </aside>
 
         {/* Main Content */}
         <main className="flex-1 p-5">{children}</main>
@@ -161,4 +184,4 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default  isAuth(AdminLayout) ;
+export default isAuth(AdminLayout);

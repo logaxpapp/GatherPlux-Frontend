@@ -1,57 +1,165 @@
-"use client"
+"use client";
 
-import { useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import SuspensionModal from "@/components/modal/SuspensionModal"; 
+import SuspensionModal from "@/components/modal/SuspensionModal";
 import { FaSearch } from "react-icons/fa";
-
+import {
+  useGetAllPublicEventsQuery,
+  useLazySearchEventsQuery,
+} from "@/services/slices/events.slice";
+import { EventProps } from "@/app/homepage/EventCard";
+import { useDebounce } from "@/helpers/hooks/useDebounce";
+import { toast } from "react-toastify";
+import { useSuspendEventMutation } from "@/services/slices/admin.slice";
 
 const ManageEvents = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventsData, setEventsData] = useState<EventProps[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [searchPage, setSearchPage] = useState(0);
+  const [eventToSuspend, setEventToSuspend] = useState<EventProps | null>(null);
 
-  const events = [
-    {
-      name: "Wedding Gala",
-      date: "Feb 10, 2025 - 6 PM",
-      status: "Published",
-      statusColor: "bg-[#16803C]",
-    },
-    {
-      name: "Tech Conference",
-      date: "Apr 12, 2025 - 8 PM",
-      status: "Suspended",
-      statusColor: "bg-[#A07D22]",
-    },
-    {
-      name: "Art Exhibition",
-      date: "May 20, 2025 - 4 PM",
-      status: "Unpublished",
-      statusColor: "bg-[#5E5E5E]",
-    },
-  ];
+  const [canDebounce, setCanDebounce] = useState(false);
+  const debouncedQuery: string = useDebounce(
+    canDebounce ? searchQuery : "",
+    300,
+  );
+
+  const { data: eventsAPIData } = useGetAllPublicEventsQuery(currentPage);
+  const [searchEvents] = useLazySearchEventsQuery();
+  const [suspendEvent] = useSuspendEventMutation();
+
+  useEffect(() => {
+    if (
+      eventsAPIData &&
+      eventsAPIData.code === 200 &&
+      eventsAPIData.body &&
+      eventsAPIData.body.records
+    ) {
+      setEventsData(eventsAPIData.body.events.records);
+      setTotalPages(eventsAPIData.body.events.totalPages);
+      setCurrentPage(eventsAPIData.body.events.currentPage);
+    }
+  }, [eventsAPIData]);
+
+  useEffect(() => {
+    if (!debouncedQuery || debouncedQuery.length < 3) {
+      // Load all users if no search query
+      if (eventsAPIData?.body?.events?.records) {
+        setEventsData(eventsAPIData.body.events.records);
+        setTotalPages(eventsAPIData.body.events.totalPages);
+        setCurrentPage(eventsAPIData.body.events.currentPage);
+      }
+      return;
+    }
+
+    const searchUsersData = async () => {
+      try {
+        const response = await searchEvents({
+          query: debouncedQuery,
+          page: searchPage,
+        }).unwrap();
+
+        if (response?.code === 200) {
+          setEventsData(response.body.events.records);
+          setTotalPages(response.body.events.totalPages);
+        }
+      } catch (error) {
+        console.error("Search error:", error);
+      }
+    };
+
+    searchUsersData();
+  }, [debouncedQuery, searchPage, eventsAPIData, searchEvents]);
+
+  const handlePageChange = (pageNumber: number) => {
+    if (searchQuery.length >= 3) {
+      // If searching, update searchPage
+      if (pageNumber >= 0 && pageNumber < totalPages) {
+        setSearchPage(pageNumber);
+      }
+    } else {
+      // If not searching, update normal pagination
+      if (pageNumber >= 0 && pageNumber < totalPages) {
+        setCurrentPage(pageNumber);
+      }
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setSearchQuery(value);
+
+    if (value.length >= 3) {
+      setCanDebounce(true);
+      setSearchPage(0); // Reset search pagination
+    } else {
+      // If search is cleared, reset and fetch all users
+      setCanDebounce(false);
+      setSearchPage(0);
+      setCurrentPage(0);
+      if (eventsAPIData?.body?.records) {
+        setEventsData(eventsAPIData.body.records);
+        setTotalPages(eventsAPIData.body.totalPages);
+      }
+    }
+  };
+
+  const handleSuspensionModal = (event: EventProps) => {
+    setEventToSuspend(event);
+    setIsModalOpen(true);
+  };
+
+  const handleSuspension = async (reason: string, description: string) => {
+    if (!eventToSuspend) {
+      toast.error("Event not found");
+      return;
+    }
+
+    const response = await suspendEvent({
+      id: eventToSuspend.id,
+      status: `${!eventToSuspend.published}`,
+      reason: `${reason} - ${description}`,
+    }).unwrap();
+
+    if (response?.code === 200 && response.message === "SUCCESSFUL") {
+      toast.success("Event suspended successfully");
+      setIsModalOpen(false);
+      setEventToSuspend(null);
+    } else {
+      toast.error("Failed to suspend event");
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEventToSuspend(null);
+  };
 
   return (
     <div className="min-h-screen text-white p-6">
       <h1 className="text-3xl font-bold">Manage Events</h1>
 
       {/* Search Bar + Create Event Button */}
-     
 
-<div className="mt-4 flex justify-between items-center">
-  <div className="relative w-full max-w-lg">
-    <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-    <input
-      type="text"
-      placeholder="Search for users"
-      className="w-full bg-[#1d2635] text-gray-300 px-10 py-2 rounded-md outline-none border border-[#3A3F4E]"
-    />
-  </div>
-  <button className="bg-primary-500 text-black px-4 py-2 rounded-full font-medium ml-4">
-    + Create Event
-  </button>
-</div>
-
+      <div className="mt-4 flex justify-between items-center">
+        <div className="relative w-full max-w-lg">
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleChange}
+            placeholder="Search for events"
+            className="w-full bg-[#1d2635] text-gray-300 px-10 py-2 rounded-md outline-none border border-[#3A3F4E]"
+          />
+        </div>
+        <button className="bg-primary-500 text-black px-4 py-2 rounded-full font-medium ml-4">
+          + Create Event
+        </button>
+      </div>
 
       {/* Events Table */}
       <div className="mt-6 rounded-lg p-4 border border-[#3A3F4E]">
@@ -72,25 +180,40 @@ const ManageEvents = () => {
             </tr>
           </thead>
           <tbody>
-            {events.map((event, index) => (
-              <tr key={index} className="border-t border-[#3A3F4E] hover:bg-[#2A2F3E] transition">
+            {eventsData.map((event) => (
+              <tr
+                key={event.id}
+                className="border-t border-[#3A3F4E] hover:bg-[#2A2F3E] transition"
+              >
                 <td className="py-4 px-4 text-sm flex items-center gap-2">
                   <input type="checkbox" className="accent-primary-500" />
-                  {event.name}
+                  {event.title}
                 </td>
-                <td className="py-3 px-4 text-sm">{event.date}</td>
+                <td className="py-3 px-4 text-sm">{event.start_date}</td>
                 <td className="py-3 px-4 text-sm">
-                  <span className={`text-white font-thin px-3 py-1 rounded-full ${event.statusColor}`}>
-                    {event.status}
+                  <span
+                    className={`text-white font-thin px-3 py-1 rounded-full ${event.published ? "bg-[#16803C]" : "bg-[#5E5E5E]"} `}
+                  >
+                    {event.published ? "Published" : "Unpublished"}
                   </span>
                 </td>
                 <td className="py-3 pr-4 text-sm text-right">
                   <div className="flex justify-end gap-3">
-                    <FaEdit className="text-primary-500 cursor-pointer" />
-                    <FaTrash
-                      className="text-primary-500 cursor-pointer"
-                      onClick={() => setIsModalOpen(true)} // Open modal on click
-                    />
+                    {event.published ? (
+                      <button
+                        onClick={() => handleSuspensionModal(event)}
+                        className="text-white hover:text-red-600 hover:bg-white p-2 bg-red-400"
+                      >
+                        Suspend
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleSuspensionModal(event)}
+                        className="text-green-500 hover:text-green-600"
+                      >
+                        Publish
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -99,27 +222,35 @@ const ManageEvents = () => {
         </table>
 
         {/* Pagination */}
-        <div className="flex justify-between items-center mt-4">
-          <button className="bg-[#3A3F4E] px-3 py-2 rounded-md text-gray-300">← Previous</button>
-          <div className="flex items-center gap-2">
-            <span className="bg-primary-500/60 text-white px-3 py-1 rounded-md">1</span>
-            <span className="text-gray-400">2</span>
-            <span className="text-gray-400">3</span>
-            <span className="text-gray-400">...</span>
-            <span className="text-gray-400">10</span>
-          </div>
-          <button className="bg-[#3A3F4E] px-3 py-2 rounded-md text-gray-300">Next →</button>
+        <div className="flex justify-between items-center mt-4 px-4 py-5">
+          <button
+            type="button"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 0}
+            className="px-4 py-2 border border-gray-500 rounded text-white"
+          >
+            ← Previous
+          </button>
+          <span>
+            Page {currentPage} of {totalPages ? totalPages : 0}
+          </span>
+          <button
+            type="button"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages - 1}
+            className="px-4 py-2 border border-gray-500 rounded text-white"
+          >
+            Next →
+          </button>
         </div>
       </div>
 
       {/* Suspension Modal */}
       {isModalOpen && (
         <SuspensionModal
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={(reason, description) => {
-            console.log("Suspension Reason:", reason, "Description:", description);
-            setIsModalOpen(false);
-          }}
+          onClose={handleCloseModal}
+          onSubmit={handleSuspension}
+          eventName={eventToSuspend?.title}
         />
       )}
     </div>

@@ -12,6 +12,7 @@ import Lock from "../../../../public/lock.svg";
 import { useCreateUserMutation } from "@/services/slices/user.slice";
 import Loader from "@/components/Loader";
 import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const router = useRouter();
@@ -29,6 +30,9 @@ const Signup = () => {
     };
 
     if (!userData.email || !userData.password || !userData.name) {
+      toast.error("Please fill all fields", {
+        position: "top-right",
+      });
       return;
     }
 
@@ -42,6 +46,9 @@ const Signup = () => {
         router.push(`/auth/verify?email=${userData.email}`);
       }
     } catch (err) {
+      toast.error("An error occurred when you up", {
+        position: "top-right",
+      });
       console.error("An error occurred when signing user up:", err);
     }
   };
