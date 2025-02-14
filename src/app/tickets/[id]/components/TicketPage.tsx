@@ -1,20 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { EventProps } from "@/app/homepage/EventCard";
+import AttendeeDetails from "@/components/modal/AttendeeDetails";
+import { toast } from "react-toastify";
 
 // Define the prop types for the component
 interface EventDescriptionProps {
-  onOpenModal: () => void;
   event: EventProps;
 }
-const EventDescription: React.FC<EventDescriptionProps> = ({
-  onOpenModal,
-  event,
-}) => {
-  const ticket = {
-    price: event.price,
-    type: "",
+
+export interface TicketProps {
+  id: number;
+  name: string;
+  price: string;
+}
+
+const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
+  const [selectedTicket, setSelectedTicket] = useState<TicketProps>({
+    id: -1,
+    name: "",
+    price: "",
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleTicketSelection = (ticket: TicketProps) => {
+    setSelectedTicket(ticket);
   };
+
+  const toggleModal = () => {
+    if (selectedTicket.id === -1) {
+      toast.info("Please select a ticket to proceed");
+      return;
+    }
+    setIsModalOpen(!isModalOpen);
+  };
+
   const formattedDate = new Date(event.start_date).toLocaleDateString("en-GB", {
     weekday: "long", // Full day of the week
     day: "numeric", // Numeric day of the month
@@ -52,66 +72,30 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
             <h2 className="text-2xl font-bold mb-4">Event Description</h2>
             <p>{event.description}</p>
           </div>
-
-          {/* Reasons to Attend */}
-          {/* <div className='mb-8'>
-            <h3 className='text-xl font-semibold mb-4'>
-              3 Reasons to attend the event:
-            </h3>
-            <ul className='list-decimal list-inside space-y-2'>
-              <li>The FIRST Christmas concert of Mumbai!</li>
-              <li>A Special Christmas Choir!</li>
-              <li>Special Dance performances and many more surprises!</li>
-            </ul>
-          </div> */}
-
-          {/* Tags Section */}
-          {/* <div className='mb-10'>
-            <h3 className='text-xl font-semibold mb-4'>Tags</h3>
-            <div className='flex flex-wrap gap-3'>
-              <span className='border border-gray-700 text-white px-4 py-2 rounded-full text-sm'>
-                Holiday Concert
-              </span>
-              <span className='border border-gray-700 text-white px-4 py-2 rounded-full text-sm'>
-                Live Performance
-              </span>
-              <span className='border border-gray-700 text-white px-4 py-2 rounded-full text-sm'>
-                Seasonal Event
-              </span>
-              <span className='border border-gray-700 text-white px-4 py-2 rounded-full text-sm'>
-                Family-Friendly
-              </span>
-              <span className='border border-gray-700 text-white px-4 py-2 rounded-full text-sm'>
-                #Christmas_Spirit
-              </span>
-              <span className='border border-gray-700 text-white px-4 py-2 rounded-full text-sm'>
-                #Christmas_Carols
-              </span>
-            </div>
-          </div> */}
         </div>
 
         {/* Ticket Section */}
         <div className="bg-[#0b1a30] p-6 rounded-lg">
           <h3 className="text-lg font-bold text-white mb-4">Date and Time</h3>
           <div className="flex items-center text-sm text-gray-400 mb-2">
-            <Image
-              src="/calendar-icon.png" // Replace with actual icon
+            {/* use react icons instead */}
+            {/* <Image
+              src="/calendar-icon.png"
               alt="Calendar"
               className="mr-2"
               width={16}
               height={16}
-            />
+            /> */}
             {formattedDate !== "Invalid Date" && formattedDate}
           </div>
           <div className="flex items-center text-sm text-gray-400">
-            <Image
-              src="/clock-icon.png" // Replace with actual icon
+            {/* <Image
+              src="/clock-icon.png"
               alt="Clock"
               className="mr-2"
               width={16}
               height={16}
-            />
+            /> */}
             <p>
               {event.sessions && event.sessions.length > 1 ? (
                 event.sessions.map((session) => (
@@ -126,12 +110,12 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
               )}
             </p>
           </div>
-          <button
+          {/* <button
             type="button"
             className="text-[#9edd45] text-sm font-medium mt-4"
           >
             + Add to Calendar
-          </button>
+          </button> */}
           <hr className="my-4 border-gray-600" />
 
           <h3 className="text-lg font-bold text-white mb-4">
@@ -145,18 +129,28 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
                   className="flex items-center justify-between text-white"
                 >
                   <div className="flex items-center gap-2">
-                    <Image
+                    {/* use react icon instead */}
+                    {/* <Image
                       src="/ticket-icon.png" // Replace with actual ticket icon
                       alt="Ticket"
                       width={16}
                       height={16}
-                    />
+                    /> */}
                     <span className="type-medium">{ticket.name}</span>
+                    <span> - </span>
                     <span className="text-sm text-gray-400">
-                      ₦{ticket.price} each
+                      ₦{Number(ticket.price).toLocaleString()} each
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleTicketSelection(ticket)}
+                    className={`${selectedTicket.id === ticket.id ? "" : "bg-[#9edd45] p-2"}`}
+                    disabled={selectedTicket.id === ticket.id}
+                  >
+                    {selectedTicket.id === ticket.id ? "Selected" : "Select"}
+                  </button>
+                  {/* <div className="flex items-center gap-2">
                     <button
                       type="button"
                       className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded"
@@ -170,7 +164,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
                     >
                       -
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               ))
             ) : (
@@ -178,67 +172,42 @@ const EventDescription: React.FC<EventDescriptionProps> = ({
             )}
           </div>
           <hr className="my-4 border-gray-600" />
-          <div className="flex justify-between items-center text-white">
+          {/* <div className="flex justify-between items-center text-white">
             <span>Total</span>
             <span className="font-bold">₦0</span>
-          </div>
+          </div> */}
           <button
             type="button"
             className="bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2"
-            onClick={onOpenModal} // Trigger the modal via the prop
+            onClick={toggleModal}
           >
-            <Image
-              src="/ion_ticket.svg" // Replace with actual ticket icon
-              alt="Ticket"
-              width={16}
-              height={16}
-            />
-            <span className="font-medium">{ticket.type}</span>
+            <Image src="/ion_ticket.svg" alt="Ticket" width={16} height={16} />
+            Book Event
           </button>
         </div>
-        <span className="text-md text-[#f1df2c] ml-6">
-          ₦{ticket.price} each
-        </span>
       </div>
-      <div className="flex items-center gap-2">
-        <button className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded border border-rose-50 w-8">
-          +
-        </button>
-        <span className="text-white">0</span>
-        <button className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded border border-rose-50 w-8">
-          -
-        </button>
-      </div>
+
+      {/* Render AttendeeDetails Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <AttendeeDetails
+            ticket={selectedTicket}
+            eventID={event.id}
+            sessionID={event.sessions[0].id}
+            toggleModal={toggleModal}
+            title={event.title}
+            date={formattedDate}
+          />
+          <button
+            type="button"
+            onClick={toggleModal}
+            className="absolute top-4 right-4 text-white text-3xl hover:text-red-500"
+          >
+            &times;
+          </button>
+        </div>
+      )}
     </div>
   );
-
-  {
-    /* <p className="font-sm text-xs">Amounts of tickets (12)</p>
-  </div>
-  <hr className="my-4 border-gray-600" />
-  <div className="flex justify-between items-center text-white text-2xl">
-    <span>Total</span>
-    <span className="font-bold">₦200</span>
-    
-  </div>
-  <button
-    className="bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2"
-    onClick={onOpenModal} // Trigger the modal via the prop
-  >
-    <Image
-      src="/ticket.png" // Replace with actual icon
-      alt="Buy Ticket"
-      width={16}
-      height={16}
-    />
-    Buy Tickets
-  </button> */
-  }
-  {
-    /* </div> */
-  }
-  //   </div>
-  // </div>
-  // );
 };
 export default EventDescription;

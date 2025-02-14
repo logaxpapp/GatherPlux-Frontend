@@ -25,6 +25,13 @@ const extendApiSlice = clientBaseAPISlice.injectEndpoints({
       query: ({ query, page }) =>
         `event?search=${query}&page=${page}&size=10&sortDirection=desc`,
     }),
+    bookEvent: builder.mutation({
+      query: (eventDetails) => ({
+        url: "event/booking",
+        method: "POST",
+        body: eventDetails,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -36,4 +43,5 @@ export const {
   useGetUpcomingEventsQuery,
   useGetSearchedEventsQuery,
   useLazySearchEventsQuery,
+  useBookEventMutation,
 } = extendApiSlice;
