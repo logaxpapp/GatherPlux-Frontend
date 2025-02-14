@@ -1,24 +1,40 @@
-import { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, TextField, Button, DialogActions } from '@mui/material';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Button,
+  DialogActions,
+} from "@mui/material";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { EventCategory } from "@/app/admin/categories/page";
 
 interface NewCategoryModalProps {
   open: boolean;
   onClose: () => void;
-  onSave: (category: { name: string; description: string; status: string }) => void;
+  onSave: (category: EventCategory) => void;
 }
 
-const NewCategoryModal: React.FC<NewCategoryModalProps> = ({ open, onClose, onSave }) => {
-  const [categoryName, setCategoryName] = useState('');
-  const [description, setDescription] = useState('');
-  const [status, setStatus] = useState('Active');
+const NewCategoryModal: React.FC<NewCategoryModalProps> = ({
+  open,
+  onClose,
+  onSave,
+}) => {
+  const [categoryName, setCategoryName] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("Active");
 
   const handleSave = () => {
     if (categoryName.trim() && description.trim()) {
-      onSave({ name: categoryName, description, status });
-      setCategoryName('');
-      setDescription('');
-      setStatus('Active');
+      onSave({
+        name: categoryName,
+        description,
+        archived: status === "Inactive",
+      });
+      setCategoryName("");
+      setDescription("");
+      setStatus("Active");
       onClose();
     }
   };
@@ -51,7 +67,9 @@ const NewCategoryModal: React.FC<NewCategoryModalProps> = ({ open, onClose, onSa
           placeholder="Enter category description"
         />
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">Status</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Status
+          </label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}

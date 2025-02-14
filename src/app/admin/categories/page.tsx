@@ -1,16 +1,16 @@
-'use strict';
-'use client';
+"use strict";
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { FaPencilAlt } from 'react-icons/fa';
-import { useGetAllAdminCategoriesQuery } from '@/services/slices/admin.slice';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { FaPencilAlt } from "react-icons/fa";
+import { useGetAllAdminCategoriesQuery } from "@/services/slices/admin.slice";
 import NewCategoryModal from "@/components/modal/NewCategory";
 
-type EventCategory = {
+export type EventCategory = {
   name: string;
   description: string;
-  archived: string; // Ensure this matches your API response (e.g., "Active"/"Archived").
+  archived?: boolean;
 };
 
 // Delete Confirmation Modal
@@ -66,9 +66,10 @@ const EventCategories = () => {
   const [eventCategories, setEventCategories] = useState<EventCategory[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<EventCategory | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<EventCategory | null>(null);
 
-  const { data: eventCategoriesAPIData } = useGetAllAdminCategoriesQuery('');
+  const { data: eventCategoriesAPIData } = useGetAllAdminCategoriesQuery("");
 
   useEffect(() => {
     if (
@@ -86,7 +87,9 @@ const EventCategories = () => {
   };
 
   const handleDeleteCategory = (categoryToDelete: EventCategory) => {
-    setEventCategories(eventCategories.filter(cat => cat.name !== categoryToDelete.name));
+    setEventCategories(
+      eventCategories.filter((cat) => cat.name !== categoryToDelete.name),
+    );
   };
 
   return (
@@ -125,9 +128,9 @@ const EventCategories = () => {
                     className="w-full h-full"
                   />
                 </div>
-                <div className='flex items-center'>
-                  <span className='font-medium'>Emmanuel</span>
-                  <i className='fas fa-chevron-down ml-1 text-xs pl-1'></i>
+                <div className="flex items-center">
+                  <span className="font-medium">Emmanuel</span>
+                  <i className="fas fa-chevron-down ml-1 text-xs pl-1"></i>
                 </div>
               </div>
             </div>
@@ -146,13 +149,13 @@ const EventCategories = () => {
                 New Category
               </button>
             </div>
-            <table className='min-w-full text-left'>
+            <table className="min-w-full text-left">
               <thead>
-                <tr className='text-left bg-[#1a2938] border-b border-gray-600'>
-                  <th className='p-3 text-base font-normal'>Category Name</th>
-                  <th className='p-3 text-base font-normal'>Description</th>
-                  <th className='p-3 text-base font-normal'>Status</th>
-                  <th className='p-3 text-base font-normal'>Actions</th>
+                <tr className="text-left bg-[#1a2938] border-b border-gray-600">
+                  <th className="p-3 text-base font-normal">Category Name</th>
+                  <th className="p-3 text-base font-normal">Description</th>
+                  <th className="p-3 text-base font-normal">Status</th>
+                  <th className="p-3 text-base font-normal">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -161,16 +164,16 @@ const EventCategories = () => {
                     key={index}
                     className={`${
                       index === eventCategories.length - 1
-                        ? 'border-gray-600'
-                        : 'border-b border-gray-600'
+                        ? "border-gray-600"
+                        : "border-b border-gray-600"
                     } hover:bg-gray-700`}
                   >
                     <td className="p-3">{category.name}</td>
                     <td className="p-3">
-                      {category.description === 'Not set' ? (
+                      {category.description === "Not set" ? (
                         <span className="inline-flex items-center">
                           {category.description}
-                          <FaPencilAlt className='ml-2 w-4 h-4 text-gray-500' />
+                          <FaPencilAlt className="ml-2 w-4 h-4 text-gray-500" />
                         </span>
                       ) : (
                         <span>{category.description}</span>
@@ -200,7 +203,6 @@ const EventCategories = () => {
         open={isModalOpen}
         onClose={() => setModalOpen(false)}
         onSave={handleSaveCategory}
-        
       />
 
       <DeleteConfirmationModal
