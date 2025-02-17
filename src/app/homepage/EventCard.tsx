@@ -63,6 +63,9 @@ export interface EventProps {
       image_url: string;
     };
   };
+  category: {
+    name: string;
+  };
 }
 
 const EventCard = () => {
@@ -152,7 +155,7 @@ const EventCard = () => {
                 {/* Content Section */}
                 <div className="p-4">
                   <span className="bg-[#9edd45] text-black text-xs font-semibold px-2 py-1 rounded">
-                    {event.category_id}
+                    {event.category.name}
                   </span>
                   <h3 className="text-white font-[600] text-[19.8px] text-lg mt-2 ">
                     {event.title}
