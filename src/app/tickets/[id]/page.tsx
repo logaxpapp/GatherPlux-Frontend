@@ -46,6 +46,9 @@ const Page = () => {
         image_url: "",
       },
     },
+    category: {
+      name: "",
+    },
   });
 
   const { data: eventApiData } = useGetOneEventQuery(id);
