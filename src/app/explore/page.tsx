@@ -1,7 +1,6 @@
- 
 import Filter from "./components/Filter.component";
 import EventCard from "./components/EventCard.component";
-import SearchBar from '@/components/SearchBar';
+import SearchBar from "@/components/SearchBar";
 
 export default function Explore() {
   return (
@@ -47,7 +46,7 @@ export default function Explore() {
             rgba(0, 0, 0, 0.9) 100%,
             rgba(0, 0, 0, 0) 10%
           ),
-          url('/background.jpeg')`,
+          url('https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hqttomr2qy90ybsnknzn')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -72,7 +71,9 @@ export default function Explore() {
         {/* Events Section */}
         <div className="flex flex-col w-full">
           <div className="flex items-center space-x-2 mb-6 sm:mb-8 lg:mb-10 justify-end">
-            <p className="text-[16px] sm:text-[18px] lg:text-[20px]">Sort by:</p>
+            <p className="text-[16px] sm:text-[18px] lg:text-[20px]">
+              Sort by:
+            </p>
             <select
               className="w-[200px] sm:w-[240px] lg:w-[270px] h-[40px] sm:h-[48px] lg:h-[54px] text-[16px] sm:text-[18px] lg:text-[22px] bg-white text-black border border-gray-300 rounded px-4 py-2 pr-8 appearance-none bg-no-repeat bg-right focus:outline-none"
               style={{

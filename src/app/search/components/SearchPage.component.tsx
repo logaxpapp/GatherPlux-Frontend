@@ -29,7 +29,8 @@ const Search = () => {
     <div
       className="bg-[#020e1e] min-h-screen py-10 relative pb-56 mt-20"
       style={{
-        backgroundImage: "url('/Line.png')",
+        backgroundImage:
+          "url('https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/qq7es0mu6cc7tkzlv1kl')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -73,7 +74,7 @@ const Search = () => {
                     {/* Price Section */}
                     <div className="flex items-center">
                       <Image
-                        src="/ticket.png"
+                        src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/vnrpwfvxrmwt4xajyxoe"
                         alt="Ticket Icon"
                         width={16}
                         height={190}
@@ -85,7 +86,7 @@ const Search = () => {
                     {/* Interested Section */}
                     <div className="flex items-center text-gray-400 text-sm">
                       <Image
-                        src="/Star 1.png"
+                        src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/dtp6yqykibszstqny9ry"
                         alt="Star Icon"
                         width={16}
                         height={16}

@@ -121,7 +121,7 @@ const EventCategories = () => {
               <div className="flex items-center space-x-2 rounded-md border border-gray-500 px-1 py-1">
                 <div className="w-7 h-7 rounded-full border border-gray-300 overflow-hidden">
                   <Image
-                    src="/avatar.jpg"
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
                     alt="avatar"
                     width={50}
                     height={50}

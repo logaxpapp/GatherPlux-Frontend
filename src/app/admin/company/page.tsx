@@ -47,7 +47,7 @@ const Dash1 = () => {
               </div>
               <div className="flex items-center space-x-2 rounded-md border border-[#243447] px-1 py-1">
                 <Image
-                  src="/avatar.jpg"
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
                   alt="avatar"
                   width={16} 
                   height={16} 
@@ -133,7 +133,7 @@ const Dash1 = () => {
             <div className="flex justify-between items-center mt-2 px-4 py-5">
               <button className="flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded">
                 <Image
-                  src="/arrwl.png"
+                  src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/qmlzu1grmezavovfsbkc"
                   alt="Previous Arrow"
                   width={16}
                   height={16}
@@ -164,7 +164,7 @@ const Dash1 = () => {
               <button className="flex items-center space-x-2 px-4 py-2 border border-[#243447] text-[#93d437] rounded">
                 <span>Next</span>
                 <Image
-                  src="/arrwr.png"
+                  src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/mku2phev17abdh4kdpfk"
                   alt="Next Arrow"
                   width={16}
                   height={16}

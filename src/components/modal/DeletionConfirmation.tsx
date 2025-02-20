@@ -9,7 +9,7 @@ const DeletionConfirmation: React.FC = () => {
           ✕
         </button>
         <Image
-          src="/checkmark.png"
+          src=""
           alt="Checkmark"
           className="mx-auto mb-4 w-16 h-16"
         />

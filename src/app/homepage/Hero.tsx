@@ -1,9 +1,9 @@
-import SearchBar from '@/components/SearchBar';
+import SearchBar from "@/components/SearchBar";
 
 const Hero = () => {
   return (
     <section
-      className='relative flex flex-col items-center justify-center text-white sparkle-background min-h-screen bg-cover bg-center'
+      className="relative flex flex-col items-center justify-center text-white sparkle-background min-h-screen bg-cover bg-center"
       style={{
         backgroundImage: `
           linear-gradient(
@@ -14,15 +14,15 @@ const Hero = () => {
             rgba(0, 0, 0, 0.9) 100%,
             rgba(0, 0, 0, 0) 10%
           ),
-          url('/background.jpeg')`,
+          url('https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hqttomr2qy90ybsnknzn')`,
       }}
     >
       {/* Sparkles */}
-      <div className='absolute inset-0 overflow-hidden'>
+      <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 50 }).map((_, index) => (
           <div
             key={index}
-            className='sparkle'
+            className="sparkle"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
@@ -34,22 +34,22 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className='relative z-10 text-center px-4 sm:px-8 max-w-4xl'>
-        <h1 className='font-menseal text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6 whitespace-normal'>
+      <div className="relative z-10 text-center px-4 sm:px-8 max-w-4xl">
+        <h1 className="font-menseal text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6 whitespace-normal">
           Discover Your Next Event Adventure,
           <br />
           <span
-            className='bg-clip-text text-transparent'
+            className="bg-clip-text text-transparent"
             style={{
               backgroundImage:
-                'linear-gradient(90deg, #9ada43, #4c9e10, #b6d80e)',
+                "linear-gradient(90deg, #9ada43, #4c9e10, #b6d80e)",
             }}
           >
             with Instant Booking.
           </span>
         </h1>
 
-        <p className='text-base sm:text-lg mb-8 font-thin'>
+        <p className="text-base sm:text-lg mb-8 font-thin">
           Find events nearby, personalize your experience, and book in seconds!
         </p>
 

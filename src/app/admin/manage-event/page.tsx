@@ -166,7 +166,12 @@ const ManageEvents = () => {
         {/* Table Header */}
         <div className="flex justify-between items-center pb-2 border-b border-[#3A3F4E]">
           <h2 className="text-lg font-semibold">Event List</h2>
-          <Image src="/Actions.svg" alt="Actions" width={24} height={24} />
+          <Image
+            src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ac7wdhpfyzmhoptj5rri"
+            alt="Actions"
+            width={24}
+            height={24}
+          />
         </div>
 
         {/* Table */}

@@ -123,7 +123,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <NavItem
               icon={
                 <Image
-                  src="/driver.png"
+                  src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/jgrc8vjgykqywrkdmfz6"
                   alt="Manage Event"
                   width={20}
                   height={20}

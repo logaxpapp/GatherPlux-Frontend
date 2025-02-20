@@ -6,9 +6,6 @@ import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-
-import Mail from "../../../../public/sms-tracking.svg";
-import Lock from "../../../../public/lock.svg";
 import { useLoginUserMutation } from "@/services/slices/user.slice";
 import Loader from "@/components/Loader";
 import { setRole, setToken } from "@/store/slices/user.slice";
@@ -117,7 +114,7 @@ const Login = () => {
             </label>
             <div className="border-[1px] border-[#97a0a4] bg-[#284449] flex items-center px-3 rounded-md">
               <Image
-                src={Mail.src}
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/zpab1aftksowvooyiiw0"
                 alt="Profile"
                 width={24}
                 height={24}
@@ -139,7 +136,7 @@ const Login = () => {
             </label>
             <div className="border-[1px] border-[#97a0a4] bg-[#284449] flex items-center px-3 mb-3 rounded-md">
               <Image
-                src={Lock.src}
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ewuk7ynzelrdok6m6t4i"
                 alt="Profile"
                 width={24}
                 height={24}

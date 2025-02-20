@@ -1,5 +1,5 @@
-import Map from '@/components/Map';
-import Image from 'next/image';
+import Map from "@/components/Map";
+import Image from "next/image";
 
 interface LocationProps {
   location: string;
@@ -15,56 +15,60 @@ export default function LocationComponent({
 }: LocationProps) {
   return (
     <div
-      className='bg-[#020e1e] py-10 px-10 relative'
+      className="bg-[#020e1e] py-10 px-10 relative"
       style={{
-        backgroundImage: "url('/Line.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundImage:
+          "url('https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/qq7es0mu6cc7tkzlv1kl')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      <div className='mx-auto max-w-7xl'>
+      <div className="mx-auto max-w-7xl">
         {/* Location Section */}
-        <div className='max-w-4xl mb-8'>
-          <h2 className='text-2xl font-bold mb-4'>Location</h2>
-          <p className='text-base font-light flex items-center'>
+        <div className="max-w-4xl mb-8">
+          <h2 className="text-2xl font-bold mb-4">Location</h2>
+          <p className="text-base font-light flex items-center">
             <Image
-              src='/Locationicon.png'
-              alt='Location Icon'
+              src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hnjobd9zqsmtamysfx3l"
+              alt="Location Icon"
               width={20}
               height={20}
-              className='mr-2 mb-4'
+              className="mr-2 mb-4"
             />
             {location}
           </p>
-          <div className='mt-6'>
+          <div className="mt-6">
             {/* Map Image or Embed */}
             <Map address={location} />
           </div>
         </div>
 
         {/* Hosted By Section */}
-        <div className='max-w-4xl mt-8'>
-          <h3 className='text-xl font-semibold mb-4'>Hosted by</h3>
-          <div className='flex items-center'>
+        <div className="max-w-4xl mt-8">
+          <h3 className="text-xl font-semibold mb-4">Hosted by</h3>
+          <div className="flex items-center">
             <Image
-              src={eventHost.image_url || '/banner.png'}
-              alt='Host Logo'
+              src={
+                eventHost.image_url ||
+                "https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/cygjqqrodbmwznwqlqtv"
+              }
+              alt="Host Logo"
               width={50}
               height={50}
             />
-            <div className='ml-4'>
-              <h4 className='text-lg font-bold'>{eventHost.company}</h4>
-              <div className='flex gap-4 mt-2'>
+            <div className="ml-4">
+              <h4 className="text-lg font-bold">{eventHost.company}</h4>
+              <div className="flex gap-4 mt-2">
                 <button
-                  type='button'
-                  className='border border-[#9edd45] text-[#9edd45] px-4  rounded-lg font-medium'
+                  type="button"
+                  className="border border-[#9edd45] text-[#9edd45] px-4  rounded-lg font-medium"
                 >
                   Contact
                 </button>
                 <button
-                  type='button'
-                  className='bg-[#9edd45] text-black px-5 rounded-lg font-medium'
+                  type="button"
+                  className="bg-[#9edd45] text-black px-5 rounded-lg font-medium"
                 >
                   Follow
                 </button>

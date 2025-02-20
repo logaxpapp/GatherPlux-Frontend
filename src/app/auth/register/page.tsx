@@ -5,10 +5,6 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
-import Profile from "../../../../public/profile.svg";
-import Mail from "../../../../public/sms-tracking.svg";
-import Lock from "../../../../public/lock.svg";
 import { useCreateUserMutation } from "@/services/slices/user.slice";
 import Loader from "@/components/Loader";
 import isAuth from "@/helpers/higherOrderComponent/isAuthenticated";
@@ -89,7 +85,7 @@ const Signup = () => {
             </label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
               <Image
-                src={Profile.src}
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/zjkll3ygcuph3xf3cm2m"
                 alt="Profile"
                 width={24}
                 height={24}
@@ -112,7 +108,7 @@ const Signup = () => {
             </label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
               <Image
-                src={Mail.src}
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/zpab1aftksowvooyiiw0"
                 alt="Mail"
                 width={24}
                 height={24}
@@ -135,7 +131,7 @@ const Signup = () => {
             </label>
             <div className="flex items-center px-3 bg-[#284449] rounded-md">
               <Image
-                src={Lock.src}
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ewuk7ynzelrdok6m6t4i"
                 alt="Lock"
                 width={24}
                 height={24}

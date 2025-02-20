@@ -13,12 +13,42 @@ const Countries = () => {
 
   // Mock subscription data
   const subscriptionData = [
-    { name: "Alands Island", starter: "Not set", standard: "Not set", premium: "Not set" },
-    { name: "Canada", starter: "Not set", standard: "Not set", premium: "Not set" },
-    { name: "Algeria", starter: "Not set", standard: "Not set", premium: "Not set" },
-    { name: "Cameroun", starter: "Not set", standard: "Not set", premium: "Not set" },
-    { name: "Nigeria", starter: "Not set", standard: "Not set", premium: "Not set" },
-    { name: "United States", starter: "Not set", standard: "Not set", premium: "Not set" },
+    {
+      name: "Alands Island",
+      starter: "Not set",
+      standard: "Not set",
+      premium: "Not set",
+    },
+    {
+      name: "Canada",
+      starter: "Not set",
+      standard: "Not set",
+      premium: "Not set",
+    },
+    {
+      name: "Algeria",
+      starter: "Not set",
+      standard: "Not set",
+      premium: "Not set",
+    },
+    {
+      name: "Cameroun",
+      starter: "Not set",
+      standard: "Not set",
+      premium: "Not set",
+    },
+    {
+      name: "Nigeria",
+      starter: "Not set",
+      standard: "Not set",
+      premium: "Not set",
+    },
+    {
+      name: "United States",
+      starter: "Not set",
+      standard: "Not set",
+      premium: "Not set",
+    },
   ];
 
   return (
@@ -41,7 +71,12 @@ const Countries = () => {
               </div>
               <div className="flex items-center space-x-2 rounded-md border border-gray-500 px-1 py-1">
                 <div className="w-7 h-7 rounded-full border border-gray-300 overflow-hidden">
-                  <Image src="/avatar.jpg" alt="avatar" width={28} height={28} />
+                  <Image
+                    src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/zjkll3ygcuph3xf3cm2m"
+                    alt="avatar"
+                    width={28}
+                    height={28}
+                  />
                 </div>
                 <div className="flex items-center">
                   <span className="font-medium">Emmanuel</span>
@@ -67,9 +102,16 @@ const Countries = () => {
             <table className="min-w-full bg-[#243447] rounded-t">
               <thead>
                 <tr>
-                  <th className="p-3 text-base font-normal bg-[#1f2d3b] text-left">Plans</th>
-                  <th className="p-3 text-base font-normal bg-[#93d437] text-left">Prices</th>
-                  <th className="p-3 text-base font-normal bg-[#55677a] text-left" colSpan={2}></th>
+                  <th className="p-3 text-base font-normal bg-[#1f2d3b] text-left">
+                    Plans
+                  </th>
+                  <th className="p-3 text-base font-normal bg-[#93d437] text-left">
+                    Prices
+                  </th>
+                  <th
+                    className="p-3 text-base font-normal bg-[#55677a] text-left"
+                    colSpan={2}
+                  ></th>
                 </tr>
                 <tr className="text-left bg-[#1a2938] border-b border-gray-600">
                   <th className="p-3 text-base font-normal flex items-center">
@@ -82,7 +124,10 @@ const Countries = () => {
               </thead>
               <tbody>
                 {subscriptionData.map((country, index) => (
-                  <tr key={index} className="border-b border-gray-600 hover:bg-gray-700">
+                  <tr
+                    key={index}
+                    className="border-b border-gray-600 hover:bg-gray-700"
+                  >
                     <td className="p-3 flex items-center">
                       <input type="checkbox" className="mr-2" />
                       {country.name}

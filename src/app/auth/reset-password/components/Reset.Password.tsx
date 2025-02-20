@@ -85,7 +85,12 @@ const ResetPassword: React.FC = () => {
       >
         {/* Key Icon */}
         <div className="flex justify-center mb-4">
-          <Image height={48} width={48} src="/lock.png" alt="Key Icon" />
+          <Image
+            height={48}
+            width={48}
+            src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/myk0ugunz8rhrayyi7kk"
+            alt="Key Icon"
+          />
         </div>
         {/* Heading */}
         <h2 className="text-3xl font-bold text-center">Reset Password</h2>
@@ -103,7 +108,7 @@ const ResetPassword: React.FC = () => {
             <Image
               height={20}
               width={20}
-              src="/sms-tracking.png"
+              src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/xfydxp5zbbdbgtbxvpkh"
               alt="Password Icon"
               className="absolute top-3 left-3"
             />
@@ -127,7 +132,7 @@ const ResetPassword: React.FC = () => {
             <Image
               height={20}
               width={20}
-              src="/lock.png"
+              src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/myk0ugunz8rhrayyi7kk"
               alt="Password Icon"
               className="absolute top-3 left-3"
             />
@@ -154,7 +159,7 @@ const ResetPassword: React.FC = () => {
             <Image
               height={20}
               width={20}
-              src="/lock.png"
+              src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/myk0ugunz8rhrayyi7kk"
               alt="Confirm Password Icon"
               className="absolute top-3 left-3"
             />

@@ -4,7 +4,6 @@ import { EventProps } from "@/app/homepage/EventCard";
 import AttendeeDetails from "@/components/modal/AttendeeDetails";
 import { toast } from "react-toastify";
 
-// Define the prop types for the component
 interface EventDescriptionProps {
   event: EventProps;
 }
@@ -13,23 +12,54 @@ export interface TicketProps {
   id: number;
   name: string;
   price: string;
+  no_per_seat_type: string;
+  seat_type: string;
 }
 
 const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
-  const [selectedTicket, setSelectedTicket] = useState<TicketProps>({
-    id: -1,
-    name: "",
-    price: "",
-  });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleTicketSelection = (ticket: TicketProps) => {
-    setSelectedTicket(ticket);
+  const [selectedSessions, setSelectedSessions] = useState<
+    Record<number, number | null>
+  >({});
+  const [ticketQuantities, setTicketQuantities] = useState<
+    Record<number, number>
+  >({});
+  const [ticketNames, setTicketNames] = useState<Record<number, string>>({});
+
+  const handleSessionChange = (ticketId: number, sessionId: number | null) => {
+    setSelectedSessions({ ...selectedSessions, [ticketId]: sessionId });
+  };
+
+  const handleQuantityChange = (ticketId: number, quantityChange: number) => {
+    const currentQuantity = ticketQuantities[ticketId] || 0;
+    const newQuantity = Math.max(0, currentQuantity + quantityChange); // Prevent negative quantities
+    setTicketQuantities({ ...ticketQuantities, [ticketId]: newQuantity });
+  };
+
+  const handleTicketNameChange = (ticketId: number, newName: string) => {
+    setTicketNames({ ...ticketNames, [ticketId]: newName });
   };
 
   const toggleModal = () => {
-    if (selectedTicket.id === -1) {
-      toast.info("Please select a ticket to proceed");
+    if (
+      Object.keys(selectedSessions).length === 0 ||
+      Object.keys(ticketQuantities).length === 0 ||
+      (event.each_ticket_identity && Object.keys(ticketNames).length === 0)
+    ) {
+      toast.info(
+        "Please select sessions, quantities, and names for all tickets.",
+        {
+          position: "top-right",
+        },
+      );
+      return;
+    }
+
+    if (Object.values(ticketQuantities).every((quantity) => quantity === 0)) {
+      toast.info("Please select at least one ticket.", {
+        position: "top-right",
+      });
       return;
     }
     setIsModalOpen(!isModalOpen);
@@ -46,7 +76,8 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
     <div
       className="bg-[#020e1e] py-10 px-10 relative "
       style={{
-        backgroundImage: "url('/Line.png')",
+        backgroundImage:
+          "url('https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/qq7es0mu6cc7tkzlv1kl')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -58,7 +89,10 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
         <Image
           height={400}
           width={600}
-          src={event.images[0] || "/banner.png"}
+          src={
+            event.images[0] ||
+            "https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/cygjqqrodbmwznwqlqtv"
+          }
           alt="Event Banner"
           className="rounded-lg"
         />
@@ -78,24 +112,9 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
         <div className="bg-[#0b1a30] p-6 rounded-lg">
           <h3 className="text-lg font-bold text-white mb-4">Date and Time</h3>
           <div className="flex items-center text-sm text-gray-400 mb-2">
-            {/* use react icons instead */}
-            {/* <Image
-              src="/calendar-icon.png"
-              alt="Calendar"
-              className="mr-2"
-              width={16}
-              height={16}
-            /> */}
             {formattedDate !== "Invalid Date" && formattedDate}
           </div>
           <div className="flex items-center text-sm text-gray-400">
-            {/* <Image
-              src="/clock-icon.png"
-              alt="Clock"
-              className="mr-2"
-              width={16}
-              height={16}
-            /> */}
             <p>
               {event.sessions && event.sessions.length > 1 ? (
                 event.sessions.map((session) => (
@@ -110,12 +129,6 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
               )}
             </p>
           </div>
-          {/* <button
-            type="button"
-            className="text-[#9edd45] text-sm font-medium mt-4"
-          >
-            + Add to Calendar
-          </button> */}
           <hr className="my-4 border-gray-600" />
 
           <h3 className="text-lg font-bold text-white mb-4">
@@ -126,45 +139,86 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
               event.tickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="flex items-center justify-between text-white"
+                  className="border border-white p-2 text-white"
                 >
+                  {event.each_ticket_identity && (
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Enter Ticket Name"
+                        className="w-full p-1 sm:p-2 lg:p-3 bg-transparent focus:ring-0 focus:outline-none text-white text-sm sm:text-base"
+                        id={`ticket-name-${ticket.id}`}
+                        value={ticketNames[ticket.id]}
+                        onChange={(e) =>
+                          handleTicketNameChange(ticket.id, e.target.value)
+                        }
+                      />
+                    </div>
+                  )}
                   <div className="flex items-center gap-2">
-                    {/* use react icon instead */}
-                    {/* <Image
-                      src="/ticket-icon.png" // Replace with actual ticket icon
-                      alt="Ticket"
-                      width={16}
-                      height={16}
-                    /> */}
                     <span className="type-medium">{ticket.name}</span>
                     <span> - </span>
                     <span className="text-sm text-gray-400">
-                      ₦{Number(ticket.price).toLocaleString()} each
+                      {event.currency !== null && event.currency.split("-")[0]}
+                      {Number(ticket.price).toLocaleString()}
                     </span>
+                    <span>
+                      for a
+                      <span className="text-sm text-gray-400 px-2">
+                        {" "}
+                        {ticket.seat_type}{" "}
+                      </span>
+                      for
+                      <span className="text-sm text-gray-400 px-2">
+                        {" "}
+                        {ticket.no_per_seat_type}{" "}
+                      </span>{" "}
+                      Person(s)
+                    </span>
+
+                    {event.sessions && event.sessions.length >= 1 && (
+                      <div>
+                        <select
+                          id={`session-${ticket.id}`}
+                          value={selectedSessions[ticket.id] || ""}
+                          onChange={(e) =>
+                            handleSessionChange(
+                              ticket.id,
+                              Number(e.target.value) || null,
+                            )
+                          }
+                          className="bg-[#9edd45] text-black px-2 py-1 rounded"
+                        >
+                          <option value="">Select session</option>
+                          {event.sessions.map((session) => (
+                            <option key={session.id} value={session.id}>
+                              {session.name !== null && session.name}{" "}
+                              {session.start_time} - {session.end_time}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleTicketSelection(ticket)}
-                    className={`${selectedTicket.id === ticket.id ? "" : "bg-[#9edd45] p-2"}`}
-                    disabled={selectedTicket.id === ticket.id}
-                  >
-                    {selectedTicket.id === ticket.id ? "Selected" : "Select"}
-                  </button>
-                  {/* <div className="flex items-center gap-2">
+
+                  <div>
                     <button
                       type="button"
                       className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded"
-                    >
-                      +
-                    </button>
-                    <span className="text-white">0</span>
-                    <button
-                      type="button"
-                      className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded"
+                      onClick={() => handleQuantityChange(ticket.id, -1)}
                     >
                       -
                     </button>
-                  </div> */}
+                    <span>{ticketQuantities[ticket.id] || 0}</span>{" "}
+                    {/* Display quantity or 0 if not set */}
+                    <button
+                      type="button"
+                      className="text-[#9edd45] bg-gray-800 px-2 py-1 rounded"
+                      onClick={() => handleQuantityChange(ticket.id, 1)}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -172,16 +226,18 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
             )}
           </div>
           <hr className="my-4 border-gray-600" />
-          {/* <div className="flex justify-between items-center text-white">
-            <span>Total</span>
-            <span className="font-bold">₦0</span>
-          </div> */}
+
           <button
             type="button"
             className="bg-[#9edd45] text-black w-full py-2 rounded-lg mt-4 flex items-center justify-center gap-2"
             onClick={toggleModal}
           >
-            <Image src="/ion_ticket.svg" alt="Ticket" width={16} height={16} />
+            <Image
+              src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hcq7v4hy6hlztcq7wkcj"
+              alt="Ticket"
+              width={16}
+              height={16}
+            />
             Book Event
           </button>
         </div>
@@ -191,9 +247,10 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <AttendeeDetails
-            ticket={selectedTicket}
             eventID={event.id}
-            sessionID={event.sessions[0].id}
+            sessionIDs={selectedSessions}
+            quantities={ticketQuantities}
+            ticketNames={ticketNames}
             toggleModal={toggleModal}
             title={event.title}
             date={formattedDate}

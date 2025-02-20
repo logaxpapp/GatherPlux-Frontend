@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import axios from "axios";
@@ -11,6 +11,8 @@ import EventDetails from "./components/EventDetails.component";
 import EventBanner from "./components/EventBanner.component";
 import EventTickets from "./components/EventTickets.component";
 import PreviewEvent from "./components/PreviewEvent.component";
+import SignInModal from "@/components/modal/SignInModal";
+import SignUpModal from "@/components/modal/signUpModal";
 
 import { CombinedStateAndCategoryProps } from "./types/types";
 import { useGetAllCategoriesQuery } from "@/services/slices/category.slice";
@@ -20,6 +22,8 @@ import {
 } from "@/services/slices/state.slice";
 import { useCreateEventMutation } from "@/services/slices/events.slice";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export interface SessionsProps {
   id: string;
@@ -34,6 +38,8 @@ export interface TicketEntry {
   name: string;
   price: string;
   people: number;
+  seatType: string;
+  quantity: number;
 }
 
 export interface EventDetailsProps {
@@ -49,7 +55,9 @@ export default function CreateEvent() {
   const router = useRouter();
 
   const [formStep, setFormStep] = useState(1);
-
+  const user = useSelector((state: RootState) => state.user);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [categories, setCategories] = useState<CombinedStateAndCategoryProps[]>(
     [],
   );
@@ -253,23 +261,54 @@ export default function CreateEvent() {
         if (response.data.body.length > 0) {
           setUploadedBanner(response.data.body[0].secure_url);
         } else {
-          console.error("Error uploading file");
+          toast.error("Error uploading file", {
+            position: "top-right",
+          });
         }
       } catch (error) {
-        console.error("Error uploading file:", error);
+        toast.error(`Error uploading file: ${error}`, {
+          position: "top-right",
+        });
       }
     }
   };
 
   // tickets
-  const [eventType, setEventType] = useState<string>("ticketed");
+  const [eventType, setEventType] = useState<string>("paid");
   const [tickets, setTickets] = useState<TicketEntry[]>([
-    { id: uuid(), name: "", price: "", people: 1 },
+    {
+      id: uuid(),
+      name: "",
+      price: "",
+      people: 1,
+      seatType: "SIT",
+      quantity: 1,
+    },
   ]);
   const [numberOfTickets, setNumberOfTickets] = useState<number | "">("");
+  const [ticketIdentity, setTicketIdentity] = useState<boolean>(false);
+  const [selectedCurrency, setSelectedCurrency] = useState("");
+
+  const handleCurrencyChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCurrency(event.target.value);
+  };
+
+  const handleTicketIdentity = (event: ChangeEvent<HTMLInputElement>) => {
+    setTicketIdentity(event.target.checked);
+  };
 
   const addTicketEntry = () => {
-    setTickets([...tickets, { id: uuid(), name: "", price: "", people: 1 }]);
+    setTickets([
+      ...tickets,
+      {
+        id: uuid(),
+        name: "",
+        price: "",
+        people: 1,
+        seatType: "SIT",
+        quantity: 1,
+      },
+    ]);
   };
 
   const deleteTicketEntry = (id: string) => {
@@ -279,7 +318,7 @@ export default function CreateEvent() {
 
   const updateTicket = (
     id: string,
-    field: "name" | "price" | "people",
+    field: "name" | "price" | "people" | "seatType" | "quantity",
     value: string,
   ) => {
     setTickets(
@@ -320,7 +359,7 @@ export default function CreateEvent() {
       }
     } else if (formStep === 3) {
       if (
-        eventType === "ticketed" &&
+        eventType === "paid" &&
         tickets.some((ticket) => ticket.name === "" || ticket.price === "0.00")
       ) {
         console.log("fill all ticket fields");
@@ -343,20 +382,30 @@ export default function CreateEvent() {
       city: city,
       description: eventDetails.description,
       images: [uploadedBanner],
-      ticketed: eventType === "ticketed",
+      is_free: eventType === "free",
+      ticketed: tickets[0].name !== "",
+      currency: selectedCurrency,
+      each_ticket_identity: ticketIdentity,
+      time: sessions[0].startTime,
+      absorb_fees: true,
       tickets:
-        eventType === "ticketed"
+        tickets[0].name !== ""
           ? tickets.map((ticket) => ({
               name: ticket.name,
               price: ticket.price,
+              quantity: Number(ticket.quantity),
+              seat_type: ticket.seatType,
+              no_per_seat_type: Number(ticket.people),
             }))
           : [],
       sessions: sessions.map((session) => ({
+        name: session.name,
         date: session.startDate,
         start_time: session.startTime,
         end_time: session.endTime,
       })),
     };
+
     const response = await createEvent(newEvent);
     if (response.data) {
       toast.success("Event created successfully", {
@@ -366,8 +415,23 @@ export default function CreateEvent() {
     }
 
     if ("error" in response) {
-      console.log(response.error);
+      toast.error("Error creating event", {
+        position: "top-right",
+      });
     }
+  };
+
+  const handleSignInClick = () => {
+    setIsSignInModalOpen(true);
+  };
+
+  const handleSignUpClick = () => {
+    setIsSignUpModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsSignInModalOpen(false);
+    setIsSignUpModalOpen(false);
   };
 
   return (
@@ -428,6 +492,10 @@ export default function CreateEvent() {
             handleNumberOfTickets={handleNumberOfTickets}
             numberOfTickets={numberOfTickets}
             deleteTicketEntry={deleteTicketEntry}
+            selectedCurrency={selectedCurrency}
+            handleCurrencyChange={handleCurrencyChange}
+            ticketIdentity={ticketIdentity}
+            handleTicketIdentity={handleTicketIdentity}
           />
         </div>
       )}
@@ -474,23 +542,51 @@ export default function CreateEvent() {
         )}
 
         {/* Final Step Buttons */}
-        {formStep === 4 && (
-          <div className="flex justify-between w-full sm:w-auto space-x-4">
-            <button
-              type="button"
-              className="bg-gray-600 px-4 py-2 rounded-md text-white w-full sm:w-auto"
-            >
-              Save for Later
-            </button>
-            <button
-              type="button"
-              onClick={handleCreateEvent}
-              className="bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold w-full sm:w-auto"
-            >
-              Publish Event
-            </button>
-          </div>
-        )}
+        {formStep === 4 &&
+          user.userDetails.firstname !== "" &&
+          user.userDetails.lastname !== "" && (
+            <div className="flex justify-between w-full sm:w-auto space-x-4">
+              <button
+                type="button"
+                className="bg-gray-600 px-4 py-2 rounded-md text-white w-full sm:w-auto"
+              >
+                Save for Later
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateEvent}
+                className="bg-[#9EDD45] text-black px-4 py-2 rounded-md font-bold w-full sm:w-auto"
+              >
+                Publish Event
+              </button>
+            </div>
+          )}
+
+        {formStep === 4 &&
+          user.userDetails.firstname === "" &&
+          user.userDetails.lastname === "" && (
+            <div className="w-full sm:w-auto flex space-x-3">
+              <button
+                type="button"
+                className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+                onClick={handleSignInClick}
+              >
+                Login to Publish
+              </button>
+              <button
+                type="button"
+                className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+                onClick={handleSignUpClick}
+              >
+                Sign up to Publish
+              </button>
+            </div>
+          )}
+
+        {/* Sign In Modal */}
+        {isSignInModalOpen && <SignInModal onClose={handleCloseModal} />}
+        {/* Sign Up Modal */}
+        {isSignUpModalOpen && <SignUpModal onClose={handleCloseModal} />}
       </div>
     </div>
   );

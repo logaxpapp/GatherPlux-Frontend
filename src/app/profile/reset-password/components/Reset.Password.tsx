@@ -126,7 +126,7 @@ const ProfilePage: React.FC = () => {
                 className={`flex items-center bg-gray-800 text-gray-400 p-3 rounded-lg ${activeField === "password" ? "border border-white" : ""}`}
               >
                 <Image
-                  src="/lock.png"
+                  src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ewuk7ynzelrdok6m6t4i"
                   alt="Lock Icon"
                   width={20}
                   height={20}
@@ -162,7 +162,7 @@ const ProfilePage: React.FC = () => {
                 className={`flex items-center bg-gray-800 text-gray-400 p-3 rounded-lg ${activeField === "newPassword" ? "border border-white" : ""}`}
               >
                 <Image
-                  src="/lock.png"
+                  src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ewuk7ynzelrdok6m6t4i"
                   alt="Lock Icon"
                   width={20}
                   height={20}
@@ -195,7 +195,7 @@ const ProfilePage: React.FC = () => {
                 className={`flex items-center bg-gray-800 text-gray-400 p-3 rounded-lg ${activeField === "confirmPassword" ? "border border-white" : ""}`}
               >
                 <Image
-                  src="/lock.png"
+                  src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ewuk7ynzelrdok6m6t4i"
                   alt="Lock Icon"
                   width={20}
                   height={20}

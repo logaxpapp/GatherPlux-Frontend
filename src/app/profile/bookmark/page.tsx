@@ -41,7 +41,7 @@ const Bookmarks: React.FC = () => {
                   {/* Event Details with Blue Background */}
                   <div className='flex items-center space-x-4 bg-[#243447] p-4 max-w-[100%] rounded-md'>
                     <Image
-                      src='/Rectangle 2.png'
+                      src='https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/yaw62wote2cdswpucoqq'
                       alt='Event Thumbnail'
                       width={200}
                       height={200}

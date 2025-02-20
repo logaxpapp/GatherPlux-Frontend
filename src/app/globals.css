@@ -1,77 +1,71 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Menseal&family=Inter:wght@400;700&family=Plus+Jakarta+Sans:wght@400;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Menseal&family=Inter:wght@400;700&family=Plus+Jakarta+Sans:wght@400;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #ffffff;
+    --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .rdp-today {
-  color: #9edd45 !important;
+    color: #9edd45 !important;
 }
 
 .rdp-selected > button {
-  border-color: #9edd45 !important;
+    border-color: #9edd45 !important;
 }
 
 .rdp-chevron {
-  fill: #9edd45 !important;
+    fill: #9edd45 !important;
 }
 
 /* Sparkle effect */
 .sparkle-background {
-  position: relative;
-  overflow: hidden;
+    position: relative;
+    overflow: hidden;
 }
 
 .sparkle {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background-color: white;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-  animation: sparkle-fade 3s ease-in-out infinite;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: sparkle-fade 3s ease-in-out infinite;
 }
 
 @keyframes sparkle-fade {
-  0%,
-  100% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
 }
 
 body {
-  background-image: url('/Line.png'); /* Path to the gradient line image */
-  background-size: cover; /* Ensures it covers the whole viewport */
-  background-position: center; /* Center the image */
-  background-repeat: repeat; /* Repeats the pattern */
-  color: white; /* Ensures text color contrasts well */
+    background-image: url("https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/qq7es0mu6cc7tkzlv1kl"); /* Path to the gradient line image */
+    background-size: cover; /* Ensures it covers the whole viewport */
+    background-position: center; /* Center the image */
+    background-repeat: repeat; /* Repeats the pattern */
+    color: white; /* Ensures text color contrasts well */
 }
-
-
-
-

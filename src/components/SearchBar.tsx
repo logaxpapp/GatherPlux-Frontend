@@ -86,7 +86,7 @@ const SearchBar: React.FC = () => {
       {/* Search Input */}
       <div className="flex items-center space-x-2 flex-grow">
         <Image
-          src="/Searchicon.png" // Search icon image
+          src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ngr4snr3hzu2lxjlzcbx"
           alt="Search Icon"
           width={14} // Reduced size for smaller screens
           height={14}
@@ -103,9 +103,9 @@ const SearchBar: React.FC = () => {
       {/* Location Dropdown */}
       <div className="flex items-center space-x-1 sm:space-x-2 border-l border-gray-500 pl-2 sm:pl-4">
         <Image
-          src="/Locationicon.png" // Location icon image
+          src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hnjobd9zqsmtamysfx3l"
           alt="Location Icon"
-          width={14} // Reduced size for smaller screens
+          width={14}
           height={14}
           className="shrink-0"
         />

@@ -21,6 +21,7 @@ const initialState = {
     : null,
   role: isTokenValidAndNotExpired ? JSON.parse(token).role : null,
   userDetails: {
+    id: 0,
     firstname: "",
     lastname: "",
     email: "",
@@ -46,6 +47,7 @@ const userSlice = createSlice({
       state.accessToken = null;
       state.role = null;
       state.userDetails = {
+        id: 0,
         firstname: "",
         lastname: "",
         email: "",

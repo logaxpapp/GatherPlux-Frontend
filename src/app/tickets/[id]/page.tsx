@@ -28,10 +28,14 @@ const Page = () => {
         id: 0,
         name: "",
         price: "",
+        no_per_seat_type: "",
+        seat_type: "",
       },
     ],
     published: false,
+    each_ticket_identity: false,
     reason: "",
+    currency: "",
     sessions: [
       {
         id: 0,

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -11,7 +11,7 @@ export default function Footer() {
             {/* Logo */}
             <div className="mb-6">
               <Image
-                src="/logo.svg"
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ylvcgvmytdjdxduamcvd"
                 alt="Gatherplus Logo"
                 width={180}
                 height={180}

@@ -66,7 +66,12 @@ const ForgotPassword: React.FC = () => {
       >
         {/* Lock Icon */}
         <div className="flex justify-center mb-4">
-          <Image width={48} height={48} src="/lock.png" alt="Lock Icon" />
+          <Image
+            width={48}
+            height={48}
+            src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/myk0ugunz8rhrayyi7kk"
+            alt="Lock Icon"
+          />
         </div>
 
         {/* Heading */}
@@ -90,7 +95,7 @@ const ForgotPassword: React.FC = () => {
             <Image
               height={20}
               width={20}
-              src="/sms-tracking.png"
+              src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/zpab1aftksowvooyiiw0"
               alt="Email Icon"
               className="absolute top-3 sm:top-4 left-3"
             />

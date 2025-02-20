@@ -13,6 +13,9 @@ const Navbar = () => {
   const [selectedCountry, setSelectedCountry] = useState("US");
   const [hasScrolled, setHasScrolled] = useState(false);
   const role = useSelector((state: RootState) => state.user.role);
+  const profilePicture = useSelector(
+    (state: RootState) => state.user.userDetails.image_url,
+  );
 
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
@@ -46,7 +49,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link href="/">
               <Image
-                src="/logo.png"
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ylvcgvmytdjdxduamcvd"
                 alt="Gatherplus Logo"
                 width={150}
                 height={150}
@@ -120,7 +123,10 @@ const Navbar = () => {
             {/* User Avatar */}
             <Link href={role === "superadin" ? "/admin/messages" : "/profile"}>
               <Image
-                src="/avatar.png"
+                src={
+                  profilePicture ||
+                  "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
+                }
                 alt="User Avatar"
                 width={40}
                 height={40}

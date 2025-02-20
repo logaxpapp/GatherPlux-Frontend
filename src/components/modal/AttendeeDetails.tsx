@@ -1,50 +1,71 @@
 "use strict";
 "use client";
 
+import { RootState } from "@/store/store";
 import { useState } from "react";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import Flag from "react-world-flags";
+import { useSelector } from "react-redux";
+// import Flag from "react-world-flags";
 import { useBookEventMutation } from "@/services/slices/events.slice";
 import { toast } from "react-toastify";
-import { TicketProps } from "@/app/tickets/[id]/components/TicketPage";
 import { useRouter } from "next/navigation";
 
 interface AttendeeDetailsProps {
-  ticket: TicketProps;
   eventID: number;
-  sessionID: number;
   toggleModal: () => void;
   title: string;
   date: string;
+  sessionIDs: Record<number, number | null>;
+  quantities: Record<number, number>;
+  ticketNames: Record<number, string> | null;
+}
+
+interface BookingTickets {
+  fullname: string;
+  email: string;
+  phone: string;
+  ticket_id: number;
+  session_id: number | null;
+  user_id: number | null;
+  ticket_name?: string;
 }
 
 const AttendeeDetails: React.FC<AttendeeDetailsProps> = ({
-  ticket,
   eventID,
-  sessionID,
   toggleModal,
   title,
   date,
+  sessionIDs,
+  quantities,
+  ticketNames,
 }) => {
   const router = useRouter();
 
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [paymentChannel, setPaymentChannel] = useState<string>("");
+
+  const userID = useSelector((state: RootState) => state.user.userDetails.id);
 
   const [bookEvent] = useBookEventMutation();
 
-  const handleAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAllChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     if (name === "fullName") setFullName(value);
     if (name === "email") setEmail(value);
     if (name === "phone") setPhone(value);
+    if (name === "paymentChannel") setPaymentChannel(value);
   };
 
   const handleBookEvent = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!ticket.id || !eventID || !sessionID) {
+    if (!eventID) {
       return toast.error("An error occured linking your ticket to the event");
     }
 
@@ -52,14 +73,52 @@ const AttendeeDetails: React.FC<AttendeeDetailsProps> = ({
       return toast.error("All fields are required");
     }
 
-    const response = await bookEvent({
-      fullName,
-      email,
-      phone,
-      ticket_id: ticket.id,
+    if (
+      Object.keys(sessionIDs).length === 0 ||
+      Object.keys(quantities).length === 0
+    ) {
+      toast.info("Please select sessions, and quantities for all tickets.", {
+        position: "top-right",
+      });
+      return;
+    }
+
+    if (Object.values(quantities).every((quantity) => quantity === 0)) {
+      toast.info("Please select at least one ticket.", {
+        position: "top-right",
+      });
+      return;
+    }
+
+    const allFormData: BookingTickets[] = [];
+
+    for (const ticketIdStr in quantities) {
+      const ticketId = parseInt(ticketIdStr, 10);
+      const quantity = quantities[ticketId] || 0;
+      const sessionId = sessionIDs[ticketId];
+      const ticketName = ticketNames ? ticketNames[ticketId] : undefined;
+      for (let i = 0; i < quantity; i++) {
+        const bookingTicketItem: BookingTickets = {
+          fullname: fullName,
+          email,
+          phone,
+          user_id: userID !== 0 ? userID : null,
+          ticket_id: ticketId,
+          session_id: sessionId,
+          ticket_name: ticketName,
+        };
+        allFormData.push(bookingTicketItem);
+      }
+    }
+
+    const newBooking = {
       event_id: eventID,
-      session_id: sessionID,
-    });
+      user_id: userID !== 0 ? userID : null,
+      channel: paymentChannel,
+      bookings: allFormData,
+    };
+
+    const response = await bookEvent(newBooking);
     if (response.data) {
       toast.success("Event booked successfully");
       toggleModal();
@@ -96,9 +155,9 @@ const AttendeeDetails: React.FC<AttendeeDetailsProps> = ({
                 {date}
               </div>
             </div>
-            <p className="text-gray-400 text-sm mt-2">
+            {/* <p className="text-gray-400 text-sm mt-2">
               Ticket: {ticket.name} - ₦{Number(ticket.price).toLocaleString()}
-            </p>
+            </p> */}
           </div>
 
           {/* Form */}
@@ -140,7 +199,7 @@ const AttendeeDetails: React.FC<AttendeeDetailsProps> = ({
                   Phone
                 </label>
                 <div className="flex items-center bg-[#313b48] px-4 py-2 rounded-md focus-within:ring focus-within:ring-[#89E101]">
-                  <Flag code="NG" className="w-6 h-4 mr-2" />
+                  {/* <Flag code="USA" className="w-6 h-4 mr-2" /> */}
                   <input
                     type="tel"
                     value={phone}
@@ -151,6 +210,24 @@ const AttendeeDetails: React.FC<AttendeeDetailsProps> = ({
                   />
                 </div>
               </div>
+            </div>
+
+            <div>
+              <label className="block text-gray-300 text-sm sm:text-base mb-1">
+                Payment Channel
+              </label>
+              <select
+                value={paymentChannel}
+                name="paymentChannel"
+                onChange={handleAllChange}
+                className="w-full bg-[#313b48] text-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring focus:ring-[#89E101] text-sm sm:text-base"
+              >
+                <option value="" disabled>
+                  Select your payment channel
+                </option>
+                <option value="PayStack">Paystack</option>
+                <option value="Stripe">Stripe</option>
+              </select>
             </div>
 
             {/* Terms and Checkout */}

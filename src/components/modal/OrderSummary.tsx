@@ -18,21 +18,21 @@ const OrderSummary: React.FC = () => {
         {/* Ticket Images */}
         <div className="space-y-2 bg-[#020e1e] -mx-4 px-4 py-2">
           <Image
-            src="/Ticket1.png"
+            src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hcq7v4hy6hlztcq7wkcj"
             alt="Standard Ticket"
             width={400}
             height={150}
             className="rounded-md mx-auto"
           />
           <Image
-            src="/Ticket2.png"
+            src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hcq7v4hy6hlztcq7wkcj"
             alt="VIP Ticket"
             width={400}
             height={150}
             className="rounded-md mx-auto"
           />
           <Image
-            src="/Ticket2.png"
+            src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hcq7v4hy6hlztcq7wkcj"
             alt="VIP Ticket"
             width={400}
             height={150}
@@ -84,21 +84,21 @@ const OrderSummary: React.FC = () => {
             {/* Ticket Images */}
             <div className="space-y-2 bg-[#020e1e] -mx-4 px-4 py-2">
               <Image
-                src="/Ticket1.png"
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hcq7v4hy6hlztcq7wkcj"
                 alt="Standard Ticket"
                 width={400}
                 height={150}
                 className="rounded-md mx-auto"
               />
               <Image
-                src="/Ticket2.png"
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hcq7v4hy6hlztcq7wkcj"
                 alt="VIP Ticket"
                 width={400}
                 height={150}
                 className="rounded-md mx-auto"
               />
               <Image
-                src="/Ticket2.png"
+                src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/hcq7v4hy6hlztcq7wkcj"
                 alt="VIP Ticket"
                 width={400}
                 height={150}

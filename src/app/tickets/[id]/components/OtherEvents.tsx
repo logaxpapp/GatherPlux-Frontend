@@ -31,7 +31,8 @@ const OtherEvents = ({ id = "" }: OtherEventsProps) => {
     <div
       className="bg-[#020e1e]   py-10 relative   "
       style={{
-        backgroundImage: "url('/Line.png')",
+        backgroundImage:
+          "url('https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/qq7es0mu6cc7tkzlv1kl')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -56,7 +57,10 @@ const OtherEvents = ({ id = "" }: OtherEventsProps) => {
                   {/* Image Section */}
                   <div className="relative aspect-w-16 aspect-h-12">
                     <Image
-                      src={event.images[0] || "/banner.png"}
+                      src={
+                        event.images[0] ||
+                        "https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/cygjqqrodbmwznwqlqtv"
+                      }
                       alt={event.title}
                       layout="fill"
                       objectFit="cover"
@@ -64,7 +68,7 @@ const OtherEvents = ({ id = "" }: OtherEventsProps) => {
                     />
                     <span className="absolute top-2 right-4">
                       <Image
-                        src="/verify.png" // Path to your verify image
+                        src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/l0r6smygkyf1wrtasbuj"
                         alt="Verified"
                         width={24} // Adjust the size of the image
                         height={24}
@@ -86,7 +90,7 @@ const OtherEvents = ({ id = "" }: OtherEventsProps) => {
                       {/* Price Section */}
                       <div className="flex items-center">
                         <Image
-                          src="/ticket.png"
+                          src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/vnrpwfvxrmwt4xajyxoe"
                           alt="Ticket Icon"
                           width={16}
                           height={190}
@@ -100,7 +104,7 @@ const OtherEvents = ({ id = "" }: OtherEventsProps) => {
                       {/* Interested Section */}
                       <div className="flex items-center text-gray-400 text-sm">
                         <Image
-                          src="/Star 1.png"
+                          src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/dtp6yqykibszstqny9ry"
                           alt="Star Icon"
                           width={16}
                           height={16}

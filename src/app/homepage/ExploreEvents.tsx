@@ -1,15 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const ExploreEvents: React.FC = () => {
-
   const router = useRouter();
 
   // Function to handle the click event on the Explore Events button
   const handleExploreEvents = () => {
-    router.push('/explore');
+    router.push("/explore");
   };
 
   return (
@@ -19,16 +18,26 @@ const ExploreEvents: React.FC = () => {
         {/* Text and Button (Top Left) */}
         <div className="flex flex-col gap-8 max-w-md">
           <p className="text-lg font-thin">
-            From concerts to conferences, find the perfect event and reserve your spot instantly.
+            From concerts to conferences, find the perfect event and reserve
+            your spot instantly.
           </p>
-          <button type="button" className="bg-[#89E101] text-black px-4 py-2 w-48 rounded-lg hover:bg-green-600 transition flex flex-row-reverse items-center justify-center gap-2 whitespace-nowrap" onClick={handleExploreEvents}>
+          <button
+            type="button"
+            className="bg-[#89E101] text-black px-4 py-2 w-48 rounded-lg hover:bg-green-600 transition flex flex-row-reverse items-center justify-center gap-2 whitespace-nowrap"
+            onClick={handleExploreEvents}
+          >
             <span>&rarr;</span>
             Explore Events
           </button>
         </div>
         {/* Vertical Images (Top Right) */}
         <div className="grid grid-cols-4 gap-4">
-          {["/6.png", "/7.png", "/8.png", "/9.png"].map((src, index) => (
+          {[
+            "https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/fqs2kxaj6c5xar966gmx",
+            "https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/b5eu22ajdehwwh4mjyjg",
+            "https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/zz2fbs6arqgiujrups17",
+            "https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/bpwg1vh4iw4art7fdpif",
+          ].map((src, index) => (
             <div key={index} className="w-full h-64 overflow-hidden rounded-lg">
               <Image
                 src={src}
@@ -46,7 +55,7 @@ const ExploreEvents: React.FC = () => {
       <div className="w-full mt-10">
         <div className="w-full h-auto overflow-hidden">
           <Image
-            src="/group.png"
+            src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/cygjqqrodbmwznwqlqtv"
             alt="Event Gallery Group Image"
             width={1200}
             height={800}

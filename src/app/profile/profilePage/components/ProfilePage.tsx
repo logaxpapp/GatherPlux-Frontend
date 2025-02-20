@@ -48,7 +48,7 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
                   <Image
                     height={100}
                     width={100}
-                    src={image || '/Ellipse 1 (1).png'}
+                    src={image || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541'}
                     alt="User display picture"
                     className="object-cover rounded-full"
                   />
@@ -57,7 +57,7 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
                     <Image
                       height={20}
                       width={20}
-                      src="/Camera icon.png"
+                      src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/geyxygvdn7fzssb6ijof"
                       alt="Camera Icon"
                       className="lg:w-6 lg:h-6"
                       onClick={triggerFilePicker}
