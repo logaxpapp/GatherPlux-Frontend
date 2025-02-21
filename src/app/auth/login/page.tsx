@@ -55,25 +55,20 @@ const Login = () => {
         dispatch(setToken(response.body.access_token));
         dispatch(setRole(response.body.role));
         router.push(
-          response.body.role === "superadin" ? "/admin/messages" : "/profile",
+          response.body.role === "superadmin" ? "/admin/messages" : "/profile",
         );
       }
-
-      if (response && response.status === 401) {
-        toast.error("Invalid credentials", {
-          position: "top-right",
-        });
+    } catch (err) {
+      const error = err as { status?: number; data?: { error?: string } };
+      if (error.status === 400) {
+        toast.error("Invalid credentials", { position: "top-right" });
         return "invalid credentials";
       }
 
-      if (response && response.error) {
-        toast.error(response.error, {
-          position: "top-right",
-        });
-        return response.error;
+      if (error?.data?.error) {
+        toast.error(error.data.error, { position: "top-right" });
+        return error.data.error;
       }
-    } catch (err) {
-      console.error("An error occured when signing user up: ", err);
     }
   };
 

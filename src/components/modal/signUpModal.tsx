@@ -5,6 +5,7 @@ import Loader from "@/components/Loader";
 import { setToken } from "@/store/slices/user.slice";
 import { setCookie } from "@/utils/cookie.utility";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 interface SignUpModalProps {
   onClose: () => void;
@@ -18,17 +19,12 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const userData = {
-      fullName: formData.get("fullName"),
-      username: formData.get("email"),
+      name: formData.get("fullName"),
+      email: formData.get("email"),
       password: formData.get("password"),
     };
 
-    if (!userData.username || !userData.password || !userData.fullName) {
-      return;
-    }
-
-    if (userData.password !== userData.fullName) {
-      alert("Passwords do not match");
+    if (!userData.email || !userData.password || !userData.name) {
       return;
     }
 
@@ -40,7 +36,9 @@ export default function SignUpModal({ onClose }: SignUpModalProps) {
         onClose();
       }
     } catch (err) {
-      console.error("An error occurred: ", err);
+      toast.error(`An error occurred: ${err}`, {
+        position: "top-right",
+      });
     }
   };
 
