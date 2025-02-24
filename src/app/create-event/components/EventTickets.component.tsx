@@ -263,7 +263,7 @@ const EventTickets: React.FC<EventTicketsProps> = ({
                     }
                     className="w-full px-3 py-2 border border-gray-500 rounded focus:outline-none bg-[#1B2634] text-gray-400"
                   >
-                    <option value="SIT">Sit</option>
+                    <option value="SEAT">Seat</option>
                     <option value="TABLE">Table</option>
                   </select>
                 </div>

@@ -281,7 +281,7 @@ export default function CreateEvent() {
       name: "",
       price: "",
       people: 1,
-      seatType: "SIT",
+      seatType: "SEAT",
       quantity: 1,
     },
   ]);
@@ -305,7 +305,7 @@ export default function CreateEvent() {
         name: "",
         price: "",
         people: 1,
-        seatType: "SIT",
+        seatType: "SEAT",
         quantity: 1,
       },
     ]);
