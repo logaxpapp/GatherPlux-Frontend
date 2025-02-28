@@ -125,7 +125,7 @@ const EventTickets: React.FC<EventTicketsProps> = ({
               checked={hideTickets}
               onChange={() => setHideTickets(!hideTickets)}
             />
-            <p>Check the box if you don`&apos;t need event tickets</p>
+            <p>Check the box if you don&apos;t need event tickets</p>
           </div>
         )}
 
@@ -175,7 +175,6 @@ const EventTickets: React.FC<EventTicketsProps> = ({
                 ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                {/* Optional: Add a dropdown arrow icon here */}
                 <svg
                   className="fill-current h-4 w-4"
                   xmlns="http://www.w3.org/2000/svg"

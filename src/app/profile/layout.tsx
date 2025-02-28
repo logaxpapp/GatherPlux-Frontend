@@ -136,6 +136,17 @@ const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
                   ? "bg-[#243447]"
                   : "hover:bg-[#243447]"
               } transition duration-200 text-sm`}
+              onClick={() => handleNavigation("/profile/events")}
+            >
+              <FiBookmark className="w-4 h-4" />
+              <span>My Events</span>
+            </li>
+            <li
+              className={`cursor-pointer flex items-center space-x-2 text-white px-4 py-2 rounded-md ${
+                pathname === "/profile/bookmark"
+                  ? "bg-[#243447]"
+                  : "hover:bg-[#243447]"
+              } transition duration-200 text-sm`}
               onClick={() => handleNavigation("/profile/bookmark")}
             >
               <FiBookmark className="w-4 h-4" />

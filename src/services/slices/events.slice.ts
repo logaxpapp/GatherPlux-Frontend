@@ -32,6 +32,16 @@ const extendApiSlice = clientBaseAPISlice.injectEndpoints({
         body: eventDetails,
       }),
     }),
+    getUserEvents: builder.query({
+      query: () => "event/me",
+    }),
+    editEvent: builder.mutation({
+      query: (eventDetails) => ({
+        url: `event/${eventDetails.id}`,
+        method: "PUT",
+        body: eventDetails,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -44,4 +54,6 @@ export const {
   useGetSearchedEventsQuery,
   useLazySearchEventsQuery,
   useBookEventMutation,
+  useGetUserEventsQuery,
+  useEditEventMutation,
 } = extendApiSlice;

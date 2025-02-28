@@ -1,12 +1,12 @@
 import Loader from "@/components/Loader";
 import Image from "next/image";
 import React from "react";
-import { FiUser, } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 
 <FiUser className="text-[#a5b0c1] w-5 h-5" />;
 
 interface Props {
-  image: string | null;
+  image: string;
   email: string;
   firstname: string;
   lastname: string;
@@ -20,16 +20,24 @@ interface Props {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone, address, isLoading, handleUpdateProfile, triggerFilePicker, handleAllOnChange, fileInputRef, handleFileChange }) => {
+const ProfilePage: React.FC<Props> = ({
+  image,
+  email,
+  firstname,
+  lastname,
+  phone,
+  address,
+  isLoading,
+  handleUpdateProfile,
+  triggerFilePicker,
+  handleAllOnChange,
+  fileInputRef,
+  handleFileChange,
+}) => {
   return (
     <div className="min-h-screen bg-[#020e1e] flex justify-center  text-white ">
       <div className="w-full max-w-6xl bg-[#020e1e] rounded-lg shadow-md flex flex-col lg:flex-row ">
-
-
         <div className="w-full max-w-[1000px] bg-[#020e1e] flex justify-center   ">
-
-         
-
           {/* Right Content Area */}
           <div className="w-full lg:w-3/4   bg-[#020e1e]">
             <h2 className="text-xl lg:text-2xl font-bold text-white mb-6">
@@ -48,7 +56,10 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
                   <Image
                     height={100}
                     width={100}
-                    src={image || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541'}
+                    src={
+                      image ||
+                      "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
+                    }
                     alt="User display picture"
                     className="object-cover rounded-full"
                   />
@@ -67,7 +78,7 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
                       type="file"
                       ref={fileInputRef}
                       onChange={handleFileChange}
-                      title={''}
+                      title={""}
                     />
                   </div>
                 </div>
@@ -81,7 +92,9 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
 
               {/* Form Fields */}
               <div className="space-y-8">
-                <h3 className="text-sm lg:text-lg font-semibold mb-4 text-white">Profile Information</h3>
+                <h3 className="text-sm lg:text-lg font-semibold mb-4 text-white">
+                  Profile Information
+                </h3>
                 {/* First Name */}
                 <div className="flex flex-col">
                   <label className="font-bold text-sm text-[#a5b0c1] mb-2">
@@ -132,7 +145,8 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
                 Contact Details
               </h3>
               <p className="text-xs lg:text-sm text-[#a5b0c1] mb-4">
-                These details are private and only used to contact you for ticketing or prizes.
+                These details are private and only used to contact you for
+                ticketing or prizes.
               </p>
 
               <div className="space-y-8">
@@ -167,18 +181,17 @@ const ProfilePage: React.FC<Props> = ({ image, email, firstname, lastname, phone
                 </div>
 
                 {/* Update Button */}
-                <button type="button" className="w-full mt-6 bg-lime-500 text-black font-bold py-2 rounded-lg hover:bg-lime-600" onClick={handleUpdateProfile}>
+                <button
+                  type="button"
+                  className="w-full mt-6 bg-lime-500 text-black font-bold py-2 rounded-lg hover:bg-lime-600"
+                  onClick={handleUpdateProfile}
+                >
                   {isLoading && <Loader />}
                   Update Profile
                 </button>
-
               </div>
             </div>
           </div>
-
-
-
-
         </div>
       </div>
     </div>

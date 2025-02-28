@@ -1,31 +1,33 @@
-'use strict';
-'use client';
+"use strict";
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
-import ProfilePage from './profilePage/components/ProfilePage';
+import ProfilePage from "./profilePage/components/ProfilePage";
 import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
-} from '@/services/slices/user.slice';
-import { setUserDetails } from '@/store/slices/user.slice';
-import { RootState } from '@/store/store';
+} from "@/services/slices/user.slice";
+import { setUserDetails } from "@/store/slices/user.slice";
+import { RootState } from "@/store/store";
 
 const Page = () => {
   const dispatch = useDispatch();
 
-  const [image, setImage] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
+  const [image, setImage] = useState<string>(
+    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+  );
+  const [email, setEmail] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const userInfo = useSelector((state: RootState) => state.user.userDetails);
 
-  const { data } = useGetUserProfileQuery('');
+  const { data } = useGetUserProfileQuery("");
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
 
   useEffect(() => {
@@ -45,16 +47,16 @@ const Page = () => {
   const handleAllOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'first':
+      case "first":
         setFirstname(value);
         break;
-      case 'last':
+      case "last":
         setLastname(value);
         break;
-      case 'phone':
+      case "phone":
         setPhone(value);
         break;
-      case 'address':
+      case "address":
         setAddress(value);
         break;
       default:
@@ -70,7 +72,7 @@ const Page = () => {
       address === userInfo?.address &&
       image === userInfo?.image_url
     ) {
-      console.error('No changes made');
+      console.error("No changes made");
       return;
     }
 
@@ -82,11 +84,11 @@ const Page = () => {
         address,
         image_url: image,
       });
-      if (data && data.message === 'SUCCESSFUL') {
+      if (data && data.message === "SUCCESSFUL") {
         dispatch(setUserDetails(data.body));
       }
     } catch (err) {
-      console.error('An error occurred: ', err);
+      console.error("An error occurred: ", err);
     }
   };
 
@@ -101,7 +103,7 @@ const Page = () => {
     const files = e.target.files;
     if (files && files.length > 0) {
       const formData = new FormData();
-      formData.append('files', files[0]);
+      formData.append("files", files[0]);
 
       try {
         const response = await axios.post(
@@ -109,22 +111,22 @@ const Page = () => {
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           },
         );
 
         setImage(response.data.body[0].secure_url);
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error("Error uploading file:", error);
       }
     }
   };
 
   return (
-    <div className='min-h-screen flex bg-[#020e1e] text-white'>
+    <div className="min-h-screen flex bg-[#020e1e] text-white">
       {/* Main Content */}
-      <div className='flex-1 p-8'>
+      <div className="flex-1 p-8">
         <ProfilePage
           image={image}
           email={email}

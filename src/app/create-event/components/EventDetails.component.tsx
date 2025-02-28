@@ -33,7 +33,13 @@ export interface EventDetailsProps {
   handleDeleteSession: (id: string) => void;
   eventDetails: {
     type: string;
+    title: string;
+    category: CombinedStateAndCategoryProps | undefined;
+    address: string;
+    state: CombinedStateAndCategoryProps | undefined;
+    description: string;
   };
+  city?: string;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({
@@ -55,6 +61,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   handleAddSession,
   handleDeleteSession,
   eventDetails,
+  city,
 }) => {
   const [editingId, setEditingId] = useState<string>("");
   const [sessionName, setSessionName] = useState<string>("");
@@ -90,6 +97,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           type="text"
           placeholder="Enter the name of your event"
           name="title"
+          value={eventDetails.title}
           className="h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-full max-w-[500px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]"
           onChange={handleTitleAndDescriptionAndAddress}
         />
@@ -110,7 +118,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
             backgroundSize: "1em",
           }}
           onChange={handleCategoryChange}
-          defaultValue=""
+          value={`${eventDetails.category}`}
         >
           <option value="" disabled>
             Please select one
@@ -138,7 +146,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
             <input
               type="radio"
               name="eventType"
-              value="one-time"
+              value="single"
               className="mr-2 h-4 w-4 text-[#9edd45] border-[#2d3744] focus:ring-[#9edd45]"
               onChange={handleEventTypeChange}
               defaultChecked={eventDetails.type === "one-time"}
@@ -318,112 +326,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           </div>
         </div>
 
-        {/* Session Input Fields */}
-        <div className="space-y-6">
-          {sessions.map((session: SessionsProps) => (
-            <div
-              key={session.id}
-              className="grid grid-cols-12 gap-4 items-center"
-            >
-              {/* Session Name (only for multiple sessions) */}
-              {isMultipleSession && (
-                <div className="col-span-12 mb-2 flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    {editingId !== session.id && (
-                      <>
-                        {/* <h2 className="text-lg text-white font-semibold">
-                          {session.name || `Session ${index + 1}`}
-                        </h2> */}
-                        {/* <button
-                          type="button"
-                          className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
-                          onClick={() => handleSessionNameEdit(session.id)}
-                        >
-                          ✏️ edit name
-                        </button> */}
-                      </>
-                    )}
-                    {/* {editingId === session.id && (
-                      <>
-                        <input
-                          type="text"
-                          placeholder="Enter session name"
-                          className="h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-[250px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]"
-                          onChange={handleSessionNameChange}
-                        />
-                        <button
-                          type="button"
-                          className="text-[#9edd45] border border-[#9edd45] px-2 py-1 rounded text-sm hover:bg-[#76b434] hover:text-white transition"
-                          onClick={handleSaveSessionName}
-                        >
-                          save name
-                        </button>
-                      </>
-                    )} */}
-                  </div>
-                </div>
-              )}
-
-              {/* Session Input Fields */}
-      
-
-              {/* <div className="col-span-12 sm:col-span-3">
-                <label className="block text-sm text-gray-400 mb-2">
-                  Start Time <span className="text-red-500">*</span>
-                </label>
-                <div className="relative">
-                  <CustomTimePicker
-                    handleTimeChange={handleTimeChange}
-                    id={session.id}
-                    type="startTime"
-                  />
-                </div>
-              </div>
-              <div className="col-span-12 sm:col-span-3">
-                <label className="block text-sm text-gray-400 mb-2">
-                  End Time
-                </label>
-                <div className="relative">
-                  <CustomTimePicker
-                    handleTimeChange={handleTimeChange}
-                    id={session.id}
-                    type="endTime"
-                  />
-                </div>
-              </div> */}
-
-              {/* {index < 1 && isMultipleSession && (
-                <div className="col-span-12 sm:col-span-2 justify-end">
-                  <button
-                    title={""}
-                    type="button"
-                    className="text-[#9edd45] text-[24px] hover:text-[#76b434] transition"
-                    onClick={handleAddSession}
-                  >
-                    <CiCirclePlus />
-                  </button>
-                </div>
-              )} */}
-              {/* {index >= 1 && (
-                <div className="col-span-12 sm:col-span-2 justify-end">
-                  <button
-                    title={""}
-                    type="button"
-                    className="text-[#f00] text-[24px] hover:text-[#f00] transition"
-                    onClick={() => handleDeleteSession(session.id)}
-                  >
-                    <CiTrash />
-                  </button>
-                </div>
-              )} */}
-            </div>
-          ))}
-        </div>
-
-
-
-
-        
         {/* </div> */}
 
         {/* LOCATION */}
@@ -494,7 +396,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                     backgroundSize: "1em",
                   }}
                   onChange={handleStateChange}
-                  defaultValue=""
+                  value={`${eventDetails.state}`}
                 >
                   <option value="" disabled>
                     Please select one
@@ -527,6 +429,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 type="text"
                 id="city"
                 name="city"
+                value={city}
                 placeholder="City of the event's location"
                 className="w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]"
                 onChange={handleCityChange}
@@ -548,6 +451,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 type="text"
                 id="address"
                 name="address"
+                value={`${eventDetails.address}`}
                 placeholder="Address of the event's location"
                 className="w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]"
                 onChange={handleTitleAndDescriptionAndAddress}
@@ -577,7 +481,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
               <textarea
                 id="description"
                 name="description"
-                rows={8} /* Increased Rows for Larger Box */
+                value={`${eventDetails.description}`}
+                rows={8}
                 placeholder="Describe what's special about your event & other important details."
                 className="w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]"
                 onChange={handleTitleAndDescriptionAndAddress}
