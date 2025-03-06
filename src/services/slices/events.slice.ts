@@ -35,11 +35,11 @@ const extendApiSlice = clientBaseAPISlice.injectEndpoints({
     getUserEvents: builder.query({
       query: () => "event/me",
     }),
-    editEvent: builder.mutation({
-      query: (eventDetails) => ({
-        url: `event/${eventDetails.id}`,
+    updateEvent: builder.mutation({
+      query: ({ id, updatedEvent }) => ({
+        url: `event/${id}`,
         method: "PUT",
-        body: eventDetails,
+        body: updatedEvent,
       }),
     }),
   }),
@@ -50,10 +50,11 @@ export const {
   useGetAllPublicEventsQuery,
   useCreateEventMutation,
   useGetOneEventQuery,
+  useLazyGetOneEventQuery,
   useGetUpcomingEventsQuery,
   useGetSearchedEventsQuery,
   useLazySearchEventsQuery,
   useBookEventMutation,
   useGetUserEventsQuery,
-  useEditEventMutation,
+  useUpdateEventMutation,
 } = extendApiSlice;

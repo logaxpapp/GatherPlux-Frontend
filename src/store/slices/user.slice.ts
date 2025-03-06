@@ -4,7 +4,7 @@ import { getCookie, isTokenValid, removeCookie } from "@/utils/cookie.utility";
 const token = getCookie("token") as string | "";
 let accessToken: string | null = null;
 try {
-  accessToken = token ? JSON.parse(token).access_token : null;
+  accessToken = token ? token : null;
 } catch (error) {
   console.error("Error parsing token:", error);
 }

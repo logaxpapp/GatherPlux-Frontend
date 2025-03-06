@@ -1,70 +1,170 @@
-import React, { useState } from "react";
+import { useGetAllCategoriesQuery } from "@/services/slices/category.slice";
+import {
+  useGetAllCountriesQuery,
+  useLazyGetAllStatesQuery,
+} from "@/services/slices/state.slice";
+import { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
+import { SessionsProps } from "../types/types";
+import { CiCirclePlus, CiTrash } from "react-icons/ci";
+import { toast } from "react-toastify";
 import CustomCalendar from "@/components/CustomCalender";
 import CustomTimePicker from "@/components/CustomTimePicker";
-import { CiCirclePlus, CiTrash } from "react-icons/ci";
-import { CombinedStateAndCategoryProps, CountryProp } from "../types/types";
-import { SessionsProps } from "../page";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addNewEventFields,
+  updateEditedEvent,
+} from "@/store/slices/event.slice";
+import { RootState } from "@/store/store";
 
-export interface EventDetailsProps {
-  handleTitleAndDescriptionAndAddress: (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
-  ) => void;
-  categories: CombinedStateAndCategoryProps[];
-  countries: CountryProp[];
-  states: CombinedStateAndCategoryProps[];
-  isMultipleSession: boolean;
-  sessions: SessionsProps[];
-  handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleEventTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleCountryChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleCityChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleStateChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleStartDateChange: (date: Date | undefined, id: string) => void;
-  handleSessionTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleTimeChange: (
-    time: string | undefined,
-    id: string | undefined,
-    type: string,
-  ) => void;
-  handleSessionEditName: (id: string, name: string) => void;
-  handleAddSession: () => void;
-  handleDeleteSession: (id: string) => void;
-  eventDetails: {
-    type: string;
-    title: string;
-    category: CombinedStateAndCategoryProps | undefined;
-    address: string;
-    state: CombinedStateAndCategoryProps | undefined;
-    description: string;
-  };
-  city?: string;
+interface IEventDetailsProps {
+  handleNextStep: () => void;
+  path: string;
 }
 
-const EventDetails: React.FC<EventDetailsProps> = ({
-  handleTitleAndDescriptionAndAddress,
-  categories = [],
-  countries = [],
-  states = [],
-  isMultipleSession,
-  sessions,
-  handleCategoryChange,
-  handleEventTypeChange,
-  handleCountryChange,
-  handleCityChange,
-  handleStateChange,
-  handleStartDateChange,
-  handleSessionTypeChange,
-  handleTimeChange,
-  handleSessionEditName,
-  handleAddSession,
-  handleDeleteSession,
-  eventDetails,
-  city,
-}) => {
+const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
+  const dispatch = useDispatch();
+
+  const [title, setTitle] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [eventType, setEventType] = useState("single");
+  const [isMultipleSession, setIsMultipleSession] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [states, setStates] = useState([]);
+  const [selectedState, setSelectedState] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [sessions, setSessions] = useState<SessionsProps[]>([
+    {
+      id: uuid(),
+      date: undefined,
+      start_time: "",
+      end_time: "",
+    },
+  ]);
   const [editingId, setEditingId] = useState<string>("");
   const [sessionName, setSessionName] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+
+  const eventToEditDetails = useSelector(
+    (state: RootState) => state.event.eventToEdit,
+  );
+
+  const { data: categoriesData } = useGetAllCategoriesQuery("");
+  const { data: allCountries } = useGetAllCountriesQuery("");
+  const [getAllStates] = useLazyGetAllStatesQuery();
+
+  useEffect(() => {
+    if (categoriesData && categoriesData.body) {
+      setCategories(categoriesData.body);
+    }
+
+    if (allCountries && allCountries.body) {
+      setCountries(allCountries.body);
+    }
+  }, [allCountries, categoriesData]);
+
+  useEffect(() => {
+    const fetchStates = async (code2: string) => {
+      const response = await getAllStates(code2);
+      if (response.data) {
+        setStates(response.data.body);
+      }
+    };
+
+    // Create Event
+    const savedEventDetails = localStorage.getItem("eventDetails");
+    if (path === "create" && savedEventDetails) {
+      const parsedData = JSON.parse(savedEventDetails);
+      setTitle(parsedData.title || "");
+      setSelectedCategory(parsedData.selectedCategory || "");
+      setEventType(parsedData.eventType || "single");
+      setIsMultipleSession(parsedData.isMultipleSession || false);
+      setSelectedCountry(parsedData.selectedCountry || "");
+      setSelectedState(parsedData.selectedState || "");
+      setDescription(parsedData.description || "");
+      setCity(parsedData.city || "");
+      setAddress(parsedData.address || "");
+      setSessions(parsedData.sessions || []);
+
+      const parsedSelectedCountry = JSON.parse(
+        parsedData.selectedCountry || "",
+      );
+      const { code2 } = parsedSelectedCountry;
+      fetchStates(code2);
+    }
+
+    // Edit Event
+    if (path === "edit" && eventToEditDetails) {
+      setTitle(eventToEditDetails.title || "");
+      setSelectedCategory(eventToEditDetails.category_id || "");
+      setEventType(eventToEditDetails.event_type || "single");
+      setIsMultipleSession(eventToEditDetails.sessions.length > 1 || false);
+      setSelectedCountry(eventToEditDetails.country || "AU");
+      setSelectedState(eventToEditDetails.state_id || "");
+      setDescription(eventToEditDetails.description || "");
+      setCity(eventToEditDetails.city || "");
+      setAddress(eventToEditDetails.address || "");
+      setSessions(eventToEditDetails.sessions || []);
+
+      fetchStates(eventToEditDetails.country || "AU");
+    }
+  }, [getAllStates, path, eventToEditDetails]);
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const parsedData = JSON.parse(e.target.value);
+    const { id } = parsedData;
+    setSelectedCategory(id);
+  };
+
+  const handleEventTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setEventType(value);
+  };
+
+  const handleSessionTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { value } = event.target;
+    setIsMultipleSession(value === "multiple");
+  };
+
+  const handleAddSession = () => {
+    setSessions([
+      ...sessions,
+      { id: uuid(), date: undefined, start_time: "", end_time: "" },
+    ]);
+  };
+
+  const handleSessionEditName = (id: string, name: string) => {
+    setSessions(
+      sessions.map((session) => {
+        if (session.id === id) {
+          return { ...session, name };
+        }
+        return session;
+      }),
+    );
+  };
+
+  const handleSaveSessionName = () => {
+    if (!sessionName) return;
+
+    handleSessionEditName(editingId, sessionName);
+    setEditingId("");
+    setSessionName("");
+  };
+
+  const handleDeleteSession = (id: string) => {
+    const updatedSessions = sessions.filter((session) => session.id !== id);
+    setSessions(updatedSessions);
+  };
 
   const handleSessionNameEdit = (id: string) => {
     setEditingId(id);
@@ -74,12 +174,96 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     setSessionName(e.target.value);
   };
 
-  const handleSaveSessionName = () => {
-    if (!sessionName) return;
+  const handleStartDateChange = (date: Date | undefined, id: string) => {
+    const updatedSessions = sessions.map((session) => {
+      if (session.id === id) {
+        return { ...session, startDate: date };
+      }
+      return session;
+    });
 
-    handleSessionEditName(editingId, sessionName);
-    setEditingId("");
-    setSessionName("");
+    setSessions(updatedSessions);
+  };
+
+  const handleTimeChange = (
+    time: string | undefined,
+    id: string | undefined,
+    type: string,
+  ) => {
+    const updatedSessions = sessions.map((session) => {
+      if (session.id === id) {
+        return { ...session, [type]: time };
+      }
+      return session;
+    });
+
+    setSessions(updatedSessions);
+  };
+
+  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const parsedData = JSON.parse(event.target.value);
+    const { code2 } = parsedData;
+
+    const fetchStates = async () => {
+      const response = await getAllStates(code2);
+      if (response.data) {
+        setStates(response.data.body);
+      }
+    };
+
+    if (code2) {
+      fetchStates();
+      setSelectedCountry(event.target.value);
+    }
+  };
+
+  const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedState(event.target.value);
+  };
+
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setDescription(e.target.value);
+  };
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(e.target.value);
+  };
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
+  };
+
+  const handleSaveAndContinue = () => {
+    if (!title || !description || !city || !address) {
+      toast.info("Please fill in all required fields", {
+        position: "top-right",
+      });
+      return;
+    }
+
+    const eventDetails = {
+      id: eventToEditDetails.id || "",
+      title,
+      category_id: selectedCategory,
+      event_type: eventType,
+      country: selectedCountry,
+      state_id: selectedState,
+      description,
+      city,
+      address,
+      sessions,
+    };
+
+    if (path === "create") {
+      localStorage.setItem("eventDetails", JSON.stringify(eventDetails));
+      dispatch(addNewEventFields(eventDetails));
+    }
+
+    if (path === "edit") {
+      dispatch(updateEditedEvent(eventDetails));
+    }
+    handleNextStep();
   };
 
   return (
@@ -97,9 +281,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           type="text"
           placeholder="Enter the name of your event"
           name="title"
-          value={eventDetails.title}
+          value={title}
+          onChange={handleTitleChange}
           className="h-[44px] px-4 py-2 rounded-md text-[#fff] bg-[#1b2634] border border-[#2d3744] mt-2 w-full max-w-[500px] focus:outline-none focus:ring-2 focus:ring-[#2d3744]"
-          onChange={handleTitleAndDescriptionAndAddress}
         />
       </div>
 
@@ -117,13 +301,13 @@ const EventDetails: React.FC<EventDetailsProps> = ({
             backgroundPosition: "right 10px center",
             backgroundSize: "1em",
           }}
+          value={selectedCategory}
           onChange={handleCategoryChange}
-          value={`${eventDetails.category}`}
         >
           <option value="" disabled>
             Please select one
           </option>
-          {categories?.map((eachCategory) => (
+          {categories?.map((eachCategory: { id: string; name: string }) => (
             <option
               value={JSON.stringify(eachCategory)}
               key={eachCategory.id}
@@ -149,7 +333,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
               value="single"
               className="mr-2 h-4 w-4 text-[#9edd45] border-[#2d3744] focus:ring-[#9edd45]"
               onChange={handleEventTypeChange}
-              defaultChecked={eventDetails.type === "one-time"}
+              defaultChecked={eventType === "single"}
             />
             Single Event
           </label>
@@ -160,7 +344,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
               value="recurring"
               className="mr-2 h-4 w-4 text-[#9edd45] border-[#2d3744] focus:ring-[#9edd45]"
               onChange={handleEventTypeChange}
-              defaultChecked={eventDetails.type === "recurring"}
+              defaultChecked={eventType === "recurring"}
             />
             Recurring Event
           </label>
@@ -263,6 +447,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                     <CustomCalendar
                       handleStartDateChange={handleStartDateChange}
                       id={session.id}
+                      givenDate={session.date}
                     />
                   </div>
                 </div>
@@ -277,6 +462,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                       handleTimeChange={handleTimeChange}
                       id={session.id}
                       type="startTime"
+                      givenStartTime={session.start_time}
                     />
                   </div>
                 </div>
@@ -291,7 +477,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                       handleTimeChange={handleTimeChange}
                       id={session.id}
                       type="endTime"
-                      startTime={session.startTime}
+                      startTime={session.start_time}
+                      givenEndTime={session.end_time}
                     />
                   </div>
                 </div>
@@ -326,8 +513,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           </div>
         </div>
 
-        {/* </div> */}
-
         {/* LOCATION */}
         <div className="pb-6 pt-12">
           {/* Border Line */}
@@ -357,19 +542,21 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                   backgroundSize: "1em",
                 }}
                 onChange={handleCountryChange}
-                defaultValue=""
+                value={selectedCountry}
               >
                 <option value="" disabled>
                   Please select one
                 </option>
-                {countries?.map((eachCountry) => (
-                  <option
-                    value={JSON.stringify(eachCountry)}
-                    key={eachCountry.code2}
-                  >
-                    {eachCountry.name}
-                  </option>
-                ))}
+                {countries?.map(
+                  (eachCountry: { name: string; code2: string }) => (
+                    <option
+                      value={JSON.stringify(eachCountry)}
+                      key={eachCountry.code2}
+                    >
+                      {eachCountry.name}
+                    </option>
+                  ),
+                )}
               </select>
             </div>
           </div>
@@ -395,13 +582,13 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                     backgroundPosition: "right 1rem center",
                     backgroundSize: "1em",
                   }}
+                  value={selectedState}
                   onChange={handleStateChange}
-                  value={`${eventDetails.state}`}
                 >
                   <option value="" disabled>
                     Please select one
                   </option>
-                  {states?.map((eachState) => (
+                  {states?.map((eachState: { id: number; name: string }) => (
                     <option
                       value={JSON.stringify(eachState)}
                       key={eachState.id}
@@ -430,9 +617,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 id="city"
                 name="city"
                 value={city}
+                onChange={handleCityChange}
                 placeholder="City of the event's location"
                 className="w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]"
-                onChange={handleCityChange}
               ></input>
             </div>
           </div>
@@ -451,10 +638,10 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 type="text"
                 id="address"
                 name="address"
-                value={`${eventDetails.address}`}
+                value={address}
+                onChange={handleAddressChange}
                 placeholder="Address of the event's location"
                 className="w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]"
-                onChange={handleTitleAndDescriptionAndAddress}
               ></input>
             </div>
           </div>
@@ -481,15 +668,25 @@ const EventDetails: React.FC<EventDetailsProps> = ({
               <textarea
                 id="description"
                 name="description"
-                value={`${eventDetails.description}`}
+                value={description}
+                onChange={handleDescriptionChange}
                 rows={8}
                 placeholder="Describe what's special about your event & other important details."
                 className="w-full bg-gray-800 text-white px-4 py-3 border border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-[#9edd45]"
-                onChange={handleTitleAndDescriptionAndAddress}
               ></textarea>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="w-full sm:w-auto">
+        <button
+          type="button"
+          className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+          onClick={handleSaveAndContinue}
+        >
+          Save & Continue
+        </button>
       </div>
     </div>
   );

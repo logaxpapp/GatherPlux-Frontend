@@ -15,9 +15,7 @@ const ProgressBar = ({ currentStep }: ProgressBarProps) => {
               currentStep >= 1 ? "bg-gray-400" : "bg-[#2E353E]"
             } rounded-full`}
           ></div>
-          <div
-            className="absolute left-1/2 -translate-x-1/2 h-5 w-5 bg-gray-200 border border-gray-400 rounded-full flex items-center justify-center top-[-8px]"
-          >
+          <div className="absolute left-1/2 -translate-x-1/2 h-5 w-5 bg-gray-200 border border-gray-400 rounded-full flex items-center justify-center top-[-8px]">
             <div className="h-3 w-3 bg-[#D7D5EA] rounded-full"></div>
           </div>
         </div>

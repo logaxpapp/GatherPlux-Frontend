@@ -8,7 +8,6 @@ import {
 } from "react-icons/io5";
 import { SlCalender } from "react-icons/sl";
 import Image from "next/image";
-import { EventDetailsProps, SessionsProps, TicketEntry } from "../page";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import SignInModal from "@/components/modal/SignInModal";
@@ -16,31 +15,40 @@ import SignUpModal from "@/components/modal/signUpModal";
 import { useLazyGetUserProfileQuery } from "@/services/slices/user.slice";
 import { setUserDetails } from "@/store/slices/user.slice";
 import Map from "@/components/Map";
+import {
+  useCreateEventMutation,
+  useUpdateEventMutation,
+} from "@/services/slices/events.slice";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-interface PreviewEventProps {
-  uploadedBanner: string | null;
-  eventDetails: EventDetailsProps;
-  sessions: SessionsProps[];
-  tickets: TicketEntry[];
-  numberOfTickets: number | "";
-  eventType: string;
-  isMultipleSession: boolean;
+interface IEventPreviewProps {
+  handlePreviousStep: () => void;
+  path: string;
 }
 
-const PreviewEvent: React.FC<PreviewEventProps> = ({
-  uploadedBanner,
-  eventDetails,
-  sessions,
-  tickets,
-  numberOfTickets,
-  eventType,
-  isMultipleSession,
+const EventPreview: React.FC<IEventPreviewProps> = ({
+  handlePreviousStep,
+  path,
 }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const user = useSelector((state: RootState) => state.user);
 
+  const eventDetails = useSelector((state: RootState) =>
+    path === "create" ? state.event.newEvent[0] : state.event.editedEvent[0],
+  );
+  const eventBanner = useSelector((state: RootState) =>
+    path === "create" ? state.event.newEvent[1] : state.event.editedEvent[1],
+  );
+  const eventTickets = useSelector((state: RootState) =>
+    path === "create" ? state.event.newEvent[2] : state.event.editedEvent[2],
+  );
+
   const [getUserProfileQuery] = useLazyGetUserProfileQuery();
+  const [createEventMutation] = useCreateEventMutation();
+  const [updateEventMutation] = useUpdateEventMutation();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -63,7 +71,7 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
     ) {
       fetchUserProfile();
     }
-  }, [dispatch, eventDetails, getUserProfileQuery, user]);
+  }, [dispatch, getUserProfileQuery, user]);
 
   const [showMore, setShowMore] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
@@ -83,15 +91,124 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
     setIsSignUpModalOpen(false);
   };
 
+  const handleGoBackandEdit = () => {
+    handlePreviousStep();
+  };
+
+  const handleCreateEvent = async () => {
+    const newEvent = {
+      title: eventDetails.title,
+      category_id: eventDetails.category_id,
+      state_id: JSON.parse(eventDetails.state_id).id,
+      address: eventDetails.address,
+      city: eventDetails.city,
+      description: eventDetails.description,
+      images: [eventBanner.images],
+      is_free: eventTickets.event_type === "free",
+      ticketed: eventTickets.tickets[0].name !== "",
+      currency: eventTickets.currency,
+      each_ticket_identity: eventTickets.each_ticket_identity,
+      time: eventDetails.sessions[0].start_time,
+      absorb_fees: true,
+      tickets:
+        eventTickets.tickets[0].name !== ""
+          ? eventTickets.tickets.map((ticket) => ({
+              name: ticket.name,
+              price: ticket.price,
+              quantity: Number(ticket.quantity),
+              seat_type: ticket.seat_type,
+              no_per_seat_type: Number(ticket.no_per_seat_type),
+            }))
+          : [],
+      sessions: eventDetails.sessions.map((session) => ({
+        name: session.name,
+        date: session.date,
+        start_time: session.start_time,
+        end_time: session.end_time,
+      })),
+    };
+
+    const response = await createEventMutation(newEvent);
+    if (response.data) {
+      toast.success("Event created successfully", {
+        position: "top-right",
+      });
+
+      localStorage.removeItem("eventDetails");
+      localStorage.removeItem("eventBanner");
+      localStorage.removeItem("eventTickets");
+
+      router.push("/");
+    }
+
+    if ("error" in response) {
+      toast.error("Error creating event", {
+        position: "top-right",
+      });
+    }
+  };
+
+  const handleUpdateEvent = async () => {
+    const updatedEvent = {
+      title: eventDetails.title,
+      category_id: eventDetails.category_id,
+      state_id: JSON.parse(eventDetails.state_id).id,
+      address: eventDetails.address,
+      city: eventDetails.city,
+      description: eventDetails.description,
+      images: [...eventBanner.images],
+      is_free: eventTickets.event_type === "free",
+      ticketed: eventTickets.tickets[0].name !== "",
+      currency: eventTickets.currency,
+      each_ticket_identity: eventTickets.each_ticket_identity,
+      time: eventDetails.sessions[0].start_time,
+      absorb_fees: true,
+      tickets:
+        eventTickets.tickets[0].name !== ""
+          ? eventTickets.tickets.map((ticket) => ({
+              name: ticket.name,
+              price: ticket.price,
+              quantity: Number(ticket.quantity),
+              seat_type: ticket.seat_type,
+              no_per_seat_type: Number(ticket.no_per_seat_type),
+            }))
+          : [],
+      sessions: eventDetails.sessions.map((session) => ({
+        name: session.name,
+        date: session.date,
+        start_time: session.start_time,
+        end_time: session.end_time,
+      })),
+    };
+
+    const response = await updateEventMutation({
+      id: eventDetails.id,
+      updatedEvent,
+    });
+    if (response.data) {
+      toast.success("Event Updated successfully", {
+        position: "top-right",
+      });
+
+      router.push("/");
+    }
+
+    if ("error" in response) {
+      toast.error("Error updating event", {
+        position: "top-right",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#020e1e] text-white  sm:px-10 py-10">
       {/* Event Card */}
       <div className="max-w-[1100px] mx-auto border border-[#9EDD45] rounded-xl p-6 bg-[#020e1e] shadow-md">
         {/* Event Image */}
         <div className="relative w-full rounded-lg overflow-hidden mb-6">
-          {uploadedBanner ? (
+          {eventBanner.images ? (
             <Image
-              src={uploadedBanner}
+              src={eventBanner.images[0]}
               alt="Event Banner"
               width={1200}
               height={500}
@@ -128,15 +245,18 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
               </p>
             </div>
             {/* Host Info */}
-            <div>
-              <h1 className="font-extralight text-lg mb-2">Hosted by</h1>
-              <p className="font-bold">
-                {user.userDetails.firstname} {user.userDetails.lastname}
-              </p>
-            </div>
+            {path === "create" && (
+              <div>
+                <h1 className="font-extralight text-lg mb-2">Hosted by</h1>
+                <p className="font-bold">
+                  {user.userDetails.firstname} {user.userDetails.lastname}
+                </p>
+              </div>
+            )}
 
             {/* Sign In and Sign Up Buttons */}
-            {user &&
+            {path === "create" &&
+              user &&
               user.userDetails.firstname === "" &&
               user.userDetails.lastname === "" && (
                 <>
@@ -176,8 +296,10 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
                 <div>
                   <p className="flex items-center mt-1">
                     <SlCalender className="text-[#9EDD45] mr-2" />{" "}
-                    {sessions[0].startDate
-                      ? sessions[0].startDate.toLocaleDateString("en-GB", {
+                    {eventDetails.sessions[0].date
+                      ? new Date(
+                          eventDetails.sessions[0].date,
+                        ).toLocaleDateString("en-GB", {
                           weekday: "long",
                           day: "numeric",
                           month: "long",
@@ -187,16 +309,17 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
                   </p>
                   <p className="flex items-center mt-1">
                     <IoTimeOutline className="text-[#9EDD45] mr-2" />{" "}
-                    {sessions[0].startTime} - {sessions[0].endTime}
+                    {eventDetails.sessions[0].start_time} -{" "}
+                    {eventDetails.sessions[0].end_time}
                   </p>
                 </div>
               )}
 
               {/* Additional Sessions */}
-              {sessions &&
-                sessions.length > 1 &&
+              {eventDetails.sessions &&
+                eventDetails.sessions.length > 1 &&
                 showMore &&
-                sessions.map((session) => (
+                eventDetails.sessions.map((session) => (
                   <div key={session.id}>
                     <hr className="border-t border-gray-500 my-4" />
                     <div>
@@ -206,8 +329,8 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
                       </p>
                       <p className="flex items-center mt-1">
                         <SlCalender className="text-[#9EDD45] mr-2" />{" "}
-                        {session.startDate
-                          ? session.startDate.toLocaleDateString("en-GB", {
+                        {session.date
+                          ? new Date(session.date).toLocaleDateString("en-GB", {
                               weekday: "long",
                               day: "numeric",
                               month: "long",
@@ -217,14 +340,14 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
                       </p>
                       <p className="flex items-center mt-1">
                         <IoTimeOutline className="text-[#9EDD45] mr-2" />{" "}
-                        {session.startTime} - {session.endTime}
+                        {session.start_time} - {session.end_time}
                       </p>
                     </div>
                   </div>
                 ))}
 
               {/* View More / View Less */}
-              {isMultipleSession && (
+              {eventDetails.sessions && eventDetails.sessions.length > 1 && (
                 <p
                   className="text-[#9EDD45] underline mt-4 flex items-center justify-end cursor-pointer"
                   onClick={() => setShowMore(!showMore)}
@@ -251,12 +374,14 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
               <p className="text-gray-400 text-sm mb-2">
                 Numbers of Tickets{" "}
                 <span className="text-[#9EDD45] font-semibold">
-                  {numberOfTickets.toLocaleString() || 0}
+                  {eventTickets.number_of_tickets.toLocaleString() || 0}
                 </span>
               </p>
               <div className="space-y-2">
-                {eventType === "ticketed" &&
-                  tickets.map((ticket, index) => (
+                {eventTickets.number_of_tickets > 0 &&
+                  eventTickets.tickets &&
+                  eventTickets.tickets.length > 0 &&
+                  eventTickets.tickets.map((ticket, index) => (
                     <p
                       key={index}
                       className="flex items-center justify-between"
@@ -266,11 +391,13 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
                         {ticket.name}
                       </span>
                       <span className="text-yellow-400 font-semibold">
-                        ₦ {ticket.price} each
+                        {ticket.price
+                          ? ` ${ticket.price} ${eventTickets.currency.split("-")[0]}`
+                          : "Free"}
                       </span>
                     </p>
                   ))}
-                {eventType === "free" && (
+                {eventTickets.is_free && (
                   <p className="flex items-center">
                     <span className="flex items-center">
                       <IoTicketSharp className="text-white mr-2" />
@@ -296,8 +423,44 @@ const PreviewEvent: React.FC<PreviewEventProps> = ({
           </div>
         </div>
       </div>
+
+      <div className="w-full sm:w-auto mt-20">
+        <button
+          type="button"
+          className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+          onClick={handleGoBackandEdit}
+        >
+          Go back and Edit
+        </button>
+
+        {path === "create" && user.userDetails.id !== 0 && (
+          <button
+            type="button"
+            className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+            onClick={handleCreateEvent}
+          >
+            Create Event
+          </button>
+        )}
+
+        {path === "create" && user.userDetails.id === 0 && (
+          <span className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap p-2">
+            Login to create an event
+          </span>
+        )}
+
+        {path === "edit" && (
+          <button
+            type="button"
+            className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
+            onClick={handleUpdateEvent}
+          >
+            Update Event
+          </button>
+        )}
+      </div>
     </div>
   );
 };
 
-export default PreviewEvent;
+export default EventPreview;
