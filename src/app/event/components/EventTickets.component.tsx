@@ -54,6 +54,10 @@ const EventTickets: React.FC<IEventTicketsProps> = ({
     (state: RootState) => state.event.eventToEdit,
   );
 
+  const editedEvent = useSelector(
+    (state: RootState) => state.event.editedEvent,
+  );
+
   const { data: currencies, isLoading, error } = useGetCurrenciesQuery();
 
   useEffect(() => {
@@ -207,16 +211,17 @@ const EventTickets: React.FC<IEventTicketsProps> = ({
     }
 
     if (path === "edit") {
-      dispatch(
-        updateEditedEvent({
-          tickets,
-          is_free: eventType === "free",
-          each_ticket_identity: ticketIdentity,
-          currency: selectedCurrency,
-          hideTickets,
-          number_of_tickets: numberOfTickets,
-        }),
-      );
+      if (editedEvent.length < 3)
+        dispatch(
+          updateEditedEvent({
+            tickets,
+            is_free: eventType === "free",
+            each_ticket_identity: ticketIdentity,
+            currency: selectedCurrency,
+            hideTickets,
+            number_of_tickets: numberOfTickets,
+          }),
+        );
     }
 
     handleNextStep();

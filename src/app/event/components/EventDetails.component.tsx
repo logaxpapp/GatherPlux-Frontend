@@ -52,6 +52,10 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
     (state: RootState) => state.event.eventToEdit,
   );
 
+  const editedEvent = useSelector(
+    (state: RootState) => state.event.editedEvent,
+  );
+
   const { data: categoriesData } = useGetAllCategoriesQuery("");
   const { data: allCountries } = useGetAllCountriesQuery("");
   const [getAllStates] = useLazyGetAllStatesQuery();
@@ -261,7 +265,7 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
     }
 
     if (path === "edit") {
-      dispatch(updateEditedEvent(eventDetails));
+      if (editedEvent.length < 1) dispatch(updateEditedEvent(eventDetails));
     }
     handleNextStep();
   };

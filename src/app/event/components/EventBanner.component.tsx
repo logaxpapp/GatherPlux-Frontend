@@ -32,6 +32,10 @@ const EventBanner: React.FC<IEventBannerProps> = ({
     (state: RootState) => state.event.eventToEdit,
   );
 
+  const editedEvent = useSelector(
+    (state: RootState) => state.event.editedEvent,
+  );
+
   useEffect(() => {
     if (path === "create") {
       const savedEventBanner = localStorage.getItem("eventBanner");
@@ -135,7 +139,8 @@ const EventBanner: React.FC<IEventBannerProps> = ({
     }
 
     if (path === "edit") {
-      dispatch(updateEditedEvent({ images: [uploadedBanner] }));
+      if (editedEvent.length < 2)
+        dispatch(updateEditedEvent({ images: [uploadedBanner] }));
     }
 
     handleNextStep();
