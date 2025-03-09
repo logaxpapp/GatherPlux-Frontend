@@ -218,22 +218,24 @@ const EventBanner: React.FC<IEventBannerProps> = ({
         )}
       </div>
 
-      <div className="w-full sm:w-auto mt-20">
-        <button
-          type="button"
-          className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
-          onClick={handleGoBackandEdit}
-        >
-          Go back and Edit
-        </button>
-        <button
-          type="button"
-          className="w-full sm:w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-2"
-          onClick={handleSaveAndContinue}
-        >
-          Save & Continue
-        </button>
-      </div>
+      <div className="w-full sm:w-auto mt-20 flex justify-center sm:justify-start gap-8 border border-red-500">
+  <button
+    type="button"
+    className="w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-4 mr-10"
+    onClick={handleGoBackandEdit}
+  >
+    Go back and Edit
+  </button>
+  <button
+    type="button"
+    className="w-60 h-[36px] bg-[#9EDD45] text-black rounded-full whitespace-nowrap px-4"
+    onClick={handleSaveAndContinue}
+  >
+    Save & Continue
+  </button>
+</div>
+
+
     </div>
   );
 };
