@@ -73,7 +73,7 @@ export const {
   useGetSearchedEventsQuery,
   useLazySearchEventsQuery,
   useBookEventMutation,
-  useGetUserEventsQuery,
+  useLazyGetUserEventsQuery,
   useUpdateEventMutation,
   useBookmarkEventMutation,
   useGetBookmarkedEventsQuery,

@@ -1,15 +1,31 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { useGetUserEventsQuery } from "@/services/slices/events.slice";
+import { useLazyGetUserEventsQuery } from "@/services/slices/events.slice";
 import { EventProps } from "@/app/homepage/EventCard";
 import { useRouter } from "next/navigation";
 
 const Events: React.FC = () => {
   const router = useRouter();
-  const { data: events } = useGetUserEventsQuery("");
+
+  const [events, setEvents] = useState<EventProps[]>([]);
+
+  const [getUserEvents] = useLazyGetUserEventsQuery();
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const response = await getUserEvents("");
+      if (response && response.data && response.data.body) {
+        console.log(response.data.body.result);
+        setEvents(response.data.body.result);
+      } else {
+        console.error("Failed to fetch events");
+      }
+    };
+    fetchEvents();
+  }, [getUserEvents]);
 
   const handleEdit = (path: string) => {
     router.push(path);
@@ -26,8 +42,8 @@ const Events: React.FC = () => {
 
           {/* Event Cards */}
           <div className="space-y-4 flex-grow">
-            {events && events.body && events.body.length > 0 ? (
-              events.body.map((event: EventProps) => (
+            {events && events.length > 0 ? (
+              events.map((event) => (
                 <div key={event.id}>
                   {/* Card Content */}
                   <div className="flex items-center justify-between pb-4">
