@@ -498,7 +498,7 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
                 <div className='col-span-1 md:col-span-2 flex justify-end'>
                   {index < 1 && isMultipleSession ? (
                     <button
-                      title=''
+                      title={''}
                       type='button'
                       className='text-[#9edd45] text-[24px] hover:text-[#76b434] transition'
                       onClick={handleAddSession}
@@ -507,7 +507,7 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
                     </button>
                   ) : index >= 1 ? (
                     <button
-                      title=''
+                      title={''}
                       type='button'
                       className='text-[#f00] text-[24px] hover:text-[#f00] transition'
                       onClick={() => handleDeleteSession(session.id)}
