@@ -125,7 +125,7 @@ const EventTickets: React.FC<IEventTicketsProps> = ({
 
   const updateTicket = (
     id: string,
-    field: "name" | "price" | "no_per_seat_type" | "seatType" | "quantity",
+    field: "name" | "price" | "no_per_seat_type" | "seat_type" | "quantity",
     value: string,
   ) => {
     setTickets((prevTickets) =>
@@ -430,7 +430,7 @@ const EventTickets: React.FC<IEventTicketsProps> = ({
                     <select
                       value={ticket.seat_type}
                       onChange={(e) =>
-                        updateTicket(ticket.id, "seatType", e.target.value)
+                        updateTicket(ticket.id, "seat_type", e.target.value)
                       }
                       className="w-full px-3 py-2 border border-gray-500 rounded focus:outline-none bg-[#1B2634] text-gray-400"
                     >

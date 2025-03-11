@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiUser, FiMail, FiLock, FiBook, FiBookmark, FiEye, FiEyeOff } from "react-icons/fi";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiBook,
+  FiBookmark,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
 
 import { useResetPasswordMutation } from "@/services/slices/user.slice";
 import Loader from "@/components/Loader";
@@ -11,7 +19,7 @@ const ProfilePage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [activeField, setActiveField] = useState<string | null>(null);
+  const [activeField, setActiveField] = useState<string | "">("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,7 +58,6 @@ const ProfilePage: React.FC = () => {
       confirmPassword,
     }).unwrap();
 
-
     if (data && data.code === 200) {
       // notification.success({
       //   message: "Password reset successful",
@@ -67,14 +74,13 @@ const ProfilePage: React.FC = () => {
       //   message: "Error",
       //   description: error.message,
       // });
-      console.log('Error updating password');
+      console.log("Error updating password");
     }
   };
 
   return (
     <div className="min-h-screen bg-[#020e1e] flex justify-center py-10 text-white mt-11">
       <div className="w-full max-w-6xl bg-[#020e1e] rounded-lg shadow-md flex flex-col lg:flex-row pt-28">
-
         {/* Left Content Area (Sidebar) */}
         <div className="w-full lg:w-1/4 bg-[#020e1e] p-6">
           <div className="flex justify-start mb-8">
@@ -95,7 +101,6 @@ const ProfilePage: React.FC = () => {
               <FiMail className="w-4 h-4" />
               <span>Change Email</span>
             </li>
-
 
             <li className="flex items-center space-x-2 font-medium text-[#93d437] bg-[#243447] px-4 py-2 rounded-md text-sm w-44">
               <FiLock className="w-4 h-4" />
@@ -121,7 +126,9 @@ const ProfilePage: React.FC = () => {
           <div className="space-y-6">
             {/* Password Input */}
             <div className="relative max-w-lg">
-              <label className="block text-gray-400 text-sm mb-1">Password</label>
+              <label className="block text-gray-400 text-sm mb-1">
+                Password
+              </label>
               <div
                 className={`flex items-center bg-gray-800 text-gray-400 p-3 rounded-lg ${activeField === "password" ? "border border-white" : ""}`}
               >
@@ -137,7 +144,7 @@ const ProfilePage: React.FC = () => {
                   placeholder="Enter your password"
                   className="bg-transparent focus:outline-none w-full"
                   onFocus={() => setActiveField("password")}
-                  onBlur={() => setActiveField(null)}
+                  onBlur={() => setActiveField("")}
                   name="password"
                   value={password}
                   onChange={handleInputChange}
@@ -157,7 +164,9 @@ const ProfilePage: React.FC = () => {
 
             {/* New Password Input */}
             <div className="relative max-w-lg">
-              <label className="block text-gray-400 text-sm mb-1">New Password</label>
+              <label className="block text-gray-400 text-sm mb-1">
+                New Password
+              </label>
               <div
                 className={`flex items-center bg-gray-800 text-gray-400 p-3 rounded-lg ${activeField === "newPassword" ? "border border-white" : ""}`}
               >
@@ -173,7 +182,7 @@ const ProfilePage: React.FC = () => {
                   placeholder="Enter your new password"
                   className="bg-transparent focus:outline-none w-full"
                   onFocus={() => setActiveField("newPassword")}
-                  onBlur={() => setActiveField(null)}
+                  onBlur={() => setActiveField("")}
                   name="newPassword"
                   value={newPassword}
                   onChange={handleInputChange}
@@ -190,7 +199,9 @@ const ProfilePage: React.FC = () => {
 
             {/* Confirm New Password Input */}
             <div className="relative max-w-lg">
-              <label className="block text-gray-400 text-sm mb-1">Confirm New Password</label>
+              <label className="block text-gray-400 text-sm mb-1">
+                Confirm New Password
+              </label>
               <div
                 className={`flex items-center bg-gray-800 text-gray-400 p-3 rounded-lg ${activeField === "confirmPassword" ? "border border-white" : ""}`}
               >
@@ -206,7 +217,7 @@ const ProfilePage: React.FC = () => {
                   placeholder="Re-enter your new password"
                   className="bg-transparent focus:outline-none w-full"
                   onFocus={() => setActiveField("confirmPassword")}
-                  onBlur={() => setActiveField(null)}
+                  onBlur={() => setActiveField("")}
                   name="confirmPassword"
                   value={confirmPassword}
                   onChange={handleInputChange}
@@ -223,7 +234,11 @@ const ProfilePage: React.FC = () => {
           </div>
 
           {/* Save Changes Button */}
-          <button type="button" className="mt-8 w-40 self-end bg-lime-500 text-black font-bold py-2 rounded-full shadow-md hover:bg-lime-400" onClick={handleResetPassword}>
+          <button
+            type="button"
+            className="mt-8 w-40 self-end bg-lime-500 text-black font-bold py-2 rounded-full shadow-md hover:bg-lime-400"
+            onClick={handleResetPassword}
+          >
             {isLoading && <Loader />}
             Save changes
           </button>

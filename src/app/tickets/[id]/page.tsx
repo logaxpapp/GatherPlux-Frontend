@@ -6,7 +6,13 @@ import TicketPage from "./components/TicketPage";
 import LocationComponent from "./components/LocationComponent";
 import OtherEvents from "./components/OtherEvents";
 import { EventProps } from "@/app/homepage/EventCard";
-import { useGetOneEventQuery } from "@/services/slices/events.slice";
+import {
+  useGetOneEventQuery,
+  useBookmarkEventMutation,
+} from "@/services/slices/events.slice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const pathname = usePathname();
@@ -55,7 +61,10 @@ const Page = () => {
     },
   });
 
+  const user = useSelector((state: RootState) => state.user);
+
   const { data: eventApiData } = useGetOneEventQuery(id);
+  const [bookmarkEvent] = useBookmarkEventMutation();
 
   useEffect(() => {
     if (eventApiData && eventApiData.body) {
@@ -63,10 +72,32 @@ const Page = () => {
     }
   }, [eventApiData]);
 
+  const handleBookmark = async () => {
+    if (id && Number(id)) {
+      if (user.userDetails.id !== 0 && user.userDetails.email !== "") {
+        const response = await bookmarkEvent({ event_id: Number(id) }).unwrap();
+        console.log(response);
+        if (response.message === "SUCCESSFUL" && response.body) {
+          toast.success("Event bookmarked successfully");
+        } else {
+          toast.error("Failed to bookmark event");
+        }
+      }
+    }
+  };
+
   return (
     <div className="bg-[#020e1e] min-h-screen px-4 py-8 text-white">
-      {/* Pass the toggleModal function to TicketPage */}
       <TicketPage event={eventData} />
+      {user.userDetails.id !== 0 && user.userDetails.email !== "" ? (
+        <button
+          className="bg-[#9edd45] text-black w-full py-2 rounded-lg"
+          onClick={handleBookmark}
+        >
+          Bookmark This Event
+        </button>
+      ) : null}
+
       <LocationComponent
         location={eventData.address}
         eventHost={eventData.user.profile}

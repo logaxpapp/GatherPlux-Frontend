@@ -16,7 +16,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   startTime,
   type,
 }) => {
-  const [hoveredTime, setHoveredTime] = useState<string | null>(null);
+  const [hoveredTime, setHoveredTime] = useState<string | "">("");
 
   const formatTimeFor12Hour = (time: string) => {
     const [hours, minutes] = time.split(":");
@@ -52,7 +52,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   let startSlotIndex = 0;
   let startTimeIndex = 0;
 
-  if (startTime && type === "endTime") {
+  if (startTime && type === "end_time") {
     const time24h = convertTo24Hour(startTime);
     if (time24h) {
       const hour = parseInt(time24h.split(":")[0]);
@@ -65,7 +65,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
     }
   }
 
-  const isEndTimeDisabled = type === "endTime" && !startTime; // Disable endTime selection if no startTime is selected
+  const isEndTimeDisabled = type === "end_time" && !startTime;
 
   return (
     <div className="w-72 rounded-md bg-[#eeeded] overflow-hidden text-black">
@@ -122,7 +122,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
                             handleSetTime(formatTimeFor12Hour(time))
                           }
                           onMouseEnter={() => setHoveredTime(time)}
-                          onMouseLeave={() => setHoveredTime(null)}
+                          onMouseLeave={() => setHoveredTime("")}
                         >
                           <span className="text-sm font-medium">
                             {formatTimeFor12Hour(time)}

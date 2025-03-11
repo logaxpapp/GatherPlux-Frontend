@@ -82,20 +82,19 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
     const savedEventDetails = localStorage.getItem("eventDetails");
     if (path === "create" && savedEventDetails) {
       const parsedData = JSON.parse(savedEventDetails);
+      console.log(parsedData);
       setTitle(parsedData.title || "");
-      setSelectedCategory(parsedData.selectedCategory || "");
-      setEventType(parsedData.eventType || "single");
-      setIsMultipleSession(parsedData.isMultipleSession || false);
-      setSelectedCountry(parsedData.selectedCountry || "");
-      setSelectedState(parsedData.selectedState || "");
+      setSelectedCategory(parsedData.category_id || "");
+      setEventType(parsedData.event_type || "single");
+      setIsMultipleSession(parsedData.sessions.length > 1 || false);
+      setSelectedCountry(parsedData.country || "");
+      setSelectedState(parsedData.state_id || "");
       setDescription(parsedData.description || "");
       setCity(parsedData.city || "");
       setAddress(parsedData.address || "");
       setSessions(parsedData.sessions || []);
 
-      const parsedSelectedCountry = JSON.parse(
-        parsedData.selectedCountry || "",
-      );
+      const parsedSelectedCountry = JSON.parse(parsedData.country || "{}");
       const { code2 } = parsedSelectedCountry;
       fetchStates(code2);
     }
@@ -181,7 +180,7 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
   const handleStartDateChange = (date: Date | undefined, id: string) => {
     const updatedSessions = sessions.map((session) => {
       if (session.id === id) {
-        return { ...session, startDate: date };
+        return { ...session, date };
       }
       return session;
     });
@@ -239,7 +238,15 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
   };
 
   const handleSaveAndContinue = () => {
-    if (!title || !description || !city || !address) {
+    if (
+      !title ||
+      !description ||
+      !city ||
+      !address ||
+      !selectedCategory ||
+      !selectedCountry ||
+      !selectedState
+    ) {
       toast.info("Please fill in all required fields", {
         position: "top-right",
       });
@@ -465,7 +472,7 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
                     <CustomTimePicker
                       handleTimeChange={handleTimeChange}
                       id={session.id}
-                      type="startTime"
+                      type="start_time"
                       givenStartTime={session.start_time}
                     />
                   </div>
@@ -480,7 +487,7 @@ const EventDetails = ({ handleNextStep, path }: IEventDetailsProps) => {
                     <CustomTimePicker
                       handleTimeChange={handleTimeChange}
                       id={session.id}
-                      type="endTime"
+                      type="end_time"
                       startTime={session.start_time}
                       givenEndTime={session.end_time}
                     />

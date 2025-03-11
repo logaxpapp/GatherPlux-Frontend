@@ -6,7 +6,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "@/helpers/hooks/useDebounce";
 import { useGetAllCountriesQuery } from "@/services/slices/state.slice";
-import { CountryProp } from "@/app/create-event/types/types";
+
+export interface CountryProp {
+  code2: string;
+  code3: string;
+  name: string;
+}
 
 const SearchBar: React.FC = () => {
   const router = useRouter();

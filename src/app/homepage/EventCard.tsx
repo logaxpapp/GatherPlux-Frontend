@@ -86,8 +86,8 @@ const EventCard = () => {
     setIsClient(true);
 
     if (eventsData && eventsData.body) {
-      setEvents(eventsData.body.events.records);
-      dispatch(setStateEvents(eventsData.body.events.records));
+      setEvents(eventsData.body.events.result);
+      dispatch(setStateEvents(eventsData.body.events.result));
     }
 
     if (categoriesData && categoriesData.body) {

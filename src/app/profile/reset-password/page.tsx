@@ -10,7 +10,7 @@ const ProfilePage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [activeField, setActiveField] = useState<string | null>(null);
+  const [activeField, setActiveField] = useState<string | "">("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -88,7 +88,7 @@ const ProfilePage: React.FC = () => {
                   placeholder="Enter your password"
                   className="bg-transparent focus:outline-none w-full"
                   onFocus={() => setActiveField("password")}
-                  onBlur={() => setActiveField(null)}
+                  onBlur={() => setActiveField("")}
                   name="password"
                   value={password}
                   onChange={handleInputChange}
@@ -128,7 +128,7 @@ const ProfilePage: React.FC = () => {
                   placeholder="Enter your new password"
                   className="bg-transparent focus:outline-none w-full"
                   onFocus={() => setActiveField("newPassword")}
-                  onBlur={() => setActiveField(null)}
+                  onBlur={() => setActiveField("")}
                   name="newPassword"
                   value={newPassword}
                   onChange={handleInputChange}
@@ -165,7 +165,7 @@ const ProfilePage: React.FC = () => {
                   placeholder="Re-enter your new password"
                   className="bg-transparent focus:outline-none w-full"
                   onFocus={() => setActiveField("confirmPassword")}
-                  onBlur={() => setActiveField(null)}
+                  onBlur={() => setActiveField("")}
                   name="confirmPassword"
                   value={confirmPassword}
                   onChange={handleInputChange}

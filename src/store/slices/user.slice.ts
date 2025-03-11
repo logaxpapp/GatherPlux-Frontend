@@ -1,24 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getCookie, isTokenValid, removeCookie } from "@/utils/cookie.utility";
 
-const token = getCookie("token") as string | "";
-let accessToken: string | null = null;
+const token = getCookie("token") as string | "{}";
+let accessToken: { access_token: string; role: string } = {
+  access_token: "",
+  role: "",
+};
 try {
-  accessToken = token ? token : null;
+  accessToken =
+    token !== "" && token !== "{}" && token !== undefined && token !== null
+      ? JSON.parse(token)
+      : null;
 } catch (error) {
   console.error("Error parsing token:", error);
 }
 
-const isTokenValidAndNotExpired = isTokenValid(accessToken);
+const isTokenValidAndNotExpired = isTokenValid(accessToken?.access_token);
 
 if (!isTokenValidAndNotExpired) {
   removeCookie("token");
 }
 
 const initialState = {
-  accessToken: isTokenValidAndNotExpired
-    ? JSON.parse(token).access_token
-    : null,
+  accessToken: isTokenValidAndNotExpired ? accessToken.access_token : null,
   role: isTokenValidAndNotExpired ? JSON.parse(token).role : null,
   userDetails: {
     id: 0,

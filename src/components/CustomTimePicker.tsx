@@ -56,8 +56,9 @@ const CustomTimePicker = ({
           {!time && !givenStartTime && !givenEndTime && (
             <span>Pick a time</span>
           )}
-          {!time && givenStartTime && type === "startTime" && givenStartTime}
-          {!time && givenEndTime && type === "endTime" && givenEndTime}
+
+          {!time && givenStartTime && type === "start_time" && givenStartTime}
+          {!time && givenEndTime && type === "end_time" && givenEndTime}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

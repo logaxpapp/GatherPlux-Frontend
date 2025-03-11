@@ -22,7 +22,7 @@ export const removeCookie = (name: string) => {
 
 export function isTokenValid(token: string | null): boolean {
   try {
-    if (!token) {
+    if (!token || token === "") {
       return false;
     }
     const decodedToken = jwtDecode<DecodedToken>(token);

@@ -99,17 +99,27 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
     const newEvent = {
       title: eventDetails.title,
       category_id: eventDetails.category_id,
-      state_id: JSON.parse(eventDetails.state_id).id,
+      state_id: (() => {
+        if (!eventDetails.state_id) return null;
+        try {
+          const parsed = JSON.parse(eventDetails.state_id);
+          return parsed && parsed.id ? Number(parsed.id) : null;
+        } catch {
+          // If it's not JSON, try using it directly
+          return Number(eventDetails.state_id) || null;
+        }
+      })(),
       address: eventDetails.address,
       city: eventDetails.city,
       description: eventDetails.description,
-      images: [eventBanner.images],
+      images: eventBanner.images,
       is_free: eventTickets.event_type === "free",
       ticketed: eventTickets.tickets[0].name !== "",
       currency: eventTickets.currency,
       each_ticket_identity: eventTickets.each_ticket_identity,
       time: eventDetails.sessions[0].start_time,
       absorb_fees: true,
+      start_date: eventDetails.sessions[0].date,
       tickets:
         eventTickets.tickets[0].name !== ""
           ? eventTickets.tickets.map((ticket) => ({
@@ -127,6 +137,8 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
         end_time: session.end_time,
       })),
     };
+
+    console.log(newEvent);
 
     const response = await createEventMutation(newEvent);
     if (response.data) {
@@ -374,16 +386,16 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
               <p className="text-gray-400 text-sm mb-2">
                 Numbers of Tickets{" "}
                 <span className="text-[#9EDD45] font-semibold">
-                  {eventTickets.number_of_tickets.toLocaleString() || 0}
+                  {Number(eventTickets.number_of_tickets).toLocaleString() || 0}
                 </span>
               </p>
               <div className="space-y-2">
                 {eventTickets.number_of_tickets > 0 &&
                   eventTickets.tickets &&
                   eventTickets.tickets.length > 0 &&
-                  eventTickets.tickets.map((ticket, index) => (
+                  eventTickets.tickets.map((ticket) => (
                     <p
-                      key={index}
+                      key={ticket.id}
                       className="flex items-center justify-between"
                     >
                       <span className="flex items-center">
@@ -392,7 +404,7 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
                       </span>
                       <span className="text-yellow-400 font-semibold">
                         {ticket.price
-                          ? ` ${ticket.price} ${eventTickets.currency.split("-")[0]}`
+                          ? ` ${Number(ticket.price).toLocaleString()} ${eventTickets.currency.split("-")[0]}`
                           : "Free"}
                       </span>
                     </p>

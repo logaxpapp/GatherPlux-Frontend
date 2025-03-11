@@ -32,14 +32,16 @@ const Page = () => {
 
   useEffect(() => {
     if (data) {
-      setFirstname(data.body.firstname);
-      setLastname(data.body.lastname);
-      setPhone(data.body.phone);
-      setAddress(data.body.address);
-      setImage(data.body.image_url);
-      setEmail(data.body.email);
+      setFirstname(data.body.firstname ?? "");
+      setLastname(data.body.lastname ?? "");
+      setPhone(data.body.phone ?? "");
+      setAddress(data.body.address ?? "");
+      setImage(
+        data.body.image_url ??
+          "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+      );
+      setEmail(data.body.email ?? "");
 
-      // set the user details in the state
       dispatch(setUserDetails(data.body));
     }
   }, [data, dispatch]);

@@ -15,7 +15,7 @@ const ProfilePage: React.FC = () => {
   const [currentEmail, setCurrentEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
-  const [activeField, setActiveField] = useState<string | null>(null);
+  const [activeField, setActiveField] = useState<string | "">("");
 
   const [updateUserEmail, { isLoading }] = useUpdateUserEmailMutation();
 
@@ -121,7 +121,7 @@ const ProfilePage: React.FC = () => {
                     placeholder="Enter your current email address"
                     className="bg-transparent focus:outline-none w-full"
                     onFocus={() => setActiveField("password")}
-                    onBlur={() => setActiveField(null)}
+                    onBlur={() => setActiveField("")}
                     name="currentEmail"
                     value={currentEmail}
                     onChange={handleAllInputChange}
@@ -154,7 +154,7 @@ const ProfilePage: React.FC = () => {
                     placeholder="Enter your new email address"
                     className="bg-transparent focus:outline-none w-full"
                     onFocus={() => setActiveField("newPassword")}
-                    onBlur={() => setActiveField(null)}
+                    onBlur={() => setActiveField("")}
                     name="newEmail"
                     value={newEmail}
                     onChange={handleAllInputChange}
@@ -186,7 +186,7 @@ const ProfilePage: React.FC = () => {
                     placeholder="Re-enter your new password"
                     className="bg-transparent focus:outline-none w-full"
                     onFocus={() => setActiveField("confirmPassword")}
-                    onBlur={() => setActiveField(null)}
+                    onBlur={() => setActiveField("")}
                     name="confirmEmail"
                     value={confirmEmail}
                     onChange={handleAllInputChange}

@@ -42,6 +42,24 @@ const extendApiSlice = clientBaseAPISlice.injectEndpoints({
         body: updatedEvent,
       }),
     }),
+    bookmarkEvent: builder.mutation({
+      query: ({ event_id }) => ({
+        url: `event/bookmark`,
+        method: "POST",
+        body: {
+          event_id,
+        },
+      }),
+    }),
+    getBookmarkedEvents: builder.query({
+      query: () => "event/bookmark",
+    }),
+    removeBookmarkEvent: builder.mutation({
+      query: ({ id }) => ({
+        url: `event/bookmark/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -57,4 +75,7 @@ export const {
   useBookEventMutation,
   useGetUserEventsQuery,
   useUpdateEventMutation,
+  useBookmarkEventMutation,
+  useGetBookmarkedEventsQuery,
+  useRemoveBookmarkEventMutation,
 } = extendApiSlice;
