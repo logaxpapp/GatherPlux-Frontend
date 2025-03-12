@@ -158,7 +158,7 @@ const ProfilePage: React.FC<Props> = ({
                   <input
                     type="text"
                     className="w-full p-2 bg-[#1b263b] text-sm text-white border border-[#2c3e50] rounded-lg"
-                    placeholder="+234"
+                    placeholder="+111 1111 1111"
                     value={phone}
                     name="phone"
                     onChange={handleAllOnChange}

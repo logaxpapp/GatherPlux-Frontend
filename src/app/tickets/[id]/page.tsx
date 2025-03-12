@@ -76,7 +76,6 @@ const Page = () => {
     if (id && Number(id)) {
       if (user.userDetails.id !== 0 && user.userDetails.email !== "") {
         const response = await bookmarkEvent({ event_id: Number(id) }).unwrap();
-        console.log(response);
         if (response.message === "SUCCESSFUL" && response.body) {
           toast.success("Event bookmarked successfully");
         } else {

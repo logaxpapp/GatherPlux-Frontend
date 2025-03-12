@@ -12,6 +12,7 @@ import {
 } from "@/services/slices/user.slice";
 import { setUserDetails } from "@/store/slices/user.slice";
 import { RootState } from "@/store/store";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -87,6 +88,9 @@ const Page = () => {
         image_url: image,
       });
       if (data && data.message === "SUCCESSFUL") {
+        toast.success("Profile updated successfully", {
+          position: "top-right",
+        });
         dispatch(setUserDetails(data.body));
       }
     } catch (err) {

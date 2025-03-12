@@ -5,15 +5,7 @@ import Image from "next/image";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { useGetAllPublicEventsQuery } from "@/services/slices/events.slice";
-import { useGetAllCategoriesQuery } from "@/services/slices/category.slice";
 import { setEvents as setStateEvents } from "@/store/slices/event.slice";
-import { setCategories as setStateCategories } from "@/store/slices/category.slice";
-
-interface CategoriesProps {
-  id: number;
-  name: string;
-  description: string;
-}
 
 export const formatDate = (dateString: string) => {
   try {
@@ -75,12 +67,10 @@ export interface EventProps {
 const EventCard = () => {
   const dispatch = useDispatch();
 
-  const [categories, setCategories] = useState<CategoriesProps[]>([]);
   const [events, setEvents] = useState<EventProps[]>([]);
   const [isClient, setIsClient] = useState(false);
 
   const { data: eventsData } = useGetAllPublicEventsQuery("");
-  const { data: categoriesData } = useGetAllCategoriesQuery("");
 
   useEffect(() => {
     setIsClient(true);
@@ -89,12 +79,7 @@ const EventCard = () => {
       setEvents(eventsData.body.events.result);
       dispatch(setStateEvents(eventsData.body.events.result));
     }
-
-    if (categoriesData && categoriesData.body) {
-      setCategories(categoriesData.body);
-      dispatch(setStateCategories(categoriesData.body));
-    }
-  }, [eventsData, categoriesData, dispatch]);
+  }, [eventsData, dispatch]);
 
   return (
     <div
@@ -117,27 +102,6 @@ const EventCard = () => {
           you&apos;re looking for concerts, workshops, or social gatherings, our
           marketplace brings unique experiences tailored for everyone.
         </p>
-      </div>
-
-      {/* Categories Section */}
-      <div className="flex justify-center gap-4 flex-wrap mb-8">
-        {categories && categories.length > 0 ? (
-          categories.map((category, index) => (
-            <button
-              type="button"
-              key={category.id}
-              className={`px-8 py-2 rounded-full text-sm font-semibold ${
-                index === 0
-                  ? "bg-[#9edd45] text-black"
-                  : "border border-gray-800 hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded"
-              }`}
-            >
-              {category.name}
-            </button>
-          ))
-        ) : (
-          <div>No categories available</div>
-        )}
       </div>
 
       {/* Events Grid */}

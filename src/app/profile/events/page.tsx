@@ -18,7 +18,6 @@ const Events: React.FC = () => {
     const fetchEvents = async () => {
       const response = await getUserEvents("");
       if (response && response.data && response.data.body) {
-        console.log(response.data.body.result);
         setEvents(response.data.body.result);
       } else {
         console.error("Failed to fetch events");
@@ -77,7 +76,7 @@ const Events: React.FC = () => {
 
                     <button
                       className="ml-4 bg-[#93d437] text-black font-bold px-6 py-2 rounded-full hover:bg-[#a4de4a]"
-                      onClick={() => handleEdit(`/edit-event/${event.id}`)}
+                      onClick={() => handleEdit(`/event/edit/${event.id}`)}
                     >
                       Edit Event
                     </button>

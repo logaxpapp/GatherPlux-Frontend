@@ -3,7 +3,7 @@ import { clientBaseAPISlice } from "../clientBaseAPI";
 const extendApiSlice = clientBaseAPISlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllPublicEvents: builder.query({
-      query: (page = 0) => `event/list?page=${page}&size=10`,
+      query: (page = 0) => `event/list?page=${page}&size=9`,
     }),
     createEvent: builder.mutation({
       query: (eventDetails) => ({

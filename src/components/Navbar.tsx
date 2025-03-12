@@ -59,7 +59,7 @@ const Navbar = () => {
 
           {/* Navigation Links */}
           <div className="flex space-x-8 text-sm">
-            <a href="#" className="hover:text-[#9edd45] text-white">
+            <a href="/category" className="hover:text-[#9edd45] text-white">
               Category
             </a>
             <Link

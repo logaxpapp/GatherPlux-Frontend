@@ -1,6 +1,7 @@
-import SearchBar from "@/components/SearchBar";
+import Link from "next/link";
+import React from "react";
 
-const Hero = () => {
+const Hero: React.FC = () => {
   return (
     <section
       className="relative flex flex-col items-center justify-center text-white sparkle-background min-h-screen bg-cover bg-center"
@@ -53,8 +54,15 @@ const Hero = () => {
           Find events nearby, personalize your experience, and book in seconds!
         </p>
 
-        {/*Search Bar */}
-        <SearchBar />
+        {/* Marketplace */}
+        <div className="flex justify-center">
+          <Link
+            href="/explore"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Explore Marketplace
+          </Link>
+        </div>
       </div>
     </section>
   );

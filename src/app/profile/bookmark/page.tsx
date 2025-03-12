@@ -9,7 +9,7 @@ import {
 } from "@/services/slices/events.slice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { EventProps } from "@/app/homepage/EventCard";
+import { EventProps, formatDate } from "@/app/homepage/EventCard";
 import { toast } from "react-toastify";
 
 interface BookmarkProps {
@@ -95,16 +95,22 @@ const Bookmarks: React.FC = () => {
                       />
                       <div className="flex-1">
                         <h3 className="text-white font-bold text-sm">
-                          Event title that can go up to two lines
+                          {bookmark.event.title}
                         </h3>
                         <p className="text-[#a5b0c1] text-xs">
-                          Venue - NOV 22
+                          {bookmark.event.city} -{" "}
+                          {formatDate(bookmark.event.start_date)}
                           <br />
-                          08:00 AM - 06:00 PM
+                          {bookmark.event.time}
                         </p>
                         <p className="text-[#93d437] text-xs mt-1">
-                          ₹499 • <span className="text-orange-500">★</span>{" "}
-                          <span className="text-white">10 Interested</span>
+                          {Number(bookmark.event.price).toLocaleString()}{" "}
+                          {bookmark.event.currency.split("-")[0]} •{" "}
+                          <span className="text-orange-500">★</span>{" "}
+                          <span className="text-white">
+                            {Number(bookmark.event.likes).toLocaleString()}{" "}
+                            Interested
+                          </span>
                         </p>
                       </div>
                     </div>

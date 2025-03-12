@@ -98,17 +98,8 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
   const handleCreateEvent = async () => {
     const newEvent = {
       title: eventDetails.title,
-      category_id: eventDetails.category_id,
-      state_id: (() => {
-        if (!eventDetails.state_id) return null;
-        try {
-          const parsed = JSON.parse(eventDetails.state_id);
-          return parsed && parsed.id ? Number(parsed.id) : null;
-        } catch {
-          // If it's not JSON, try using it directly
-          return Number(eventDetails.state_id) || null;
-        }
-      })(),
+      category_id: +eventDetails.category_id,
+      state_id: +eventDetails.state_id,
       address: eventDetails.address,
       city: eventDetails.city,
       description: eventDetails.description,
@@ -138,8 +129,6 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
       })),
     };
 
-    console.log(newEvent);
-
     const response = await createEventMutation(newEvent);
     if (response.data) {
       toast.success("Event created successfully", {
@@ -163,8 +152,8 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
   const handleUpdateEvent = async () => {
     const updatedEvent = {
       title: eventDetails.title,
-      category_id: eventDetails.category_id,
-      state_id: JSON.parse(eventDetails.state_id).id,
+      category_id: +eventDetails.category_id,
+      state_id: +eventDetails.state_id,
       address: eventDetails.address,
       city: eventDetails.city,
       description: eventDetails.description,
@@ -193,6 +182,7 @@ const EventPreview: React.FC<IEventPreviewProps> = ({
       })),
     };
 
+    console.log(updatedEvent);
     const response = await updateEventMutation({
       id: eventDetails.id,
       updatedEvent,

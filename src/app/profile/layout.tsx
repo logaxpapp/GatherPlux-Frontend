@@ -74,13 +74,6 @@ const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
           } md:relative md:translate-x-0`}
         >
           <div className="flex justify-between mb-8">
-            <button
-              type="button"
-              className="pr-14 pl-6 py-2 bg-[#93d437] text-[#0b1326] font-bold rounded-md hover:bg-[#a4de4a] text-lg"
-              onClick={() => handleNavigation("/dashboard")}
-            >
-              Dashboard
-            </button>
             {/* Close Sidebar Button */}
             <button
               type="button"
@@ -132,7 +125,7 @@ const SidebarLayout = ({ children }: { children: React.ReactNode }) => {
             </li>
             <li
               className={`cursor-pointer flex items-center space-x-2 text-white px-4 py-2 rounded-md ${
-                pathname === "/profile/bookmark"
+                pathname === "/profile/events"
                   ? "bg-[#243447]"
                   : "hover:bg-[#243447]"
               } transition duration-200 text-sm`}
