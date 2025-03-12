@@ -7,7 +7,7 @@ import axios from "axios";
 
 import ProfilePage from "./profilePage/components/ProfilePage";
 import {
-  useGetUserProfileQuery,
+  useLazyGetUserProfileQuery,
   useUpdateUserProfileMutation,
 } from "@/services/slices/user.slice";
 import { setUserDetails } from "@/store/slices/user.slice";
@@ -28,24 +28,29 @@ const Page = () => {
 
   const userInfo = useSelector((state: RootState) => state.user.userDetails);
 
-  const { data } = useGetUserProfileQuery("");
+  const [getUserProfile] = useLazyGetUserProfileQuery();
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
 
   useEffect(() => {
-    if (data) {
-      setFirstname(data.body.firstname ?? "");
-      setLastname(data.body.lastname ?? "");
-      setPhone(data.body.phone ?? "");
-      setAddress(data.body.address ?? "");
-      setImage(
-        data.body.image_url ??
-          "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
-      );
-      setEmail(data.body.email ?? "");
+    const getProfile = async () => {
+      const response = await getUserProfile("").unwrap();
+      if (response && response.body) {
+        setFirstname(response.body.firstname ?? "");
+        setLastname(response.body.lastname ?? "");
+        setPhone(response.body.phone ?? "");
+        setAddress(response.body.address ?? "");
+        setImage(
+          response.body.image_url ??
+            "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+        );
+        setEmail(response.body.email ?? "");
 
-      dispatch(setUserDetails(data.body));
-    }
-  }, [data, dispatch]);
+        dispatch(setUserDetails(response.body));
+      }
+    };
+
+    getProfile();
+  }, [dispatch, getUserProfile]);
 
   const handleAllOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

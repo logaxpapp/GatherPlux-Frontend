@@ -3,9 +3,9 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useDebounce } from "@/helpers/hooks/useDebounce";
 import { useGetAllCountriesQuery } from "@/services/slices/state.slice";
+import { EventProps } from "@/app/homepage/EventCard";
 
 export interface CountryProp {
   code2: string;
@@ -13,13 +13,12 @@ export interface CountryProp {
   name: string;
 }
 
-const SearchBar: React.FC = () => {
-  const router = useRouter();
+const SearchBar = ({}: { handleStateUpdate?: (event: EventProps) => void }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [canDebounce, setCanDebounce] = useState(false);
   const debouncedQuery: string = useDebounce(
     canDebounce ? searchQuery : "",
-    300,
+    1000,
   );
 
   const [userCountry, setUserCountry] = useState("");
@@ -38,15 +37,14 @@ const SearchBar: React.FC = () => {
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    const country = JSON.parse(value);
-    router.push(`/search?query=${country.name}`);
+    setUserCountry(value);
   };
 
   useEffect(() => {
-    if (debouncedQuery && debouncedQuery?.length >= 4) {
-      router.push(`/search?query=${debouncedQuery}`);
+    if (debouncedQuery && debouncedQuery?.length >= 5) {
+      // router.push(`/search?query=${debouncedQuery}`);
     }
-  }, [debouncedQuery, router]);
+  }, [debouncedQuery]);
 
   useEffect(() => {
     if (allCountries && allCountries.body) {
@@ -73,7 +71,7 @@ const SearchBar: React.FC = () => {
             );
 
             if (country) {
-              setUserCountry(JSON.stringify(country));
+              setUserCountry(country.code2);
             }
           },
           (error) => {
@@ -117,7 +115,7 @@ const SearchBar: React.FC = () => {
         <select
           title="Select a country"
           className="bg-gray-800 outline-none text-xs sm:text-base text-white cursor-pointer max-w-[80px] sm:max-w-full rounded border border-gray-600 hover:border-gray-400 "
-          defaultValue={userCountry || ""}
+          value={userCountry}
           onChange={handleCountryChange}
         >
           <option value="" disabled hidden>
@@ -126,7 +124,7 @@ const SearchBar: React.FC = () => {
           {countries?.length ? (
             countries.map(({ name, code2 }) => (
               <option
-                value={JSON.stringify({ name, code2 })}
+                value={code2}
                 key={code2}
                 className="bg-gray-700 text-white hover:bg-gray-600 pr-9"
               >

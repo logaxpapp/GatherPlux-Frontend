@@ -1,8 +1,34 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter.component";
 import EventCard from "./components/EventCard.component";
-import SearchBar from "@/components/SearchBar";
+import SearchBar from "./components/SearchBar";
+import { EventProps } from "../homepage/EventCard";
+import { useGetAllPublicEventsQuery } from "@/services/slices/events.slice";
 
 export default function Explore() {
+  const [events, setEvents] = useState<EventProps[]>([]);
+
+  const { data: eventsData } = useGetAllPublicEventsQuery("");
+
+  useEffect(() => {
+    if (
+      eventsData &&
+      eventsData.message === "SUCCESSFUL" &&
+      eventsData.body &&
+      eventsData.body.events &&
+      eventsData.body.events.result &&
+      eventsData.body.events.result.length > 0
+    ) {
+      setEvents(eventsData.body.events.result);
+    }
+  }, [eventsData]);
+
+  const updateStateAfterSearchAndFilter = () => {
+    // Implement search logic here
+  };
+
   return (
     <div
       className="bg-[#0b1120]"
@@ -59,7 +85,7 @@ export default function Explore() {
           </h1>
 
           {/* Search Bar */}
-          <SearchBar />
+          <SearchBar handleStateUpdate={updateStateAfterSearchAndFilter} />
         </div>
       </div>
 
@@ -91,9 +117,13 @@ export default function Explore() {
 
           {/* Events Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((event) => (
-              <EventCard key={event} />
-            ))}
+            {events && events.length > 0 ? (
+              events.map((event) => (
+                <EventCard key={event.id} eventDetails={event} />
+              ))
+            ) : (
+              <p>No events found.</p>
+            )}
           </div>
         </div>
       </div>

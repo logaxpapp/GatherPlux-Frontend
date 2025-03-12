@@ -4,7 +4,7 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import {
-  useGetBookmarkedEventsQuery,
+  useLazyGetBookmarkedEventsQuery,
   useRemoveBookmarkEventMutation,
 } from "@/services/slices/events.slice";
 import { useSelector } from "react-redux";
@@ -22,20 +22,24 @@ const Bookmarks: React.FC = () => {
 
   const user = useSelector((state: RootState) => state.user);
 
-  const { data: bookmarkedEventsData } = useGetBookmarkedEventsQuery("");
+  const [getBookmarkedEvents] = useLazyGetBookmarkedEventsQuery();
   const [removeBookmarkMutation] = useRemoveBookmarkEventMutation();
 
   useEffect(() => {
     if (user.userDetails.id !== 0 && user.userDetails.email !== "") {
-      if (
-        bookmarkedEventsData &&
-        bookmarkedEventsData.body &&
-        bookmarkedEventsData.body.length > 0
-      ) {
-        setBookmarkedEvents(bookmarkedEventsData.body);
-      }
+      const fetchData = async () => {
+        const bookmarkedEventsData = await getBookmarkedEvents("").unwrap();
+        if (
+          bookmarkedEventsData &&
+          bookmarkedEventsData.body &&
+          bookmarkedEventsData.body.length > 0
+        ) {
+          setBookmarkedEvents(bookmarkedEventsData.body);
+        }
+      };
+      fetchData();
     }
-  }, [bookmarkedEventsData, user]);
+  }, [user, getBookmarkedEvents]);
 
   const handleRemoveBookmark = async (
     event: React.MouseEvent<HTMLButtonElement>,

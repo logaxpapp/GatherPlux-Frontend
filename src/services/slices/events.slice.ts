@@ -76,6 +76,6 @@ export const {
   useLazyGetUserEventsQuery,
   useUpdateEventMutation,
   useBookmarkEventMutation,
-  useGetBookmarkedEventsQuery,
+  useLazyGetBookmarkedEventsQuery,
   useRemoveBookmarkEventMutation,
 } = extendApiSlice;
