@@ -10,7 +10,7 @@ import { setEvents as setStateEvents } from "@/store/slices/event.slice";
 import { setCategories as setStateCategories } from "@/store/slices/category.slice";
 import { EventProps } from "@/app/homepage/EventCard";
 
-interface CategoriesProps {
+export interface CategoriesProps {
   id: number;
   name: string;
   description: string;
@@ -36,17 +36,14 @@ const EventCard = () => {
 
   const [categories, setCategories] = useState<CategoriesProps[]>([]);
   const [events, setEvents] = useState<EventProps[]>([]);
-  const [isClient, setIsClient] = useState(false);
 
   const { data: eventsData } = useGetUpcomingEventsQuery("");
   const { data: categoriesData } = useGetAllCategoriesQuery("");
 
   useEffect(() => {
-    setIsClient(true);
-
     if (eventsData && eventsData.body) {
-      setEvents(eventsData.body.events.records);
-      dispatch(setStateEvents(eventsData.body.events.records));
+      setEvents(eventsData.body.result);
+      dispatch(setStateEvents(eventsData.body.result));
     }
 
     if (categoriesData && categoriesData.body) {
@@ -154,7 +151,7 @@ const EventCard = () => {
                 </div>
                 {/* Date Badge */}
                 <div className="absolute top-4 left-4 bg-white text-black font-bold text-sm rounded-full w-12 h-12 flex items-center justify-center">
-                  {isClient ? formatDate(event.start_date) : event.start_date}
+                  {formatDate(event.start_date)}
                 </div>
               </div>
             </Link>

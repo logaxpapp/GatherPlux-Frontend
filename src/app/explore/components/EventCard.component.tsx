@@ -1,6 +1,9 @@
-import { EventProps, formatDate } from "@/app/homepage/EventCard";
+"use strict";
+"use client";
+
 import Image from "next/image";
 import { IoTicket, IoStar } from "react-icons/io5";
+import { EventProps, formatDate } from "@/app/homepage/EventCard";
 
 export default function EventCard({
   eventDetails,

@@ -6,24 +6,23 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { EventProps, formatDate } from "../../homepage/EventCard";
-import { useGetSearchedEventsQuery } from "@/services/slices/events.slice";
+// import { useGetSearchedEventsQuery } from "@/services/slices/events.slice";
 
 const Search = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
 
   const [events, setEvents] = useState<EventProps[]>([]);
-  const [isClient, setIsClient] = useState(false);
 
-  const { data: eventsSearchData } = useGetSearchedEventsQuery(query);
+  // const { data: eventsSearchData } = useGetSearchedEventsQuery(query);
 
   useEffect(() => {
-    setIsClient(true);
+    setEvents([]);
 
-    if (eventsSearchData && eventsSearchData.body) {
-      setEvents(eventsSearchData.body.events.records);
-    }
-  }, [eventsSearchData]);
+    // if (eventsSearchData && eventsSearchData.body) {
+    //   setEvents(eventsSearchData.body.events.records);
+    // }
+  }, []);
 
   return (
     <div
@@ -98,7 +97,7 @@ const Search = () => {
                 </div>
                 {/* Date Badge */}
                 <div className="absolute top-4 left-4 bg-white text-black font-bold text-sm rounded-full w-12 h-12 flex items-center justify-center">
-                  {isClient ? formatDate(event.start_date) : event.start_date}
+                  {formatDate(event.start_date)}
                 </div>
               </div>
             </Link>

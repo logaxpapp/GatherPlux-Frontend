@@ -68,13 +68,10 @@ const EventCard = () => {
   const dispatch = useDispatch();
 
   const [events, setEvents] = useState<EventProps[]>([]);
-  const [isClient, setIsClient] = useState(false);
 
   const { data: eventsData } = useGetAllPublicEventsQuery("");
 
   useEffect(() => {
-    setIsClient(true);
-
     if (eventsData && eventsData.body) {
       setEvents(eventsData.body.events.result);
       dispatch(setStateEvents(eventsData.body.events.result));
@@ -167,7 +164,7 @@ const EventCard = () => {
                 </div>
                 {/* Date Badge */}
                 <div className="absolute top-4 left-4 bg-white text-black font-bold text-sm rounded-full w-12 h-12 flex items-center justify-center">
-                  {isClient ? formatDate(event.start_date) : event.start_date}
+                  {formatDate(event.start_date)}
                 </div>
               </div>
             </Link>
@@ -176,6 +173,17 @@ const EventCard = () => {
           <div>No events available</div>
         )}
       </div>
+
+      {events && events.length >= 0 && (
+        <div className="flex justify-center mt-10 float-right mr-10">
+          <Link
+            href="/explore"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Explore More Events
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

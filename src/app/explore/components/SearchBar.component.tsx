@@ -4,8 +4,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDebounce } from "@/helpers/hooks/useDebounce";
+import { useSearchParams } from "next/navigation";
 import { useGetAllCountriesQuery } from "@/services/slices/state.slice";
 import { EventProps } from "@/app/homepage/EventCard";
+import { useLazyGetSearchedEventsQuery } from "@/services/slices/events.slice";
 
 export interface CountryProp {
   code2: string;
@@ -13,38 +15,59 @@ export interface CountryProp {
   name: string;
 }
 
-const SearchBar = ({}: { handleStateUpdate?: (event: EventProps) => void }) => {
+const SearchBar = ({
+  handleStateUpdate,
+}: {
+  handleStateUpdate: (event: EventProps) => void;
+}) => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [canDebounce, setCanDebounce] = useState(false);
   const debouncedQuery: string = useDebounce(
     canDebounce ? searchQuery : "",
-    1000,
+    600,
   );
 
   const [userCountry, setUserCountry] = useState("");
   const [countries, setCountries] = useState<CountryProp[]>([]);
 
   const { data: allCountries } = useGetAllCountriesQuery("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setSearchQuery(value);
-
-    if (value.length === 4) {
-      setCanDebounce(true);
-    }
-  };
-
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setUserCountry(value);
-  };
+  const [getSearchedEvents] = useLazyGetSearchedEventsQuery();
 
   useEffect(() => {
-    if (debouncedQuery && debouncedQuery?.length >= 5) {
-      // router.push(`/search?query=${debouncedQuery}`);
+    const getQueriedEvents = async (value: string) => {
+      const response = await getSearchedEvents(value);
+      if (response.data) {
+        handleStateUpdate(response.data);
+      }
+    };
+
+    if (query && query.length > 0) {
+      setSearchQuery(query);
+      getQueriedEvents(query);
     }
-  }, [debouncedQuery]);
+  }, [query, getSearchedEvents, handleStateUpdate]);
+
+  useEffect(() => {
+    const getQueriedEvents = async (value: string) => {
+      const response = await getSearchedEvents(value).unwrap();
+      if (
+        response &&
+        response.message === "SUCCESSFUL" &&
+        response.body &&
+        response.body.result &&
+        response.body.result.length > 0
+      ) {
+        handleStateUpdate(response.body.result);
+      }
+    };
+
+    if (debouncedQuery && debouncedQuery?.length >= 5) {
+      getQueriedEvents(debouncedQuery);
+    }
+  }, [debouncedQuery, getSearchedEvents, handleStateUpdate]);
 
   useEffect(() => {
     if (allCountries && allCountries.body) {
@@ -83,6 +106,31 @@ const SearchBar = ({}: { handleStateUpdate?: (event: EventProps) => void }) => {
 
     getGeolocation();
   }, [allCountries, countries]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setSearchQuery(value);
+
+    if (value.length === 4) {
+      setCanDebounce(true);
+    }
+  };
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setUserCountry(value);
+
+    const getQueriedEvents = async () => {
+      const response = await getSearchedEvents(value);
+      if (response.data) {
+        handleStateUpdate(response.data);
+      }
+    };
+
+    if (value) {
+      getQueriedEvents();
+    }
+  };
 
   return (
     <div className="flex items-center bg-[#253f3f] rounded-full px-2 sm:px-4 py-2 sm:py-4 shadow-md w-full sm:w-auto space-x-2 sm:space-x-4 max-w-2xl mx-auto text-white">

@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
-import { useGetUserBookingsQuery } from "@/services/slices/booking.slice";
+import React, { useEffect, useState } from "react";
+import { useLazyGetLazyUserBookingsQuery } from "@/services/slices/booking.slice";
 import Loader from "@/components/Loader";
 
-export interface BookingsPageProps {
+export interface IBookings {
   id: number;
   code: string;
   fullname: string;
@@ -26,7 +26,24 @@ export interface BookingsPageProps {
 }
 
 const BookingsPage = () => {
-  const { data: bookings, isLoading } = useGetUserBookingsQuery("");
+  const [bookings, setBookings] = useState<IBookings[]>([]);
+
+  const [getBookings, { isLoading }] = useLazyGetLazyUserBookingsQuery();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getBookings("").unwrap();
+      if (
+        response &&
+        response.message === "SUCCESSFUL" &&
+        response.body &&
+        response.body.length > 0
+      ) {
+        setBookings(response.body);
+      }
+    };
+    fetchData();
+  }, [getBookings]);
 
   return (
     <div className="min-h-screen bg-[#020e1e] flex justify-center text-white">
@@ -46,12 +63,9 @@ const BookingsPage = () => {
           {isLoading && <Loader />}
 
           <div>
-            {!isLoading &&
-            bookings &&
-            bookings.body &&
-            bookings.body.length > 0 ? (
+            {!isLoading && bookings && bookings.length > 0 ? (
               <div className="grid grid-cols-3 gap-4">
-                {bookings.body.map((booking: BookingsPageProps) => (
+                {bookings.map((booking) => (
                   <div key={booking.id} className="border border-white p-2">
                     <p>CODE: {booking.code}</p>
                     <p>Full Name: {booking.fullname}</p>

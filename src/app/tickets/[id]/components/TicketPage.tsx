@@ -145,7 +145,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ event }) => {
                     <div>
                       <input
                         type="text"
-                        placeholder="Enter Ticket Name"
+                        placeholder="Enter Ticket Holder's Name"
                         className="w-full p-1 sm:p-2 lg:p-3 bg-transparent focus:ring-0 focus:outline-none text-white text-sm sm:text-base"
                         id={`ticket-name-${ticket.id}`}
                         value={ticketNames[ticket.id]}

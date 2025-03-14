@@ -3,7 +3,7 @@ import { clientBaseAPISlice } from "../clientBaseAPI";
 const extendApiSlice = clientBaseAPISlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllPublicEvents: builder.query({
-      query: (page = 0) => `event/list?page=${page}&size=9`,
+      query: ({ page = 0, size = 9 }) => `event/list?page=${page}&size=${size}`,
     }),
     createEvent: builder.mutation({
       query: (eventDetails) => ({
@@ -66,11 +66,13 @@ const extendApiSlice = clientBaseAPISlice.injectEndpoints({
 
 export const {
   useGetAllPublicEventsQuery,
+  useLazyGetAllPublicEventsQuery,
   useCreateEventMutation,
   useGetOneEventQuery,
   useLazyGetOneEventQuery,
   useGetUpcomingEventsQuery,
-  useGetSearchedEventsQuery,
+  useLazyGetUpcomingEventsQuery,
+  useLazyGetSearchedEventsQuery,
   useLazySearchEventsQuery,
   useBookEventMutation,
   useLazyGetUserEventsQuery,

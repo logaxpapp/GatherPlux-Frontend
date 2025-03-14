@@ -14,13 +14,10 @@ const OtherEvents = ({ id = "" }: OtherEventsProps) => {
   const dispatch = useDispatch();
 
   const [events, setEvents] = useState<EventProps[]>([]);
-  const [isClient, setIsClient] = useState(false);
 
   const { data: eventsData } = useGetAllPublicEventsQuery("");
 
   useEffect(() => {
-    setIsClient(true);
-
     if (eventsData && eventsData.body) {
       setEvents(eventsData.body.events.records);
       dispatch(setStateEvents(eventsData.body.events.records));
@@ -116,7 +113,7 @@ const OtherEvents = ({ id = "" }: OtherEventsProps) => {
                   </div>
                   {/* Date Badge */}
                   <div className="absolute top-4 left-4 bg-white text-black font-bold text-sm rounded-full w-12 h-12 flex items-center justify-center">
-                    {isClient ? formatDate(event.start_date) : event.start_date}
+                    {formatDate(event.start_date)}
                   </div>
                 </div>
               </Link>

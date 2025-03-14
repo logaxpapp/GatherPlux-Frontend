@@ -3,30 +3,50 @@
 import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter.component";
 import EventCard from "./components/EventCard.component";
-import SearchBar from "./components/SearchBar";
+import SearchBar from "./components/SearchBar.component";
 import { EventProps } from "../homepage/EventCard";
-import { useGetAllPublicEventsQuery } from "@/services/slices/events.slice";
+import { useLazyGetAllPublicEventsQuery } from "@/services/slices/events.slice";
 
 export default function Explore() {
   const [events, setEvents] = useState<EventProps[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [sortQuery, setSortQuery] = useState("");
 
-  const { data: eventsData } = useGetAllPublicEventsQuery("");
+  const [getAllPublicEvents] = useLazyGetAllPublicEventsQuery();
 
   useEffect(() => {
-    if (
-      eventsData &&
-      eventsData.message === "SUCCESSFUL" &&
-      eventsData.body &&
-      eventsData.body.events &&
-      eventsData.body.events.result &&
-      eventsData.body.events.result.length > 0
-    ) {
-      setEvents(eventsData.body.events.result);
-    }
-  }, [eventsData]);
+    const fetchEvents = async () => {
+      const response = await getAllPublicEvents("").unwrap();
+      if (
+        response &&
+        response.message === "SUCCESSFUL" &&
+        response.body &&
+        response.body.events &&
+        response.body.events.result &&
+        response.body.events.result.length > 0
+      ) {
+        setEvents(response.body.events.result);
+        setTotalPages(response.body.events.totalPages);
+        setCurrentPage(response.body.events.currentPage);
+      }
+    };
+    fetchEvents();
+  }, [getAllPublicEvents]);
 
   const updateStateAfterSearchAndFilter = () => {
     // Implement search logic here
+  };
+
+  const handleSortEvents = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setSortQuery(value);
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 0 && pageNumber < totalPages) {
+      setCurrentPage(pageNumber);
+    }
   };
 
   return (
@@ -108,6 +128,8 @@ export default function Explore() {
                 backgroundPosition: "right 0.5rem center",
               }}
               aria-label="Sort events"
+              value={sortQuery}
+              onChange={handleSortEvents}
             >
               <option value="relevance">Relevance</option>
               <option value="location">Location</option>
@@ -124,6 +146,29 @@ export default function Explore() {
             ) : (
               <p>No events found.</p>
             )}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-between items-center mt-4 px-4 py-5">
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 0}
+              className="px-4 py-2 border border-gray-500 rounded text-white"
+            >
+              Previous
+            </button>
+            <span>
+              Page {currentPage} of {totalPages ? totalPages : 0}
+            </span>
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages - 1}
+              className="px-4 py-2 border border-gray-500 rounded text-white"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

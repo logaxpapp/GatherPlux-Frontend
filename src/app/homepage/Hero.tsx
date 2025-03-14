@@ -1,7 +1,67 @@
-import Link from "next/link";
-import React from "react";
+"use strict";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useLazyGetAllCategoriesQuery } from "@/services/slices/category.slice";
+import { CategoriesProps } from "../upcoming-events/components/EventCard.component";
+import { useRouter } from "next/navigation";
 
 const Hero: React.FC = () => {
+  const router = useRouter();
+
+  const [sparkles, setSparkles] = useState<
+    {
+      top: string;
+      left: string;
+      animationDelay: string;
+      animationDuration: string;
+    }[]
+  >([]);
+
+  const [categories, setCategories] = useState<CategoriesProps[]>([]);
+  const [dropdownCategories, setDropdownCategories] = useState<boolean>(false);
+
+  const [getAllCategories] = useLazyGetAllCategoriesQuery();
+
+  useEffect(() => {
+    setSparkles(
+      Array.from({ length: 50 }).map(() => ({
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * 5}s`,
+        animationDuration: `${Math.random() * 2 + 1}s`,
+      })),
+    );
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await getAllCategories("").unwrap();
+      if (response && response.message === "SUCCESSFUL" && response.body) {
+        setCategories(response.body);
+      }
+    };
+    fetchCategories();
+  }, [getAllCategories]);
+
+  const handleSearchBarChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    router.push(`/explore?query=${event.target.value}`);
+  };
+
+  const handleCategoryClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const category = event.currentTarget.value;
+    if (category) {
+      router.push(`/explore?query=${category}`);
+    }
+  };
+
+  const handleSearchBarFocus = () => {
+    setDropdownCategories(true);
+  };
+
   return (
     <section
       className="relative flex flex-col items-center justify-center text-white sparkle-background min-h-screen bg-cover bg-center"
@@ -20,17 +80,8 @@ const Hero: React.FC = () => {
     >
       {/* Sparkles */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 50 }).map((_, index) => (
-          <div
-            key={index}
-            className="sparkle"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${Math.random() * 2 + 1}s`,
-            }}
-          />
+        {sparkles.map((sparkle, index) => (
+          <div key={index} className="sparkle" style={sparkle} />
         ))}
       </div>
 
@@ -55,14 +106,43 @@ const Hero: React.FC = () => {
         </p>
 
         {/* Marketplace */}
-        <div className="flex justify-center">
-          <Link
-            href="/explore"
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Explore Marketplace
-          </Link>
+        <div className="flex items-center bg-[#253f3f] rounded-full px-2 sm:px-4 py-2 sm:py-4 shadow-md w-full sm:w-auto space-x-2 sm:space-x-4 max-w-2xl mx-auto text-white">
+          <div className="flex items-center space-x-2 flex-grow">
+            <Image
+              src="https://res.cloudinary.com/dondkf6je/image/upload/f_auto,q_auto/v1/GatherPlux%20-%20Dev%20Images/ngr4snr3hzu2lxjlzcbx"
+              alt="Search Icon"
+              width={14} // Reduced size for smaller screens
+              height={14}
+            />
+            <input
+              type="text"
+              placeholder="Search Events, Categories, Location..."
+              onChange={handleSearchBarChange}
+              onFocus={handleSearchBarFocus}
+              className="flex-grow outline-none bg-transparent text-xs sm:text-base text-[#ffffff] placeholder-gray-300"
+            />
+          </div>
         </div>
+
+        {dropdownCategories && (
+          <div className="flex justify-center gap-4 flex-wrap mt-8">
+            {categories && categories.length > 0 ? (
+              categories.map((category) => (
+                <button
+                  type="button"
+                  key={category.id}
+                  value={category.name}
+                  onClick={handleCategoryClick}
+                  className={`px-8 py-2 rounded-full text-sm font-semibold border border-gray-800 hover:bg-gray-700 hover:text-white bg-[#9edd45] text-black`}
+                >
+                  {category.name}
+                </button>
+              ))
+            ) : (
+              <div>No categories available</div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
